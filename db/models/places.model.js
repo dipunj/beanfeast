@@ -1,5 +1,5 @@
 import { mongoose } from 'mongoose';
-import PlacesSchema from './schemas/places.schema';
+import PlacesSchema from '../schemas/places.schema';
 
 const { model } = mongoose;
 const Places = model('Places', PlacesSchema);
