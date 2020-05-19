@@ -1,4 +1,5 @@
 import CableService from '../services/cable.services';
+import PoolService from '../services/pool.services';
 
 const newCable = async (req, res, next) => {
 	const {
@@ -11,7 +12,7 @@ const newCable = async (req, res, next) => {
 	} = req.params;
 
 	try {
-		const cable = await CableService.generateNewCable({
+		let cable = await CableService.generateNewCable({
 			fromTime,
 			toTime,
 			maxPeople,
@@ -21,6 +22,7 @@ const newCable = async (req, res, next) => {
 			longitude,
 			sessionId,
 		});
+		if (poolEntry) cable = await CableService.incrementPoolSize({ cableId: cable._id });
 		return res
 			.status(200)
 			.json({ status: 200, data: cable, message: 'Cable created succesfully' });

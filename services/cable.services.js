@@ -15,18 +15,29 @@ const generateNewCable = async (params, ...rest) => {
 };
 
 const updateCable = async (params, ...rest) => {
-	const { cableId, fromTime, toTime, maxPoolSize, currPoolSize } = params;
+	const { cableId, fromTime, toTime, maxPoolSize } = params;
 
 	try {
-		const cable = await Cable.findById(cableId, 'maxPoolSize');
-		if (cable.maxPoolSize > currPoolSize) {
-			throw 'Max Pool Size reached. Cannot add more people to this pool';
-		} else {
-			cable.currPoolSize = currPoolSize || cable.currPoolSize;
-			cable.maxPoolSize = maxPoolSize || cable.maxPoolSize;
-			cable.fromTime = fromTime || cable.fromTime;
-			cable.toTime = toTime || cable.toTime;
+		const cable = await Cable.findById(cableId, 'maxPoolSize fromTime toTime');
+		cable.maxPoolSize = maxPoolSize || cable.maxPoolSize;
+		cable.fromTime = fromTime || cable.fromTime;
+		cable.toTime = toTime || cable.toTime;
 
+		cable.save();
+		return cable;
+	} catch (e) {
+		throw Error(e);
+	}
+};
+
+const incrementPoolSize = async (params, ...rest) => {
+	const { cableId } = params;
+	try {
+		const cable = await Cable.findById(cableId, 'currPoolSize maxPoolSize');
+		if (cable.currPoolSize === cable.maxPoolSize) {
+			throw 'Max Pool Size reached';
+		} else {
+			cable.currPoolSize += 1;
 			cable.save();
 			return cable;
 		}
@@ -34,4 +45,4 @@ const updateCable = async (params, ...rest) => {
 		throw Error(e);
 	}
 };
-export { generateNewCable, updateCable };
+export { generateNewCable, updateCable, incrementPoolSize };
