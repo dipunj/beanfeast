@@ -10,7 +10,7 @@ const PoolSchema = new Schema(
 			ref: 'Cable',
 			index: true,
 		},
-		personId: {
+		sessionId: {
 			type: String,
 			required: true,
 		},

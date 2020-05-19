@@ -18,11 +18,11 @@ const CableSchema = new Schema(
 			type: Date,
 			default: Date.now,
 		},
-		maxPeople: {
+		maxPoolSize: {
 			type: Number,
 			default: Infinity,
 		},
-		currPeople: {
+		currPoolSize: {
 			type: Number,
 			default: 0,
 		},
