@@ -18,5 +18,6 @@
 		"titleBar.inactiveForeground": "#e7e7e799"
 	},
 	"editor.tabSize": 4,
-	"editor.formatOnSave": true
+	"editor.formatOnSave": true,
+	"peacock.color": "#000000"
 }
