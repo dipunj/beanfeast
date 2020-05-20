@@ -1,4 +1,4 @@
-import Cable from '../db/models/cable.model';
+var Cable = require('../db/models/cable.model');
 
 // TODO: create transaction here
 const generateNewCable = async (params, ...rest) => {
@@ -51,4 +51,4 @@ const CableService = {
 	incrementPoolSize,
 };
 
-export default CableService;
+module.exports = CableService;

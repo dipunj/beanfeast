@@ -1,9 +1,6 @@
-import './config';
-import 'core-js/stable';
-import 'regenerator-runtime/runtime';
-
-import http from 'http';
-import app from '../app';
+require('./config');
+var http = require('http');
+var app = require('../app');
 
 const debug = require('debug')('beanfeast:server');
 

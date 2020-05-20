@@ -1,10 +1,10 @@
-import express from 'express';
-import cookieParser from 'cookie-parser';
-import logger from 'morgan';
-import indexRouter from './routes/index';
-import cableRouter from './routes/cable.routes';
-import poolRouter from './routes/pool.routes';
-// import placesRouter from './routes/places.routes';
+var express = require('express');
+var cookieParser = require('cookie-parser');
+var logger = require('morgan');
+var indexRouter = require('./routes/index');
+var cableRouter = require('./routes/cable.routes');
+var poolRouter = require('./routes/pool.routes');
+// var placesRouter = require('./routes/places.routes');
 
 const app = express();
 
@@ -18,4 +18,4 @@ app.use('/cable', cableRouter);
 app.use('/pool', poolRouter);
 // app.use('/places', placesRouter);
 
-export default app;
+module.exports = app;

@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import PoolSchema from '../schemas/pool.schema';
+var mongoose = require('mongoose');
+var PoolSchema = require('../schemas/pool.schema');
 
 const { model } = mongoose;
 const Pool = model('Pool', PoolSchema);
 
-export default Pool;
+module.exports = Pool;

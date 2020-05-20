@@ -7,4 +7,4 @@ const PoolController = {
 	},
 };
 
-export default PoolController;
+module.exports = PoolController;

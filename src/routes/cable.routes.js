@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import CableController from '../controllers/cable.controller';
+var express = require('express');
+var CableController = require('../controllers/cable.controller');
 
-const router = Router();
+const router = express.Router();
 
 router.post('/new', CableController.newCable);
 router.post('/update', CableController.updateCable);
 
-export default router;
+module.exports = router;

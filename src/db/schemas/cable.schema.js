@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import shortid from 'shortid';
+var mongoose = require('mongoose');
+var shortid = require('shortid');
 
 const { Schema } = mongoose;
 
@@ -37,4 +37,4 @@ const CableSchema = new Schema(
 	}
 );
 
-export default CableSchema;
+module.exports = CableSchema;

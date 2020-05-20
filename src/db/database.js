@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+var mongoose = require('mongoose');
 
 const dbPath = process.env.DB_URL;
 
@@ -12,4 +12,4 @@ db.once('open', () => {
 	console.log('> successfully opened the database');
 });
 
-export default db;
+module.exports = mongoose;

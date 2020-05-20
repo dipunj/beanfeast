@@ -1,10 +1,10 @@
-import { Router } from 'express';
+var express = require('express');
 
-const router = Router();
+const router = express.Router();
 
 /* GET home page. */
 router.get('/', (req, res, next) => {
 	res.json({ title: 'Express is working' });
 });
 
-export default router;
+module.exports = router;

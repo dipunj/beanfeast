@@ -1,5 +1,5 @@
-import mongoose from 'mongoose';
-import placesApiResponseSchema from './mapsApi.schema';
+var mongoose = require('mongoose');
+var placesApiResponseSchema = require('./mapsApi.schema');
 
 const { Schema } = mongoose;
 
@@ -19,4 +19,4 @@ const placesSchema = new Schema(
 	}
 );
 
-export default placesSchema;
+module.exports = placesSchema;

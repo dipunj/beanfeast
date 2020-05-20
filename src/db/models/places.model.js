@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
-import PlacesSchema from '../schemas/places.schema';
+var mongoose = require('mongoose');
+var PlacesSchema = require('../schemas/places.schema');
 
 const { model } = mongoose;
 const Places = model('Places', PlacesSchema);
 
-export default Places;
+module.exports = Places;

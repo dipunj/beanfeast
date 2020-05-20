@@ -1,5 +1,7 @@
-import mongoose from 'mongoose';
-import { Decimal128 } from 'mongodb';
+var mongoose = require('mongoose');
+var mongodb = require('mongodb');
+
+var { Decimal128 } = mongodb;
 
 const { Schema } = mongoose;
 
@@ -28,4 +30,4 @@ const PoolSchema = new Schema(
 	}
 );
 
-export default PoolSchema;
+module.exports = PoolSchema;

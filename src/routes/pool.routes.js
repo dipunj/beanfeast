@@ -1,9 +1,9 @@
-import { Router } from 'express';
-import PoolController from '../controllers/pool.controller';
+var express = require('express');
+var PoolController = require('../controllers/pool.controller');
 
-const router = Router();
+const router = express.Router();
 
 router.get('/new', PoolController.newPool);
 router.get('/update', PoolController.updatePool);
 
-export default router;
+module.exports = router;

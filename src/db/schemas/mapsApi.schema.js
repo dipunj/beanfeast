@@ -1,7 +1,7 @@
-import mongoose from 'mongoose';
+var mongoose = require('mongoose');
 
 const { Schema } = mongoose;
 
 const mapsApiSchema = new Schema({});
 
-export default mapsApiSchema;
+module.exports = mapsApiSchema;

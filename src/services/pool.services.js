@@ -1,4 +1,4 @@
-import Pool from '../db/models/pool.model';
+var Pool = require('../db/models/pool.model');
 
 // TODO: create transaction here
 
@@ -23,4 +23,4 @@ const PoolService = {
 	addNewUser,
 };
 
-export default PoolService;
+module.exports = PoolService;

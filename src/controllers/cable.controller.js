@@ -1,5 +1,5 @@
-import CableService from '../services/cable.services';
-import PoolService from '../services/pool.services';
+var CableService = require('../services/cable.services');
+var PoolService = require('../services/pool.services');
 
 const newCable = async (req, res, next) => {
 	const {
@@ -17,8 +17,7 @@ const newCable = async (req, res, next) => {
 			toTime,
 			maxPeople,
 		});
-		console.log(cable);
-		const poolEntry = await PoolService.addNewUser({
+		let poolEntry = await PoolService.addNewUser({
 			cableId: cable._id,
 			latitude,
 			longitude,
@@ -58,4 +57,4 @@ const CableController = {
 	updateCable,
 };
 
-export default CableController;
+module.exports = CableController;
