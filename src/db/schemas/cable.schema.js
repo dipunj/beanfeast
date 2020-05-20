@@ -1,5 +1,5 @@
-import { mongoose } from 'mongoose';
-import { shortid } from 'shortid';
+import mongoose from 'mongoose';
+import shortid from 'shortid';
 import locationSchema from './location.schema';
 
 const { Schema } = mongoose;

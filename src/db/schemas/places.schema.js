@@ -1,4 +1,4 @@
-import { mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 import placesApiResponseSchema from './mapsApi.schema';
 
 const { Schema } = mongoose;

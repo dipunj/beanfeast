@@ -5,7 +5,7 @@ const generateNewCable = async (params, ...rest) => {
 	const { fromTime, toTime, maxPoolSize } = params;
 
 	try {
-		const newCable = await new Cable({ fromTime, toTime, maxPoolSize });
+		const newCable = await Cable({ fromTime, toTime, maxPoolSize });
 		newCable.save();
 		return newCable;
 	} catch (e) {
@@ -45,4 +45,11 @@ const incrementPoolSize = async (params, ...rest) => {
 		throw Error(e);
 	}
 };
-export { generateNewCable, updateCable, incrementPoolSize };
+
+const CableService = {
+	generateNewCable,
+	updateCable,
+	incrementPoolSize,
+};
+
+export default CableService;

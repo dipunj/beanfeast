@@ -1,4 +1,4 @@
-import { mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 import CableSchema from '../schemas/cable.schema';
 
 const { model } = mongoose;

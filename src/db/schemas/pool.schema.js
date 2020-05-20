@@ -1,4 +1,4 @@
-import { mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 import locationSchema from './location.schema';
 
 const { Schema } = mongoose;

@@ -1,4 +1,4 @@
-import { mongoose } from 'mongoose';
+import mongoose from 'mongoose';
 import PoolSchema from './schemas/pool.schema';
 
 const { model } = mongoose;
