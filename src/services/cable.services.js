@@ -10,7 +10,7 @@ const generateNewCable = async (params, ...rest) => {
 		return newCable;
 	} catch (e) {
 		// Log Errors
-		throw Error(e);
+		console.error(e);
 	}
 };
 
@@ -26,23 +26,22 @@ const updateCable = async (params, ...rest) => {
 		cable.save();
 		return cable;
 	} catch (e) {
-		throw Error(e);
+		console.error(e);
 	}
 };
 
 const incrementPoolSize = async (params, ...rest) => {
-	const { cableId } = params;
+	const { cable } = params;
 	try {
-		const cable = await Cable.findById(cableId, 'currPoolSize maxPoolSize');
 		if (cable.currPoolSize === cable.maxPoolSize) {
-			throw 'Max Pool Size reached';
+			console.error('Max Pool Size reached');
 		} else {
 			cable.currPoolSize += 1;
 			cable.save();
 			return cable;
 		}
 	} catch (e) {
-		throw Error(e);
+		console.error(e);
 	}
 };
 

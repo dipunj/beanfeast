@@ -3,13 +3,13 @@ import PoolService from '../services/pool.services';
 
 const newCable = async (req, res, next) => {
 	const {
-		fromTime = Date.now,
-		toTime = Date.now,
+		fromTime = Date.now(),
+		toTime = Date.now(),
 		maxPeople = Infinity,
 		latitude,
 		longitude,
 		sessionId,
-	} = req.params;
+	} = req.query;
 
 	try {
 		let cable = await CableService.generateNewCable({
@@ -17,12 +17,16 @@ const newCable = async (req, res, next) => {
 			toTime,
 			maxPeople,
 		});
+		console.log(cable);
 		const poolEntry = await PoolService.addNewUser({
+			cableId: cable._id,
 			latitude,
 			longitude,
 			sessionId,
 		});
-		if (poolEntry) cable = await CableService.incrementPoolSize({ cableId: cable._id });
+		if (poolEntry) {
+			cable = await CableService.incrementPoolSize({ cable });
+		}
 		return res
 			.status(200)
 			.json({ status: 200, data: cable, message: 'Cable created succesfully' });

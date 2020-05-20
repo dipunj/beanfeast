@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import locationSchema from './location.schema';
+import { Decimal128 } from 'mongodb';
 
 const { Schema } = mongoose;
 
@@ -14,8 +14,12 @@ const PoolSchema = new Schema(
 			type: String,
 			required: true,
 		},
-		location: {
-			type: locationSchema,
+		longitude: {
+			type: Decimal128,
+			required: true,
+		},
+		latitude: {
+			type: Decimal128,
 			required: true,
 		},
 	},

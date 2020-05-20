@@ -1,6 +1,5 @@
 import mongoose from 'mongoose';
 import shortid from 'shortid';
-import locationSchema from './location.schema';
 
 const { Schema } = mongoose;
 
@@ -12,11 +11,11 @@ const CableSchema = new Schema(
 		},
 		fromTime: {
 			type: Date,
-			default: Date.now,
+			default: Date.now(),
 		},
 		toTime: {
 			type: Date,
-			default: Date.now,
+			default: Date.now(),
 		},
 		maxPoolSize: {
 			type: Number,
@@ -26,9 +25,11 @@ const CableSchema = new Schema(
 			type: Number,
 			default: 0,
 		},
-		centroid: {
-			type: locationSchema,
-			required: true,
+		centroidLatitude: {
+			type: Number,
+		},
+		centroidLongitude: {
+			type: Number,
 		},
 	},
 	{

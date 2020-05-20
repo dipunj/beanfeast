@@ -1,3 +1,7 @@
+import './config';
+import 'core-js/stable';
+import 'regenerator-runtime/runtime';
+
 import http from 'http';
 import app from '../app';
 
@@ -28,13 +32,14 @@ function onError(error) {
 	}
 }
 
+const server = http.createServer(app);
+
 function onListening() {
 	const addr = server.address();
 	const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
 	debug(`Listening on ${bind}`);
 }
 
-const server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
