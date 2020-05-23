@@ -5,9 +5,9 @@ const { Schema } = mongoose;
 
 const SessionSchema = new Schema(
 	{
-		cableId: {
+		poolId: {
 			type: String,
-			ref: 'Cable',
+			ref: 'Pool',
 			index: true,
 		},
 		sessionId: {

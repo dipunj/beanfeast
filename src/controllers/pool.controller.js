@@ -20,7 +20,7 @@ const createPool = async (req, res, next) => {
 		});
 
 		await SessionService.addNew({
-			cableId: newPool._id,
+			poolId: newPool._id,
 			latitude,
 			longitude,
 			sessionId,
@@ -30,21 +30,21 @@ const createPool = async (req, res, next) => {
 	}
 
 	try {
-		const updatedCable = await PoolService.incrementPoolSize({ thisPool: newPool });
+		const updatedPool = await PoolService.incrementPoolSize({ thisPool: newPool });
 		return res
 			.status(200)
-			.json({ status: 200, data: updatedCable, message: 'Cable created succesfully' });
+			.json({ status: 200, data: updatedPool, message: 'Cable created succesfully' });
 	} catch (e) {
 		return res.status(400).json({ status: 400, message: e.message });
 	}
 };
 
 const updatePool = async (req, res, next) => {
-	const { cableId, fromTime = Date.now, toTime = Date.now, maxPeople = Infinity } = req.params;
+	const { poolId, fromTime = Date.now, toTime = Date.now, maxPeople = Infinity } = req.params;
 
 	try {
 		const newPool = await PoolService.updatePool({
-			cableId,
+			poolId,
 			fromTime,
 			toTime,
 			maxPeople,

@@ -3,10 +3,10 @@ var Session = require('../db/models/session.model');
 // TODO: create transaction here
 
 const addNew = async (params, ...rest) => {
-	const { cableId, latitude, longitude, sessionId } = params;
+	const { poolId, latitude, longitude, sessionId } = params;
 	try {
 		const sesh = Session({
-			cableId,
+			poolId,
 			sessionId,
 			latitude,
 			longitude,
