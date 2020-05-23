@@ -21,5 +21,6 @@
 	"editor.formatOnSave": true,
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
-	"peacock.color": "#000000"
+	"peacock.color": "#000000",
+	"todo-tree.tree.scanMode": "current file"
 }

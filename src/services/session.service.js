@@ -2,20 +2,20 @@ var Session = require('../db/models/session.model');
 var mongoose = require('mongoose');
 var PoolService = require('./pool.service');
 
-const addNew = async (params, ...rest) => {
-	const { pool, latitude, longitude, sessionId } = params;
+const createNew = async (params, ...rest) => {
+	const { pool, latitude, longitude, uniqueIdentifier } = params;
+
+	const session = await mongoose.startSession();
+	session.startTransaction();
 
 	if (pool.currPoolSize >= pool.maxPoolSize) {
 		throw new Error("Cannot join this pool since it's fully occupied");
 	} else {
 		try {
-			const session = await mongoose.startSession();
-			session.startTransaction();
-
 			///////////////////
 			const sesh = Session({
 				poolId: pool._id,
-				sessionId,
+				uniqueIdentifier,
 				latitude,
 				longitude,
 			});
@@ -36,8 +36,33 @@ const addNew = async (params, ...rest) => {
 	}
 };
 
+const addToPool = async (params, ...rest) => {
+	const { poolId, uniqueIdentifier, latitude, longitude } = params;
+	try {
+		const pool = await PoolService.findPool({ poolId });
+		if (!pool) {
+			throw new Error('Invalid Joining URL');
+		}
+		const anySession = await Session.find({ uniqueIdentifier });
+		console.log(anySession);
+		if (anySession && anySession.filter((sesh) => sesh.poolId == pool._id).length > 0) {
+			throw new Error('You are already in this pool!');
+		}
+		const newSession = await createNew({
+			pool,
+			latitude,
+			longitude,
+			uniqueIdentifier,
+		});
+		return newSession;
+	} catch (e) {
+		throw e;
+	}
+};
+
 const SessionService = {
-	addNew,
+	createNew,
+	addToPool,
 };
 
 module.exports = SessionService;

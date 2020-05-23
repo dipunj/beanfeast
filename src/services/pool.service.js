@@ -1,5 +1,4 @@
 var Pool = require('../db/models/pool.model');
-var SessionService = require('./session.service');
 
 const createNewPool = async (params, ...rest) => {
 	const { fromTime, toTime, maxPoolSize } = params;
@@ -59,28 +58,11 @@ const incrementPoolSize = async (params, ...rest) => {
 	}
 };
 
-const joinPool = async (params, ...rest) => {
-	const { poolId, sessionId, latitude, longitude } = params;
-	try {
-		const pool = await findPool({ poolId });
-		const newSession = await SessionService.addNew({
-			pool,
-			latitude,
-			longitude,
-			sessionId,
-		});
-		return newSession;
-	} catch (e) {
-		throw e;
-	}
-};
-
 const PoolService = {
 	createNewPool,
 	updatePool,
 	incrementPoolSize,
 	findPool,
-	joinPool,
 };
 
 module.exports = PoolService;

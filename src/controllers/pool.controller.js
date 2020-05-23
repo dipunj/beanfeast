@@ -9,7 +9,7 @@ const createPool = async (req, res, next) => {
 		maxPeople = Infinity,
 		latitude,
 		longitude,
-		sessionId,
+		uniqueIdentifier,
 	} = req.query;
 
 	try {
@@ -18,11 +18,11 @@ const createPool = async (req, res, next) => {
 			toTime,
 			maxPoolSize: maxPeople,
 		});
-		const { newSession, updatedPool } = await SessionService.addNew({
+		const { newSession, updatedPool } = await SessionService.createNew({
 			pool: newPool,
 			latitude,
 			longitude,
-			sessionId,
+			uniqueIdentifier,
 		});
 		return res.status(200).json({
 			status: 200,
@@ -53,11 +53,22 @@ const updatePool = async (req, res, next) => {
 };
 
 const joinPool = async (req, res, next) => {
-	const { latitude, longitude, sessionId } = req.query;
+	const { uniqueIdentifier, latitude, longitude } = req.query;
 	const { poolId } = req.params;
-
 	try {
-		const newSession = await PoolService.joinPool({ poolId, sessionId, latitude, longitude });
+		if (!uniqueIdentifier) {
+			throw new Error('Anonymous device hash is required to register into the pool');
+		} else if (!latitude || !longitude) {
+			throw new Error('Location is null');
+		} else if (!poolId) {
+			throw new Error('Invalid joining URL');
+		}
+		const newSession = await SessionService.addToPool({
+			poolId,
+			uniqueIdentifier,
+			latitude,
+			longitude,
+		});
 		return res.status(200).json({
 			status: 200,
 			data: newSession,

@@ -10,7 +10,7 @@ const SessionSchema = new Schema(
 			ref: 'Pool',
 			index: true,
 		},
-		sessionId: {
+		uniqueIdentifier: {
 			type: String,
 			required: true,
 		},
