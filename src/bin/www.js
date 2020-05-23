@@ -1,6 +1,7 @@
 require('./config');
 var http = require('http');
 var app = require('../app');
+var db = require('../db/connection');
 
 const debug = require('debug')('beanfeast:server');
 

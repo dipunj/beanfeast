@@ -3,7 +3,7 @@ var PoolController = require('../controllers/pool.controller');
 
 const router = express.Router();
 
-router.get('/new', PoolController.newPool);
-router.get('/update', PoolController.updatePool);
+router.post('/new', PoolController.createPool);
+router.post('/update', PoolController.updatePool);
 
 module.exports = router;

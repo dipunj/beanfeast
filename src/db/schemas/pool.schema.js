@@ -1,28 +1,35 @@
 var mongoose = require('mongoose');
-var mongodb = require('mongodb');
-
-var { Decimal128 } = mongodb;
+var shortid = require('shortid');
 
 const { Schema } = mongoose;
 
 const PoolSchema = new Schema(
 	{
-		cableId: {
+		_id: {
 			type: String,
-			ref: 'Cable',
-			index: true,
+			default: shortid.generate,
 		},
-		sessionId: {
-			type: String,
-			required: true,
+		fromTime: {
+			type: Date,
+			default: Date.now(),
 		},
-		longitude: {
-			type: Decimal128,
-			required: true,
+		toTime: {
+			type: Date,
+			default: Date.now(),
 		},
-		latitude: {
-			type: Decimal128,
-			required: true,
+		maxPoolSize: {
+			type: Number,
+			default: Infinity,
+		},
+		currPoolSize: {
+			type: Number,
+			default: 0,
+		},
+		centroidLatitude: {
+			type: Number,
+		},
+		centroidLongitude: {
+			type: Number,
 		},
 	},
 	{
