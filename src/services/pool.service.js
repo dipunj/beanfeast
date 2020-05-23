@@ -10,7 +10,7 @@ const createNewPool = async (params, ...rest) => {
 
 		return newPool;
 	} catch (e) {
-		console.error(e);
+		throw e;
 	}
 };
 
@@ -18,34 +18,44 @@ const updatePool = async (params, ...rest) => {
 	const { PoolId, fromTime, toTime, maxPoolSize } = params;
 
 	try {
-		const Pool = await Pool.findOne({ _id: PoolId }, 'maxPoolSize fromTime toTime');
+		const pool = await Pool.findOne({ _id: PoolId }, 'maxPoolSize fromTime toTime');
 
-		Pool.maxPoolSize = maxPoolSize || Pool.maxPoolSize;
-		Pool.fromTime = fromTime || Pool.fromTime;
-		Pool.toTime = toTime || Pool.toTime;
+		pool.maxPoolSize = maxPoolSize || pool.maxPoolSize;
+		pool.fromTime = fromTime || pool.fromTime;
+		pool.toTime = toTime || pool.toTime;
 
-		await Pool.save();
+		await pool.save();
 
-		return Pool;
+		return pool;
 	} catch (e) {
-		console.error(e);
+		throw e;
+	}
+};
+
+const findPool = async (params, ...rest) => {
+	const { poolId } = params;
+	try {
+		const pool = await Pool.findOne({ _id: poolId }).exec();
+		return pool;
+	} catch (e) {
+		throw e;
 	}
 };
 
 const incrementPoolSize = async (params, ...rest) => {
-	const { thisPool } = params;
+	const { pool } = params;
 	try {
-		if (thisPool.currPoolSize >= thisPool.maxPoolSize) {
-			console.error('Max Pool Size reached');
+		if (pool.currPoolSize >= pool.maxPoolSize) {
+			throw new Error('Max Pool Size reached');
 		} else {
-			const poolObj = await Pool.findOne({ _id: thisPool._id });
+			const poolObj = await Pool.findOne({ _id: pool._id });
 			poolObj.currPoolSize += 1;
 			const incrementedPool = await poolObj.save();
 
 			return incrementedPool;
 		}
 	} catch (e) {
-		console.error(e);
+		throw e;
 	}
 };
 
@@ -53,6 +63,7 @@ const PoolService = {
 	createNewPool,
 	updatePool,
 	incrementPoolSize,
+	findPool,
 };
 
 module.exports = PoolService;

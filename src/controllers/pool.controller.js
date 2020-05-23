@@ -1,5 +1,6 @@
 var PoolService = require('../services/pool.service');
 var SessionService = require('../services/session.service');
+var handleError = require('../util/error.util');
 
 const createPool = async (req, res, next) => {
 	const {
@@ -11,31 +12,25 @@ const createPool = async (req, res, next) => {
 		sessionId,
 	} = req.query;
 
-	let newPool;
 	try {
-		newPool = await PoolService.createNewPool({
+		const newPool = await PoolService.createNewPool({
 			fromTime,
 			toTime,
-			maxPeople,
+			maxPoolSize: maxPeople,
 		});
-
-		await SessionService.addNew({
-			poolId: newPool._id,
+		const { newSession, updatedPool } = await SessionService.addNew({
+			pool: newPool,
 			latitude,
 			longitude,
 			sessionId,
 		});
+		return res.status(200).json({
+			status: 200,
+			data: { newSession, updatedPool },
+			message: 'Pool created succesfully',
+		});
 	} catch (e) {
-		return res.status(400).json({ status: 400, message: e.message });
-	}
-
-	try {
-		const updatedPool = await PoolService.incrementPoolSize({ thisPool: newPool });
-		return res
-			.status(200)
-			.json({ status: 200, data: updatedPool, message: 'Cable created succesfully' });
-	} catch (e) {
-		return res.status(400).json({ status: 400, message: e.message });
+		return handleError(res, e);
 	}
 };
 
@@ -51,15 +46,38 @@ const updatePool = async (req, res, next) => {
 		});
 		return res
 			.status(200)
-			.json({ status: 200, data: newPool, message: 'Cable updated succesfully' });
+			.json({ status: 200, data: newPool, message: 'Pool updated succesfully' });
 	} catch (e) {
-		return res.status(400).json({ status: 400, message: e.message });
+		return handleError(res, e);
+	}
+};
+
+const joinPool = async (req, res, next) => {
+	const { latitude, longitude, sessionId } = req.query;
+	const { poolId } = req.params;
+
+	try {
+		const pool = await PoolService.findPool({ poolId });
+		const newSession = await SessionService.addNew({
+			pool,
+			sessionId,
+			latitude,
+			longitude,
+		});
+		return res.status(200).json({
+			status: 200,
+			data: newSession,
+			message: `Joined the Pool ${poolId} succesfully`,
+		});
+	} catch (e) {
+		return handleError(res, e);
 	}
 };
 
 const PoolController = {
 	createPool,
 	updatePool,
+	joinPool,
 };
 
 module.exports = PoolController;
