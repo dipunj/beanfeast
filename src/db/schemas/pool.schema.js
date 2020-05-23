@@ -25,6 +25,9 @@ const PoolSchema = new Schema(
 			type: Number,
 			default: 0,
 		},
+		createdBy: {
+			type: String,
+		},
 		centroidLatitude: {
 			type: Number,
 		},

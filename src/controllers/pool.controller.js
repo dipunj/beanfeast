@@ -17,6 +17,7 @@ const createPool = async (req, res, next) => {
 			fromTime,
 			toTime,
 			maxPoolSize: maxPeople,
+			uniqueIdentifier,
 		});
 		const { newSession, updatedPool } = await SessionService.createNew({
 			pool: newPool,
@@ -35,14 +36,19 @@ const createPool = async (req, res, next) => {
 };
 
 const updatePool = async (req, res, next) => {
-	const { poolId, fromTime = Date.now, toTime = Date.now, maxPeople = Infinity } = req.params;
+	const { fromTime, toTime, maxPeople, uniqueIdentifier } = req.query;
+	const { poolId } = req.params;
 
 	try {
+		if (!poolId) {
+			throw new Error('Incomplete joining URL');
+		}
 		const newPool = await PoolService.updatePool({
 			poolId,
 			fromTime,
 			toTime,
-			maxPeople,
+			maxPoolSize: maxPeople,
+			uniqueIdentifier,
 		});
 		return res
 			.status(200)
@@ -61,7 +67,7 @@ const joinPool = async (req, res, next) => {
 		} else if (!latitude || !longitude) {
 			throw new Error('Location is null');
 		} else if (!poolId) {
-			throw new Error('Invalid joining URL');
+			throw new Error('Incomplete joining URL');
 		}
 		const newSession = await SessionService.addToPool({
 			poolId,
