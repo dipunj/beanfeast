@@ -2,8 +2,6 @@ var Session = require('../db/models/session.model');
 var mongoose = require('mongoose');
 var PoolService = require('./pool.service');
 
-// TODO: create transaction here
-
 const addNew = async (params, ...rest) => {
 	const { pool, latitude, longitude, sessionId } = params;
 

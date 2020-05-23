@@ -57,13 +57,7 @@ const joinPool = async (req, res, next) => {
 	const { poolId } = req.params;
 
 	try {
-		const pool = await PoolService.findPool({ poolId });
-		const newSession = await SessionService.addNew({
-			pool,
-			sessionId,
-			latitude,
-			longitude,
-		});
+		const newSession = await PoolService.joinPool({ poolId, sessionId, latitude, longitude });
 		return res.status(200).json({
 			status: 200,
 			data: newSession,
