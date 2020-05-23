@@ -5,8 +5,14 @@ const generateNewCable = async (params, ...rest) => {
 	const { fromTime, toTime, maxPoolSize } = params;
 
 	try {
-		const newCable = await Cable({ fromTime, toTime, maxPoolSize });
-		newCable.save();
+		const newCable = Cable({ fromTime, toTime, maxPoolSize });
+
+		await newCable.save((err, doc) => {
+			if (err) console.error(err);
+			else {
+				console.log('generateNewCable: doc saved succesfully', doc);
+			}
+		});
 		return newCable;
 	} catch (e) {
 		// Log Errors
@@ -18,12 +24,12 @@ const updateCable = async (params, ...rest) => {
 	const { cableId, fromTime, toTime, maxPoolSize } = params;
 
 	try {
-		const cable = await Cable.findById(cableId, 'maxPoolSize fromTime toTime');
+		const cable = await Cable.findOne({ _id: cableId }, 'maxPoolSize fromTime toTime');
 		cable.maxPoolSize = maxPoolSize || cable.maxPoolSize;
 		cable.fromTime = fromTime || cable.fromTime;
 		cable.toTime = toTime || cable.toTime;
 
-		cable.save();
+		await cable.save();
 		return cable;
 	} catch (e) {
 		console.error(e);
@@ -33,12 +39,24 @@ const updateCable = async (params, ...rest) => {
 const incrementPoolSize = async (params, ...rest) => {
 	const { cable } = params;
 	try {
-		if (cable.currPoolSize === cable.maxPoolSize) {
+		if (cable.currPoolSize >= cable.maxPoolSize) {
 			console.error('Max Pool Size reached');
 		} else {
-			cable.currPoolSize += 1;
-			cable.save();
-			return cable;
+			const cableObj = await Cable.findOne({ _id: cable._id });
+			cableObj.currPoolSize += 1;
+			const doc = await cableObj.save();
+			// const doc = await Cable.findByIdAndUpdate(
+			// 	cable._id,
+			// 	{
+			// 		$inc: {
+			// 			currPoolSize: 1,
+			// 		},
+			// 	},
+			// 	{
+			// 		new: true,
+			// 	}
+			// );
+			return doc;
 		}
 	} catch (e) {
 		console.error(e);

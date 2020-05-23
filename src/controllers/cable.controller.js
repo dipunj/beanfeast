@@ -1,5 +1,6 @@
 var CableService = require('../services/cable.services');
 var PoolService = require('../services/pool.services');
+var Cable = require('../db/models/cable.model');
 
 const newCable = async (req, res, next) => {
 	const {
@@ -11,24 +12,29 @@ const newCable = async (req, res, next) => {
 		sessionId,
 	} = req.query;
 
+	let cable;
 	try {
-		let cable = await CableService.generateNewCable({
+		cable = await CableService.generateNewCable({
 			fromTime,
 			toTime,
 			maxPeople,
 		});
-		let poolEntry = await PoolService.addNewUser({
+
+		await PoolService.addNewUser({
 			cableId: cable._id,
 			latitude,
 			longitude,
 			sessionId,
 		});
-		if (poolEntry) {
-			cable = await CableService.incrementPoolSize({ cable });
-		}
+	} catch (e) {
+		return res.status(400).json({ status: 400, message: e.message });
+	}
+
+	try {
+		const updatedCable = await CableService.incrementPoolSize({ cable });
 		return res
 			.status(200)
-			.json({ status: 200, data: cable, message: 'Cable created succesfully' });
+			.json({ status: 200, data: updatedCable, message: 'Cable created succesfully' });
 	} catch (e) {
 		return res.status(400).json({ status: 400, message: e.message });
 	}
