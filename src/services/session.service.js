@@ -5,8 +5,10 @@ var PoolService = require('./pool.service');
 const createNew = async (params, ...rest) => {
 	const { pool, latitude, longitude, uniqueIdentifier } = params;
 
-	const session = await mongoose.startSession();
-	session.startTransaction();
+	const transaction = await mongoose.startSession();
+	transaction.startTransaction();
+
+	let sesh_id;
 
 	if (pool.currPoolSize >= pool.maxPoolSize) {
 		throw new Error("Cannot join this pool since it's fully occupied");
@@ -20,17 +22,23 @@ const createNew = async (params, ...rest) => {
 				longitude,
 			});
 
+			sesh_id = sesh._id;
+
 			await sesh.save();
 			const updatedPool = await PoolService.incrementPoolSize({ pool });
 			////////////////////
 
-			session.endSession();
-
+			transaction.endSession();
 			return { newSession: sesh, updatedPool };
 		} catch (e) {
 			// add check for sessionId, if sessionId exists for the same poolId, throw error
-			await session.abortTransaction();
-			session.endSession();
+			try {
+				await Session.deleteOne({ _id: sesh_id });
+			} catch (e2) {
+				throw e2;
+			}
+			await transaction.abortTransaction();
+			transaction.endSession();
 			throw e;
 		}
 	}
