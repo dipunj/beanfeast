@@ -1,7 +1,7 @@
 var axios = require('axios');
 var PoolService = require('./pool.service.js');
 
-const _getPlaces = async (params, ...rest) => {
+const _getPlaces = async (params, { queryString, searchRadius }, ...rest) => {
 	const { pool } = params;
 	try {
 		const places = await axios.get(
@@ -10,10 +10,9 @@ const _getPlaces = async (params, ...rest) => {
 				crossDomain: true,
 				params: {
 					key: process.env.GOOGLE_API_KEY,
-					keyword: pool.queryString,
+					keyword: queryString || process.env.defaultQueryString || 'cafe',
 					location: `${pool.centroidLatitude},${pool.centroidLongitude}`,
-					// search in atleast a radius of 200m
-					radius: Math.max(pool.searchRadius, 200),
+					radius: Math.max(searchRadius, process.env.minSearchRadius || 200),
 				},
 			}
 		);
@@ -23,23 +22,19 @@ const _getPlaces = async (params, ...rest) => {
 	}
 };
 
-const getStatus = async (params, ...rest) => {
-	const {
-		poolId,
-		fromTime,
-		toTime,
-		maxPoolSize,
-		uniqueIdentifier,
-		queryString,
-		searchRadius,
-	} = params;
-
+const getStatus = async (
+	{ poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier, queryString, searchRadius },
+	...rest
+) => {
 	const updateParams = {
 		poolId,
 		fromTime,
 		toTime,
 		maxPoolSize,
 		uniqueIdentifier,
+	};
+
+	const searchParams = {
 		queryString,
 		searchRadius,
 	};
@@ -47,13 +42,13 @@ const getStatus = async (params, ...rest) => {
 	try {
 		const pool = await PoolService.updatePool(updateParams);
 		if (pool.currPoolSize === pool.maxPoolSize) {
-			const places = await _getPlaces({ pool });
+			const places = await _getPlaces({ pool }, searchParams);
 
 			if (places.status !== 'OK') {
 				return {
 					status: 'OVER_QUERY_LIMIT',
 					message:
-						"Unfortunately we have exhausted our daily quota limit for Google's Maps API, Sorry for the inconvenience caused",
+						"Unfortunately we have exhausted our daily free quota for Google's Maps API, Sorry for the inconvenience caused",
 				};
 			}
 			return {

@@ -23,7 +23,7 @@ const _findPool = async ({ poolId }, ...rest) => {
  * @param {*} { poolObj }
  * @returns nothing, (in place update)
  */
-const _updateCentroidInPlace = async ({ poolObj }) => {
+const _updateCentroid_InPlace = async ({ poolObj }) => {
 	try {
 		const sessions = await Session.find({ poolId: poolObj._id })
 			.select('latitude longitude')
@@ -81,47 +81,56 @@ const createNewPool = async ({ fromTime, toTime, maxPoolSize, uniqueIdentifier }
 const updatePool = async ({ poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier }, ...rest) => {
 	try {
 		var pool = await Pool.findOne({ _id: poolId });
-		if (maxPoolSize) {
-			if (!pool) {
-				throw new Error('Invalid Joining URL');
-			} else if (pool.createdBy !== uniqueIdentifier) {
-				throw new Error(
-					'Pool creator can only alter the maximum allowed people in the pool'
-				);
-			} else if (pool.currPoolSize > maxPoolSize) {
-				//////////////////////////////////////////////
-				// mongodb doesn't support limit on deleteMany
-				// const latestMembers = Session.find({ poolId: pool._id })
-				// 	.sort('-date')
-				// 	.limit(pool.currPoolSize - maxPoolSize);
-				// const result = await Session.deleteMany(latestMembers);
-				//////////////////////////////////////////////
+		var sessions = (await Session.find({ poolId }, 'uniqueIdentifier -_id')).map(
+			({ uniqueIdentifier }) => uniqueIdentifier
+		);
 
-				// find the members who joined most recently and remove them
-				const latestMembers = await Session.find({ poolId: pool._id })
-					.sort({ createdAt: 'desc' })
-					.limit(pool.currPoolSize - maxPoolSize)
-					.exec();
-				const memberIds = latestMembers.map((mem) => mem._id);
-				await Session.deleteMany({
-					_id: {
-						$in: memberIds,
-					},
-				});
+		if (sessions.includes(uniqueIdentifier)) {
+			if (maxPoolSize) {
+				if (!pool) {
+					throw new Error("The pool doesn't exist");
+				} else if (pool.createdBy !== uniqueIdentifier) {
+					throw new Error(
+						'Only the Pool creator can alter the maximum allowed people in the pool'
+					);
+				} else if (maxPoolSize === 1) {
+					throw new Error('A Pool should have atleast two members');
+				} else if (pool.currPoolSize > maxPoolSize) {
+					//////////////////////////////////////////////
+					// mongodb doesn't support limit on deleteMany
+					// const latestMembers = Session.find({ poolId: pool._id })
+					// 	.sort('-date')
+					// 	.limit(pool.currPoolSize - maxPoolSize);
+					// const result = await Session.deleteMany(latestMembers);
+					//////////////////////////////////////////////
 
-				// since there are maxPoolSize number of people in this pool now
-				pool.currPoolSize = maxPoolSize;
-				await _updateCentroidInPlace({ poolObj: pool });
+					// find the members who joined most recently and remove them
+					const latestMembers = await Session.find({ poolId: pool._id })
+						.sort({ createdAt: 'desc' })
+						.limit(pool.currPoolSize - maxPoolSize)
+						.exec();
+					const memberIds = latestMembers.map((mem) => mem._id);
+					await Session.deleteMany({
+						_id: {
+							$in: memberIds,
+						},
+					});
+
+					// since there are maxPoolSize number of people in this pool now
+					pool.currPoolSize = maxPoolSize;
+					await _updateCentroid_InPlace({ poolObj: pool });
+				}
 			}
+			pool.maxPoolSize = maxPoolSize || pool.maxPoolSize;
+			pool.fromTime = fromTime || pool.fromTime;
+			pool.toTime = toTime || pool.toTime;
+
+			await pool.save();
+
+			return pool;
+		} else {
+			throw new Error('Access Unauthorised to this pool');
 		}
-
-		pool.maxPoolSize = maxPoolSize || pool.maxPoolSize;
-		pool.fromTime = fromTime || pool.fromTime;
-		pool.toTime = toTime || pool.toTime;
-
-		await pool.save();
-
-		return pool;
 	} catch (e) {
 		throw e;
 	}
@@ -148,7 +157,7 @@ const incrementPoolSize = async ({ pool }, ...rest) => {
 			if (pool.currPoolSize === pool.maxPoolSize) {
 				// update the centroid, since the number of members would have been reduced
 				// const updatedPool =
-				await _updateCentroidInPlace({ poolObj: pool });
+				await _updateCentroid_InPlace({ poolObj: pool });
 				// return updatedPool;
 			}
 			return pool;

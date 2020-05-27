@@ -16,13 +16,13 @@ const createPool = async (req, res, next) => {
 		const newPool = await PoolService.createNewPool({
 			fromTime,
 			toTime,
-			maxPoolSize: maxPeople,
+			maxPoolSize: parseInt(maxPeople),
 			uniqueIdentifier,
 		});
 		const { newSession, updatedPool } = await SessionService.createNew({
 			pool: newPool,
-			latitude,
-			longitude,
+			latitude: parseFloat(latitude),
+			longitude: parseFloat(longitude),
 			uniqueIdentifier,
 		});
 		return res.status(200).json({
@@ -46,7 +46,7 @@ const updatePool = async (req, res, next) => {
 			poolId,
 			fromTime,
 			toTime,
-			maxPoolSize: maxPeople,
+			maxPoolSize: parseInt(maxPeople),
 			uniqueIdentifier,
 		});
 		return res.status(200).json({ data: newPool, message: 'Pool updated succesfully' });
