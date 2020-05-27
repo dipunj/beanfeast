@@ -84,7 +84,6 @@ const updatePool = async ({ poolId, fromTime, toTime, maxPoolSize, uniqueIdentif
 		var sessions = (await Session.find({ poolId }, 'uniqueIdentifier -_id')).map(
 			({ uniqueIdentifier }) => uniqueIdentifier
 		);
-
 		if (sessions.includes(uniqueIdentifier)) {
 			if (maxPoolSize) {
 				if (!pool) {

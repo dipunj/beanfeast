@@ -1,4 +1,4 @@
-const GoogleStatus = Object.freeze({
+const GoogleStates = Object.freeze({
 	OVER_QUERY_LIMIT: 'OVER_QUERY_LIMIT',
 	OK: 'OK',
 });
@@ -9,6 +9,6 @@ const AppStates = Object.freeze({
 });
 
 module.exports = {
-	GoogleStatus,
+	GoogleStates,
 	AppStates,
 };

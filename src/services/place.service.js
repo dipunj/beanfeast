@@ -21,7 +21,7 @@ const _getPlaces = async (params, { queryString, searchRadius }, ...rest) => {
 	}
 };
 
-const getStatus = async (
+const getStatusAndUpdate = async (
 	{ poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier, queryString, searchRadius },
 	...rest
 ) => {
@@ -47,12 +47,13 @@ const getStatus = async (
 				return {
 					status: GoogleStates.OVER_QUERY_LIMIT,
 					message:
-						"Unfortunately we have exhausted our daily free quota for Google's Maps API, Sorry for the inconvenience caused",
+						'Google says that we have exhausted our daily free limit for Maps API. This is sometimes a error on their end. Please try again, if it persists, then we have certainly exahausted our free limit',
 				};
 			} else if (places.status !== GoogleStates.OK) {
 				return {
 					status: places.status,
 					message: places.error_message,
+					pool,
 				};
 			}
 
@@ -73,7 +74,7 @@ const getStatus = async (
 };
 
 const PlaceService = {
-	getStatus,
+	getStatusAndUpdate,
 };
 
 module.exports = PlaceService;
