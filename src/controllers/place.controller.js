@@ -2,7 +2,15 @@ var PlaceService = require('../services/place.service');
 var handleError = require('../util/error.util');
 
 const showStatus = async (req, res, next) => {
-	const { uniqueIdentifier } = req.query;
+	const {
+		uniqueIdentifier,
+		fromTime,
+		toTime,
+		maxPoolSize,
+		queryString,
+		searchRadius,
+	} = req.query;
+
 	const { poolId } = req.params;
 
 	const params = {
