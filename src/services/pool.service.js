@@ -1,17 +1,67 @@
 var Pool = require('../db/models/pool.model');
 var Session = require('../db/models/session.model');
 
-const createNewPool = async (params, ...rest) => {
-	const { fromTime, toTime, maxPoolSize, uniqueIdentifier, queryString, searchRadius } = params;
+/**
+ * finds if a pool with pool id exists
+ *
+ * @param {*} { poolId }
+ * @param {*} rest
+ * @returns mongoose pool object
+ */
+const _findPool = async ({ poolId }, ...rest) => {
+	try {
+		const pool = await Pool.findOne({ _id: poolId }).exec();
+		return pool;
+	} catch (e) {
+		throw e;
+	}
+};
 
+/**
+ * updates the centroid for a pool with poolObj
+ *
+ * @param {*} { poolObj }
+ * @returns nothing, (in place update)
+ */
+const _updateCentroidInPlace = async ({ poolObj }) => {
+	try {
+		const sessions = await Session.find({ poolId: poolObj._id })
+			.select('latitude longitude')
+			.exec();
+		const { sumLat, sumLong } = sessions.reduce(
+			(acc, sesh) => {
+				acc.sumLat = parseFloat(acc.sumLat) + parseFloat(sesh.latitude);
+				acc.sumLong = parseFloat(acc.sumLong) + parseFloat(sesh.longitude);
+				return acc;
+			},
+			{ sumLat: 0, sumLong: 0 }
+		);
+
+		poolObj.centroidLatitude = (sumLat / poolObj.currPoolSize).toFixed(5);
+		poolObj.centroidLongitude = (sumLong / poolObj.currPoolSize).toFixed(5);
+
+		await poolObj.save();
+
+		// return poolObj;
+	} catch (e) {
+		throw e;
+	}
+};
+
+/**
+ * creates a new pool with creator as uniqueIdentifier
+ *
+ * @param {*} { fromTime, toTime, maxPoolSize, uniqueIdentifier }
+ * @param {*} rest
+ * @returns newly created pool Object
+ */
+const createNewPool = async ({ fromTime, toTime, maxPoolSize, uniqueIdentifier }, ...rest) => {
 	try {
 		const newPool = Pool({
 			fromTime,
 			toTime,
 			maxPoolSize,
 			createdBy: uniqueIdentifier,
-			queryString,
-			searchRadius,
 		});
 		await newPool.save();
 
@@ -21,19 +71,16 @@ const createNewPool = async (params, ...rest) => {
 	}
 };
 
-const updatePool = async (params, ...rest) => {
-	const {
-		poolId,
-		fromTime,
-		toTime,
-		maxPoolSize,
-		uniqueIdentifier,
-		queryString,
-		searchRadius,
-	} = params;
-
+/**
+ * updates the pool details, the uniqueIdentifier must be same as the creator of the pool
+ *
+ * @param {*} { poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier }
+ * @param {*} rest
+ * @returns updated pool object
+ */
+const updatePool = async ({ poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier }, ...rest) => {
 	try {
-		const pool = await Pool.findOne({ _id: poolId });
+		var pool = await Pool.findOne({ _id: poolId });
 		if (maxPoolSize) {
 			if (!pool) {
 				throw new Error('Invalid Joining URL');
@@ -64,14 +111,13 @@ const updatePool = async (params, ...rest) => {
 
 				// since there are maxPoolSize number of people in this pool now
 				pool.currPoolSize = maxPoolSize;
+				await _updateCentroidInPlace({ poolObj: pool });
 			}
 		}
 
 		pool.maxPoolSize = maxPoolSize || pool.maxPoolSize;
 		pool.fromTime = fromTime || pool.fromTime;
 		pool.toTime = toTime || pool.toTime;
-		pool.searchRadius = searchRadius || pool.searchRadius;
-		pool.queryString = queryString || pool.queryString;
 
 		await pool.save();
 
@@ -81,27 +127,31 @@ const updatePool = async (params, ...rest) => {
 	}
 };
 
-const _findPool = async (params, ...rest) => {
-	const { poolId } = params;
-	try {
-		const pool = await Pool.findOne({ _id: poolId }).exec();
-		return pool;
-	} catch (e) {
-		throw e;
-	}
-};
-
-const incrementPoolSize = async (params, ...rest) => {
-	const { pool } = params;
+/**
+ *takes a mongoose pool object
+ *
+ * @param {*} { pool }
+ * @param {*} rest
+ * @returns udpatedPool
+ */
+const incrementPoolSize = async ({ pool }, ...rest) => {
 	try {
 		if (pool.currPoolSize >= pool.maxPoolSize) {
 			throw new Error('Max Pool Size reached');
 		} else {
-			const poolObj = await Pool.findOne({ _id: pool._id });
-			poolObj.currPoolSize += 1;
-			const incrementedPool = await poolObj.save();
+			// currPoolSize < maxPoolSize
+			pool.currPoolSize += 1;
+			await pool.save();
 
-			return incrementedPool;
+			// pool exactly full
+			// updateCentroid saves the pool obj, avoid two writes
+			if (pool.currPoolSize === pool.maxPoolSize) {
+				// update the centroid, since the number of members would have been reduced
+				// const updatedPool =
+				await _updateCentroidInPlace({ poolObj: pool });
+				// return updatedPool;
+			}
+			return pool;
 		}
 	} catch (e) {
 		throw e;

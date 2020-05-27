@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var shortid = require('shortid');
+var { Decimal128 } = require('mongodb');
 
 const { Schema } = mongoose;
 
@@ -25,22 +26,14 @@ const PoolSchema = new Schema(
 			type: Number,
 			default: 0,
 		},
-		searchRadius: {
-			type: Number,
-			default: 1000,
-		},
-		queryString: {
-			type: String,
-			default: 'cafe',
-		},
 		createdBy: {
 			type: String,
 		},
 		centroidLatitude: {
-			type: Number,
+			type: Decimal128,
 		},
 		centroidLongitude: {
-			type: Number,
+			type: Decimal128,
 		},
 	},
 	{

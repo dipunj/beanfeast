@@ -10,8 +10,6 @@ const createPool = async (req, res, next) => {
 		latitude,
 		longitude,
 		uniqueIdentifier,
-		queryString,
-		searchRadius,
 	} = req.query;
 
 	try {
@@ -20,8 +18,6 @@ const createPool = async (req, res, next) => {
 			toTime,
 			maxPoolSize: maxPeople,
 			uniqueIdentifier,
-			queryString,
-			searchRadius,
 		});
 		const { newSession, updatedPool } = await SessionService.createNew({
 			pool: newPool,
@@ -30,7 +26,6 @@ const createPool = async (req, res, next) => {
 			uniqueIdentifier,
 		});
 		return res.status(200).json({
-			status: 200,
 			data: { newSession, updatedPool },
 			message: 'Pool created succesfully',
 		});
@@ -40,7 +35,7 @@ const createPool = async (req, res, next) => {
 };
 
 const updatePool = async (req, res, next) => {
-	const { fromTime, toTime, maxPeople, uniqueIdentifier, queryString, searchRadius } = req.query;
+	const { fromTime, toTime, maxPeople, uniqueIdentifier } = req.query;
 	const { poolId } = req.params;
 
 	try {
@@ -53,12 +48,8 @@ const updatePool = async (req, res, next) => {
 			toTime,
 			maxPoolSize: maxPeople,
 			uniqueIdentifier,
-			queryString,
-			searchRadius,
 		});
-		return res
-			.status(200)
-			.json({ status: 200, data: newPool, message: 'Pool updated succesfully' });
+		return res.status(200).json({ data: newPool, message: 'Pool updated succesfully' });
 	} catch (e) {
 		return handleError(res, e);
 	}
@@ -82,7 +73,6 @@ const joinPool = async (req, res, next) => {
 			longitude,
 		});
 		return res.status(200).json({
-			status: 200,
 			data: newSession,
 			message: `Joined the Pool ${poolId} succesfully`,
 		});

@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.post('/new', PoolController.createPool);
 router.post('/update/:poolId', PoolController.updatePool);
+
+// the get route for join will contain the view to join the pool
 router.post('/join/:poolId', PoolController.joinPool);
 
 module.exports = router;
