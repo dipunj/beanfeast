@@ -10,6 +10,7 @@
 		"dev": "nodemon ./src/bin/www"
 	},
 	"dependencies": {
+		"axios": "^0.19.2",
 		"cookie-parser": "~1.4.4",
 		"core-js": "^3.6.5",
 		"debug": "~2.6.9",
@@ -21,6 +22,7 @@
 		"shortid": "^2.2.15"
 	},
 	"devDependencies": {
+		"cors": "^2.8.5",
 		"eslint": "^6.8.0",
 		"eslint-config-airbnb-base": "^14.1.0",
 		"eslint-config-prettier": "^6.11.0",
