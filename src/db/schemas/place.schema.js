@@ -1,9 +1,8 @@
 var mongoose = require('mongoose');
-var placesApiResponseSchema = require('./mapsApi.schema');
 
 const { Schema } = mongoose;
 
-const placesSchema = new Schema(
+const PlaceSchema = new Schema(
 	{
 		poolId: {
 			type: String,
@@ -19,4 +18,4 @@ const placesSchema = new Schema(
 	}
 );
 
-module.exports = placesSchema;
+module.exports = PlaceSchema;

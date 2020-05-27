@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
-var PlacesSchema = require('../schemas/places.schema');
+var PlaceSchema = require('../schemas/place.schema');
 
 const { model } = mongoose;
-const Places = model('Places', PlacesSchema);
+const Place = model('Place', PlaceSchema);
 
-module.exports = Places;
+module.exports = Place;
