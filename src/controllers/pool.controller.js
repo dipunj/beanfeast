@@ -10,6 +10,8 @@ const createPool = async (req, res, next) => {
 		latitude,
 		longitude,
 		uniqueIdentifier,
+		queryString,
+		searchRadius,
 	} = req.query;
 
 	try {
@@ -18,6 +20,8 @@ const createPool = async (req, res, next) => {
 			toTime,
 			maxPoolSize: maxPeople,
 			uniqueIdentifier,
+			queryString,
+			searchRadius,
 		});
 		const { newSession, updatedPool } = await SessionService.createNew({
 			pool: newPool,
@@ -36,7 +40,7 @@ const createPool = async (req, res, next) => {
 };
 
 const updatePool = async (req, res, next) => {
-	const { fromTime, toTime, maxPeople, uniqueIdentifier } = req.query;
+	const { fromTime, toTime, maxPeople, uniqueIdentifier, queryString, searchRadius } = req.query;
 	const { poolId } = req.params;
 
 	try {
@@ -49,6 +53,8 @@ const updatePool = async (req, res, next) => {
 			toTime,
 			maxPoolSize: maxPeople,
 			uniqueIdentifier,
+			queryString,
+			searchRadius,
 		});
 		return res
 			.status(200)

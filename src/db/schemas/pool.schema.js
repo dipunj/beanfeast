@@ -25,6 +25,14 @@ const PoolSchema = new Schema(
 			type: Number,
 			default: 0,
 		},
+		searchRadius: {
+			type: Number,
+			default: 1000,
+		},
+		queryString: {
+			type: String,
+			default: 'cafe',
+		},
 		createdBy: {
 			type: String,
 		},

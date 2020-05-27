@@ -2,10 +2,17 @@ var Pool = require('../db/models/pool.model');
 var Session = require('../db/models/session.model');
 
 const createNewPool = async (params, ...rest) => {
-	const { fromTime, toTime, maxPoolSize, uniqueIdentifier } = params;
+	const { fromTime, toTime, maxPoolSize, uniqueIdentifier, queryString, searchRadius } = params;
 
 	try {
-		const newPool = Pool({ fromTime, toTime, maxPoolSize, createdBy: uniqueIdentifier });
+		const newPool = Pool({
+			fromTime,
+			toTime,
+			maxPoolSize,
+			createdBy: uniqueIdentifier,
+			queryString,
+			searchRadius,
+		});
 		await newPool.save();
 
 		return newPool;
@@ -15,7 +22,15 @@ const createNewPool = async (params, ...rest) => {
 };
 
 const updatePool = async (params, ...rest) => {
-	const { poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier } = params;
+	const {
+		poolId,
+		fromTime,
+		toTime,
+		maxPoolSize,
+		uniqueIdentifier,
+		queryString,
+		searchRadius,
+	} = params;
 
 	try {
 		const pool = await Pool.findOne({ _id: poolId });
@@ -55,6 +70,8 @@ const updatePool = async (params, ...rest) => {
 		pool.maxPoolSize = maxPoolSize || pool.maxPoolSize;
 		pool.fromTime = fromTime || pool.fromTime;
 		pool.toTime = toTime || pool.toTime;
+		pool.searchRadius = searchRadius || pool.searchRadius;
+		pool.queryString = queryString || pool.queryString;
 
 		await pool.save();
 
