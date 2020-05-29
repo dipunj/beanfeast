@@ -1,6 +1,10 @@
 {
-	"name": "with-typescript-styled-components",
-	"version": "1.0.0",
+	"name": "beanfeast-frontend",
+	"version": "0.1.0",
+	"private": true,
+	"repository": "https://github.com/dipunj/beanfeast.git",
+	"author": "Dipunj Gupta <dipunj.mnnit@gmail.com>",
+	"license": "MIT",
 	"scripts": {
 		"dev": "next",
 		"build": "next build",
@@ -21,6 +25,5 @@
 		"babel-plugin-styled-components": "^1.10.0",
 		"prettier": "^2.0.5",
 		"typescript": "3.5.2"
-	},
-	"license": "ISC"
+	}
 }
