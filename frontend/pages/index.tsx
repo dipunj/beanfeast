@@ -1,8 +1,8 @@
-import styled from 'styled-components';
+import React from 'react';
+import Header from '../components/Layouts/Header';
 
-const Title = styled.h1`
-	color: red;
-	font-size: 50px;
-`;
+const Homepage = () => {
+	return <Header />;
+};
 
-export default () => <Title>My page</Title>;
+export default Homepage;
