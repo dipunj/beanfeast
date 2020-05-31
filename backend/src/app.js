@@ -5,7 +5,6 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var poolRouter = require('./routes/pool.routes');
-var sessionRouter = require('./routes/session.routes');
 var placeRouter = require('./routes/place.routes');
 
 const app = express();
@@ -17,7 +16,6 @@ app.use(cookieParser());
 
 app.use('/', indexRouter);
 app.use('/pool', poolRouter);
-app.use('/session', sessionRouter);
 app.use('/place', placeRouter);
 
 module.exports = app;
