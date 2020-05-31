@@ -22,5 +22,7 @@
 	"editor.insertSpaces": false,
 	"editor.detectIndentation": false,
 	"peacock.color": "#000000",
-	"todo-tree.tree.scanMode": "current file"
+	"todo-tree.tree.scanMode": "current file",
+	"editor.wordWrapColumn": 120,
+	"editor.wordWrap": "bounded"
 }
