@@ -1,7 +1,13 @@
 import { Wrapper } from './styles';
+import Header from '../Layouts/Header';
 
-const withWrapper = (content) => {
-	return <Wrapper>{content}</Wrapper>;
+const defaultGetLayout = (page) => {
+	return (
+		<>
+			<Header />
+			{page}
+		</>
+	);
 };
 
-export { withWrapper };
+export { defaultGetLayout };

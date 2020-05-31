@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import theme from '../theme';
+import { defaultGetLayout } from '../components/util';
 
 export default function MyApp(props) {
 	const { Component, pageProps } = props;
@@ -15,6 +16,9 @@ export default function MyApp(props) {
 			jssStyles.parentElement.removeChild(jssStyles);
 		}
 	}, []);
+
+	// use the getLayout function to get the layout of the page
+	const getLayout = Component.getLayout || ((page) => defaultGetLayout(page));
 
 	return (
 		<React.Fragment>
@@ -33,7 +37,7 @@ export default function MyApp(props) {
 			<ThemeProvider theme={theme}>
 				{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 				<CssBaseline />
-				<Component {...pageProps} />
+				{getLayout(<Component {...pageProps} />)}
 			</ThemeProvider>
 		</React.Fragment>
 	);
