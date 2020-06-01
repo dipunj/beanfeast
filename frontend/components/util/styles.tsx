@@ -1,7 +1,12 @@
-import styled from 'styled-components';
+import { makeStyles } from '@material-ui/core/styles';
 
-const Wrapper = styled.div`
-	display: flex;
-`;
+const useStyles = makeStyles({
+	paddedContainer: {
+		flexDirection: 'column',
+		justifyContent: 'space-evenly',
+		alignItems: 'center',
+		padding: '0px 25vw',
+	},
+});
 
-export { Wrapper };
+export default useStyles;
