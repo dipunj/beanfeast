@@ -5,7 +5,7 @@ var db = require('../db/connection');
 
 const debug = require('debug')('beanfeast:server');
 
-const port = process.env.PORT || 3000;
+const port = process.env.APP_PORT || 4000;
 app.set('port', port);
 
 function onError(error) {
@@ -35,7 +35,7 @@ const server = http.createServer(app);
 function onListening() {
 	const addr = server.address();
 	const bind = typeof addr === 'string' ? `pipe ${addr}` : `port ${addr.port}`;
-	debug(`Listening on ${bind}`);
+	console.log(`Listening on ${bind}`);
 }
 
 server.listen(port);
