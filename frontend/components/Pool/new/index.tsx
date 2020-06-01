@@ -17,13 +17,15 @@ import { useTheme } from '@material-ui/core';
  */
 
 const createNewPool = () => {
-	const { container, label } = useStyles();
-	const [date, setDate] = useState<Date | null>(new Date());
-	const [fromTime, setFromTime] = useState<Date | null>(new Date());
-	const [toTime, setToTime] = useState<Date | null>(new Date());
+	const { container } = useStyles();
+
+	const [date, setDate] = useState<Date>(new Date());
+	const [fromTime, setFromTime] = useState<Date>(new Date());
+	const [toTime, setToTime] = useState<Date>(new Date());
 	const [headCount, setHeadCount] = useState(4);
-	const [permssionError, setPermissionError] = useState('');
 	const [location, setLocation] = useState({});
+
+	const [permssionError, setPermissionError] = useState('');
 
 	const handleSliderChange = (e, newValue) => {
 		setHeadCount(newValue);
@@ -34,10 +36,10 @@ const createNewPool = () => {
 	};
 
 	const handleBlur = () => {
-		if (headCount < 0) {
-			setHeadCount(0);
-		} else if (headCount > 100) {
-			setHeadCount(100);
+		if (headCount < 1) {
+			setHeadCount(1);
+		} else if (headCount > 10) {
+			setHeadCount(10);
 		}
 	};
 
@@ -59,12 +61,17 @@ const createNewPool = () => {
 	};
 
 	const handleLocation = ({ coords: { latitude, longitude } }) => {
-		setLocation({ latitude, longitude });
+		setLocation({ latitude: latitude.toFixed(5), longitude: longitude.toFixed(5) });
 	};
 
 	const handleSubmit = async () => {
 		const uniqueIdentifier = await getFingerprint();
-		console.log(uniqueIdentifier, date, fromTime, toTime, headCount, location);
+		const d = date?.getDate();
+		const m = date?.getMonth();
+		const y = date?.getFullYear();
+		const from_Time = new Date(y, m, d, fromTime?.getHours(), fromTime?.getMinutes());
+		const to_Time = new Date(y, m, d, toTime?.getHours(), toTime?.getMinutes());
+		console.log(uniqueIdentifier, from_Time, to_Time, headCount, location);
 	};
 
 	useEffect(() => {
@@ -94,7 +101,7 @@ const createNewPool = () => {
 					{...{
 						selectedDate: fromTime,
 						setSelectedDate: setFromTime,
-						label: 'From Time',
+						label: 'From',
 					}}
 				/>
 			</Grid>
@@ -103,16 +110,16 @@ const createNewPool = () => {
 					{...{
 						selectedDate: toTime,
 						setSelectedDate: setToTime,
-						label: 'To Time',
+						label: 'To',
 					}}
 				/>
 			</Grid>
 			<Grid item xs={12}>
-				<Typography id="headCount-slider" className={label} color="secondary">
+				<Typography id="headCount-slider" color="secondary">
 					Head Count? (including you)
 				</Typography>
 			</Grid>
-			<Grid item xs={12} sm={10}>
+			<Grid item xs={12} sm={8} lg={10}>
 				<Slider
 					value={typeof headCount === 'number' ? headCount : 4}
 					onChange={handleSliderChange}
@@ -124,7 +131,7 @@ const createNewPool = () => {
 					valueLabelDisplay="on"
 				/>
 			</Grid>
-			<Grid item xs={12} sm={2}>
+			<Grid item xs={12} sm={4} lg={2}>
 				<OutlinedInput
 					fullWidth
 					value={headCount}
@@ -141,7 +148,7 @@ const createNewPool = () => {
 					}}
 				/>
 			</Grid>
-			<Grid item xs={12} sm={4}>
+			<Grid item xs={12} sm={8} md={6}>
 				<Button
 					{...{
 						color: 'primary',

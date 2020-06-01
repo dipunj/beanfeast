@@ -1,20 +1,19 @@
 import { createMuiTheme } from '@material-ui/core/styles';
+import createPalette from '@material-ui/core/styles/createPalette';
 
 const BeanfeastTheme = createMuiTheme({
-	palette: {
+	palette: createPalette({
 		primary: {
 			main: '#1B98E0',
 		},
 		secondary: {
 			main: '#575860',
 		},
-		error: {
+		warning: {
 			main: '#D72638',
 		},
-		info: {
-			main: '#000000',
-		},
-	},
+		// light: '#000000',
+	}),
 });
 
 export default BeanfeastTheme;
