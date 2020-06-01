@@ -7,11 +7,11 @@ const options = {
 	},
 };
 
-const getFingerprint = async () => {
+const getBrowserFingerprint = async () => {
 	const fingPrints = await Fingerprint2.getPromise(options);
 	const values = fingPrints.map((fp) => fp.value);
 	const uniqueGibberish = Fingerprint2.x64hash128(values.join(''), 31);
 	return uniqueGibberish;
 };
 
-export default getFingerprint;
+export default getBrowserFingerprint;

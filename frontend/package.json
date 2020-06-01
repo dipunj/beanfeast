@@ -13,8 +13,10 @@
 	"dependencies": {
 		"@date-io/date-fns": "1.x",
 		"@material-ui/core": "^4.10.0",
+		"@material-ui/icons": "^4.9.1",
 		"@material-ui/lab": "^4.0.0-alpha.54",
 		"@material-ui/pickers": "^3.2.10",
+		"axios": "^0.19.2",
 		"date-fns": "^2.14.0",
 		"fingerprintjs2": "^2.1.0",
 		"next": "latest",
