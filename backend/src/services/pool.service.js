@@ -37,8 +37,8 @@ const _updateCentroid_InPlace = async ({ poolObj }) => {
 			{ sumLat: 0, sumLong: 0 }
 		);
 
-		poolObj.centroidLatitude = (sumLat / poolObj.currPoolSize).toFixed(5);
-		poolObj.centroidLongitude = (sumLong / poolObj.currPoolSize).toFixed(5);
+		poolObj.centroidLatitude = (sumLat / poolObj.currPoolSize).toFixed(7);
+		poolObj.centroidLongitude = (sumLong / poolObj.currPoolSize).toFixed(7);
 
 		await poolObj.save();
 

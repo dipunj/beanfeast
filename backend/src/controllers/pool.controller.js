@@ -10,7 +10,7 @@ const createPool = async (req, res, next) => {
 		latitude,
 		longitude,
 		uniqueIdentifier,
-	} = req.query;
+	} = req.body;
 
 	try {
 		const newPool = await PoolService.createNewPool({
@@ -35,7 +35,7 @@ const createPool = async (req, res, next) => {
 };
 
 const updatePool = async (req, res, next) => {
-	const { fromTime, toTime, maxPeople, uniqueIdentifier } = req.query;
+	const { fromTime, toTime, maxPeople, uniqueIdentifier } = req.body;
 	const { poolId } = req.params;
 
 	try {
@@ -56,7 +56,7 @@ const updatePool = async (req, res, next) => {
 };
 
 const joinPool = async (req, res, next) => {
-	const { uniqueIdentifier, latitude, longitude } = req.query;
+	const { uniqueIdentifier, latitude, longitude } = req.body;
 	const { poolId } = req.params;
 	try {
 		if (!uniqueIdentifier) {
