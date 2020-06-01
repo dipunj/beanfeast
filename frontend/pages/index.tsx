@@ -1,8 +1,15 @@
 import React from 'react';
 import Header from '../components/Layouts/Header';
-
-const Homepage = () => {
-	return <Header />;
+import About from '../components/About';
+/**
+ * Landing page to tell the user how to use the application and what the applicatinn does
+ */
+const LandingPage = () => {
+	return (
+		<>
+			<About />
+		</>
+	);
 };
 
-export default Homepage;
+export default LandingPage;
