@@ -1,6 +1,8 @@
-import { useEffect, useReducer } from 'react';
+import { useContext, useEffect, useReducer } from 'react';
 import { OutlinedInput, Grid, Slider, Typography, Button, LinearProgress } from '@material-ui/core';
+import { useRouter } from 'next/router';
 import useStyles from './styles';
+import { SessionCtx } from '../../../components/Context';
 import { TimePicker, DatePicker, Notification, request } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 
@@ -63,6 +65,8 @@ const reducer = (state, action) => {
 
 const createNewPool = () => {
 	const { container } = useStyles();
+	const router = useRouter();
+	const { context, setContext } = useContext(SessionCtx);
 	const [state, dispatch] = useReducer(reducer, initialState);
 
 	const handleClose = (e, reason?) => {
@@ -90,11 +94,16 @@ const createNewPool = () => {
 			uniqueIdentifier,
 		};
 		try {
-			const { status, data } = await request.post('http://localhost:4000/pool/new', {
+			const {
+				status,
+				data: {
+					data: { sessionData, poolData },
+				},
+			} = await request.post('http://localhost:4000/pool/new', {
 				...params,
 			});
 			if (status === 200) {
-				// router.push(`/pool/share/{data.newSession.poolId}`);
+				router.push(`/place/[poolId]`, `/place/${poolData._id}`);
 			}
 		} catch (error) {
 			console.error(error);
@@ -149,7 +158,7 @@ const createNewPool = () => {
 					<TimePicker
 						{...{
 							selectedDate: state.toTime,
-							setSelectedDate: (date: Date) => dispatch({ type: 'setDate', date }),
+							setSelectedDate: (date: Date) => dispatch({ type: 'setToTime', date }),
 							label: 'To',
 						}}
 					/>

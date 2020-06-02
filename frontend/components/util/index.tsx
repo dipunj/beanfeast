@@ -66,36 +66,48 @@ const DatePicker = ({ selectedDate, setSelectedDate, minDate, label }) => {
 	);
 };
 
-const Notification = ({ handleClose, title, message, isOpen }) => {
+const Notification = ({
+	handleClose,
+	title,
+	message,
+	type,
+	isOpen,
+	hideAfter = 6000,
+	showDismiss = true,
+	position = {
+		vertical: 'top',
+		horizontal: 'center',
+	},
+	slideDirection = 'down',
+}) => {
 	return (
 		<Snackbar
 			color="error"
-			anchorOrigin={{
-				vertical: 'top',
-				horizontal: 'center',
-			}}
+			anchorOrigin={position}
 			open={isOpen}
-			autoHideDuration={6000}
+			autoHideDuration={hideAfter}
 			onClose={handleClose}
-			TransitionComponent={(props) => <Slide {...props} direction="down" />}
+			TransitionComponent={(props) => <Slide {...props} direction={slideDirection} />}
 		>
 			<Alert
 				onClose={handleClose}
-				severity="error"
+				severity={type}
 				variant="filled"
 				action={
-					<Button size="small" color="inherit" onClick={handleClose}>
-						Dismiss
-					</Button>
+					showDismiss && (
+						<Button size="small" color="inherit" onClick={handleClose}>
+							Dismiss
+						</Button>
+					)
 				}
 			>
-				<AlertTitle>{title}</AlertTitle>
+				{title && <AlertTitle>{title}</AlertTitle>}
 				{message}
 			</Alert>
 		</Snackbar>
 	);
 };
-console.log(process.env.API_URL);
+
 const request = axios.create({
 	baseURL: process.env.API_URL,
 	timeout: 1000,
