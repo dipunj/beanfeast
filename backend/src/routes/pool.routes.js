@@ -3,6 +3,7 @@ var PoolController = require('../controllers/pool.controller');
 
 const router = express.Router();
 
+router.get('/show', PoolController.showPool);
 router.post('/new', PoolController.createPool);
 router.post('/update/:poolId', PoolController.updatePool);
 

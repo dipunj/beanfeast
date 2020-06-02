@@ -166,11 +166,32 @@ const incrementPoolSize = async ({ pool }, ...rest) => {
 	}
 };
 
+const showPool = async (params, ...rest) => {
+	const { poolId, uniqueIdentifier } = params;
+
+	try {
+		const pool = await PoolService._findPool({ poolId });
+		if (!pool) {
+			throw new Error('Invalid Joining URL');
+		}
+		const anySession = await Session.find({ uniqueIdentifier, poolId });
+		if (anySession) {
+			const thisSession = anySession.filter((sesh) => sesh.poolId == pool._id)[0];
+			return { sessionData: thisSession, poolData: pool };
+		} else {
+			throw new Error('Unauthorised: You are not a member of this pool');
+		}
+	} catch (e) {
+		throw e;
+	}
+};
+
 const PoolService = {
 	createNewPool,
 	updatePool,
 	incrementPoolSize,
 	_findPool,
+	showPool,
 };
 
 module.exports = PoolService;

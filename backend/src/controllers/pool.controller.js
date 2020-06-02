@@ -26,7 +26,7 @@ const createPool = async (req, res, next) => {
 			uniqueIdentifier,
 		});
 		return res.status(200).json({
-			data: { newSession, updatedPool },
+			data: { sessionData: newSession, poolData: updatedPool },
 			message: 'Pool created succesfully',
 		});
 	} catch (e) {
@@ -60,21 +60,44 @@ const joinPool = async (req, res, next) => {
 	const { poolId } = req.params;
 	try {
 		if (!uniqueIdentifier) {
-			throw new Error('Anonymous device hash is required to register into the pool');
+			throw new Error('Browser fingerprint is required to register into the pool');
 		} else if (!latitude || !longitude) {
 			throw new Error('Location is null');
 		} else if (!poolId) {
 			throw new Error('Incomplete joining URL');
 		}
-		const newSession = await SessionService.addToPool({
+		const { newSession, updatedPool } = await SessionService.addToPool({
 			poolId,
 			uniqueIdentifier,
 			latitude,
 			longitude,
 		});
 		return res.status(200).json({
-			data: newSession,
+			sessionData: newSession,
+			poolData: updatedPool,
 			message: `Joined the Pool ${poolId} succesfully`,
+		});
+	} catch (e) {
+		return handleError(res, e);
+	}
+};
+
+const showPool = async (req, res, next) => {
+	const { uniqueIdentifier, poolId } = req.query;
+
+	try {
+		if (!uniqueIdentifier) {
+			throw new Error('Browser fingerprint is required');
+		} else if (!poolId) {
+			throw new Error('Invalid URL');
+		}
+		const { sessionData, poolData } = await PoolService.showPool({
+			poolId,
+			uniqueIdentifier,
+		});
+		return res.status(200).json({
+			sessionData,
+			poolData,
 		});
 	} catch (e) {
 		return handleError(res, e);
@@ -85,6 +108,7 @@ const PoolController = {
 	createPool,
 	updatePool,
 	joinPool,
+	showPool,
 };
 
 module.exports = PoolController;
