@@ -175,7 +175,7 @@ const showPool = async (params, ...rest) => {
 			throw new Error('Invalid Joining URL');
 		}
 		const anySession = await Session.find({ uniqueIdentifier, poolId });
-		if (anySession) {
+		if (anySession.length > 0) {
 			const thisSession = anySession.filter((sesh) => sesh.poolId == pool._id)[0];
 			return { sessionData: thisSession, poolData: pool };
 		} else {

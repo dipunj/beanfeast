@@ -6,7 +6,7 @@ const createPool = async (req, res, next) => {
 	const {
 		fromTime = Date.now(),
 		toTime = Date.now(),
-		maxPeople = Infinity,
+		maxPoolSize = Infinity,
 		latitude,
 		longitude,
 		uniqueIdentifier,
@@ -16,7 +16,7 @@ const createPool = async (req, res, next) => {
 		const newPool = await PoolService.createNewPool({
 			fromTime,
 			toTime,
-			maxPoolSize: parseInt(maxPeople),
+			maxPoolSize: parseInt(maxPoolSize),
 			uniqueIdentifier,
 		});
 		const { newSession, updatedPool } = await SessionService.createNew({
@@ -35,9 +35,8 @@ const createPool = async (req, res, next) => {
 };
 
 const updatePool = async (req, res, next) => {
-	const { fromTime, toTime, maxPeople, uniqueIdentifier } = req.body;
+	const { fromTime, toTime, maxPoolSize, uniqueIdentifier } = req.body;
 	const { poolId } = req.params;
-
 	try {
 		if (!poolId) {
 			throw new Error('Incomplete joining URL');
@@ -46,7 +45,7 @@ const updatePool = async (req, res, next) => {
 			poolId,
 			fromTime,
 			toTime,
-			maxPoolSize: parseInt(maxPeople),
+			maxPoolSize: parseInt(maxPoolSize),
 			uniqueIdentifier,
 		});
 		return res.status(200).json({ data: newPool, message: 'Pool updated succesfully' });
