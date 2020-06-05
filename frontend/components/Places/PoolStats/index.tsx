@@ -3,7 +3,6 @@ import useStyles from './styles';
 import { Grid, Button, LinearProgress } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
-import FeastDate from '../../Pool/new/FeastDate';
 import mergeDateTime from '../../../utils/mergeDateTime';
 import { request } from '../../util';
 
@@ -28,7 +27,7 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 			createdBy,
 			fromTime: origFromTime,
 			toTime: origToTime,
-			maxPoolSize,
+			maxPoolSize: origMaxPoolSize,
 			currPoolSize,
 			_id,
 		},
@@ -39,15 +38,13 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 		date: new Date(origFromTime),
 		fromTime: new Date(origFromTime),
 		toTime: new Date(origToTime),
-		maxPoolSize,
+		maxPoolSize: origMaxPoolSize,
 	});
 
 	const styles = useStyles();
 	const [loading, setLoading] = useState(false);
 
-	const handleModifyToggle = () => {
-		setEdit(true);
-	};
+	const handleModifyToggle = () => setEdit(true);
 
 	const handleUpdateCall = async () => {
 		setLoading(true);
@@ -59,14 +56,19 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 			maxPoolSize,
 			uniqueIdentifier,
 		};
+		// if (
+		// 	fromTime !== new Date(origFromTime) ||
+		// 	toTime !== new Date(origToTime) ||
+		// 	maxPoolSize !== origMaxPoolSize
+		// ) {
 		const data = await request.post(`http://localhost:4000/pool/update/${_id}`, {
 			...updateParams,
 		});
-
+		// }
 		// TODO: Ensure that call was succesful
 		// else show a toast/snackbar showing the error
-		setEdit(false);
 		setLoading(false);
+		setEdit(false);
 	};
 
 	const handleCancelUpdate = () => {
@@ -101,7 +103,7 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 								Update
 							</Button>
 							{loading && (
-								<LinearProgress color="primary" style={{ width: '100%' }} />
+								<LinearProgress color="secondary" style={{ width: '100%' }} />
 							)}
 						</Grid>
 						<Grid item xs={12} md={4} container justify="center">
@@ -122,7 +124,7 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 		return (
 			<Grid container>
 				<Grid item xs={12}>
-					<ViewPopulation {...{ currPoolSize, maxPoolSize }} />
+					<ViewPopulation {...{ currPoolSize, maxPoolSize: origMaxPoolSize }} />
 				</Grid>
 				<Grid item xs={12}>
 					<ViewTiming {...{ fromTime: origFromTime, toTime: origToTime }} />

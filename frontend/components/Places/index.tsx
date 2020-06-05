@@ -50,7 +50,7 @@ const resultPage = ({ poolId }) => {
 	}, []);
 
 	useEffect(() => {
-		fetchData();
+		if (!edit) fetchData();
 	}, [edit]);
 
 	if (state.loading === true) {

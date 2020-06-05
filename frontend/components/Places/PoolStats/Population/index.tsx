@@ -7,7 +7,7 @@ const ViewPopulation = ({ currPoolSize, maxPoolSize }) => {
 	const props = {
 		header: 'Pool Population',
 		left: {
-			key: '(Joined)',
+			key: currPoolSize === 1 ? '(Joined - Only You)' : '(Joined)',
 			value: currPoolSize,
 			variant: 'h4',
 			color: 'secondary',
