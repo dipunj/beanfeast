@@ -28,8 +28,28 @@ const useStyles = makeStyles((theme: Theme) =>
 			backgroundColor: '#080708',
 			color: 'white',
 			borderRadius: '0px',
-			margin: '30px',
-			padding: '10px 100px',
+			marginBottom: '0px',
+			width: '100%',
+			padding: '10px 80px',
+			'&:hover': {
+				backgroundColor: '#575860',
+			},
+			'&:active': {
+				boxShadow: 'none',
+				backgroundColor: '#0062cc',
+				borderColor: '#005cbf',
+			},
+			'&:focus': {
+				boxShadow: '0 0 0 0.2rem rgba(0,123,255,.5)',
+			},
+		},
+		cancelRoot: {
+			backgroundColor: '#D72638',
+			color: 'white',
+			borderRadius: '0px',
+			margintop: '15px',
+			width: '100%',
+			padding: '10px 80px',
 			'&:hover': {
 				backgroundColor: '#575860',
 			},

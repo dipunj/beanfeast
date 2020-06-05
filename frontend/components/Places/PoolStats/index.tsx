@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react';
 import useStyles from './styles';
-import { Grid, Button } from '@material-ui/core';
+import { Grid, Button, LinearProgress } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
 import FeastDate from '../../Pool/new/FeastDate';
@@ -49,7 +49,8 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 		setEdit(true);
 	};
 
-	const updatePool = async () => {
+	const handleUpdateCall = async () => {
+		setLoading(true);
 		const { date, fromTime: from, toTime: to, maxPoolSize } = state;
 		const { fromTime, toTime } = mergeDateTime(date, from, to);
 		const updateParams = {
@@ -58,20 +59,19 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 			maxPoolSize,
 			uniqueIdentifier,
 		};
-		console.log(updateParams);
 		const data = await request.post(`http://localhost:4000/pool/update/${_id}`, {
 			...updateParams,
 		});
-		console.log(data);
-		setEdit(false);
-	};
 
-	const handleUpdateCall = () => {
-		setLoading(true);
-		updatePool();
+		// TODO: Ensure that call was succesful
+		// else show a toast/snackbar showing the error
+		setEdit(false);
 		setLoading(false);
 	};
 
+	const handleCancelUpdate = () => {
+		setEdit(false);
+	};
 	if (edit) {
 		return (
 			<Grid container>
@@ -82,15 +82,38 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 					<EditTiming {...{ state, dispatch }} />
 				</Grid>
 				{createdBy === uniqueIdentifier && (
-					<Grid item xs={12} container justify="center" alignItems="center">
-						<Button
-							size="large"
-							variant="contained"
-							className={styles.updateRoot}
-							onClick={handleUpdateCall}
-						>
-							Update
-						</Button>
+					<Grid
+						item
+						xs={12}
+						direction="row"
+						container
+						justify="space-evenly"
+						alignItems="center"
+						style={{ padding: '30px 10px' }}
+					>
+						<Grid item xs={12} md={4} container justify="center">
+							<Button
+								size="large"
+								variant="contained"
+								className={styles.updateRoot}
+								onClick={handleUpdateCall}
+							>
+								Update
+							</Button>
+							{loading && (
+								<LinearProgress color="primary" style={{ width: '100%' }} />
+							)}
+						</Grid>
+						<Grid item xs={12} md={4} container justify="center">
+							<Button
+								size="large"
+								variant="contained"
+								className={styles.cancelRoot}
+								onClick={handleCancelUpdate}
+							>
+								Cancel
+							</Button>
+						</Grid>
 					</Grid>
 				)}
 			</Grid>
