@@ -1,6 +1,6 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
-const useTwinLayoutStyles = makeStyles((theme: Theme) =>
+const useSingleLayoutStyles = makeStyles((theme: Theme) =>
 	createStyles({
 		root: {
 			padding: '20px',
@@ -9,15 +9,11 @@ const useTwinLayoutStyles = makeStyles((theme: Theme) =>
 		header: {
 			marginBottom: '20px',
 		},
-		verticalDivider: {
+		divider: {
 			height: 30,
 			margin: '0px 20px',
-		},
-		horizontalDivider: {
-			margin: '30px 0px',
-			width: '100%',
 		},
 	})
 );
 
-export default useTwinLayoutStyles;
+export default useSingleLayoutStyles;
