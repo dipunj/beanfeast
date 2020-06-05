@@ -5,6 +5,10 @@ import useStyles from './styles';
 import { SessionCtx } from '../../../components/Context';
 import { TimePicker, DatePicker, Notification, request } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
+import mergeDateTime from '../../../utils/mergeDateTime';
+import HeadCount, { HeadCountLabel } from './HeadCount';
+import FeastDate from './FeastDate';
+import Timing from './Timing';
 
 const initialState = {
 	date: new Date(),
@@ -80,12 +84,7 @@ const createNewPool = () => {
 		// transform data
 		const { date, fromTime: from, toTime: to, headCount, location } = state;
 		const uniqueIdentifier = await getBrowserFingerprint();
-		const d = date?.getDate();
-		const m = date?.getMonth();
-		const y = date?.getFullYear();
-		const fromTime = new Date(y, m, d, from?.getHours(), from?.getMinutes());
-		const toTime = new Date(y, m, d, to?.getHours(), to?.getMinutes());
-
+		const { fromTime, toTime } = mergeDateTime(date, from, to);
 		const params = {
 			fromTime,
 			toTime,
@@ -134,71 +133,36 @@ const createNewPool = () => {
 	return (
 		<>
 			<Grid container className={container} spacing={4}>
-				<Grid item xs={12}>
-					<DatePicker
-						{...{
-							selectedDate: state.date,
-							setSelectedDate: (date: Date) => dispatch({ type: 'setDate', date }),
-							label: 'Date',
-							minDate: new Date(),
-						}}
-					/>
-				</Grid>
-				<Grid item xs={12} sm={6}>
-					<TimePicker
-						{...{
-							selectedDate: state.fromTime,
-							setSelectedDate: (date: Date) =>
-								dispatch({ type: 'setFromTime', date }),
-							label: 'From',
-						}}
-					/>
-				</Grid>
-				<Grid item xs={12} sm={6}>
-					<TimePicker
-						{...{
-							selectedDate: state.toTime,
-							setSelectedDate: (date: Date) => dispatch({ type: 'setToTime', date }),
-							label: 'To',
-						}}
-					/>
-				</Grid>
-				<Grid item xs={12}>
-					<Typography id="headCount-slider" color="secondary">
-						Head Count? (including you)
-					</Typography>
-				</Grid>
-				<Grid item xs={12} sm={8} lg={10}>
-					<Slider
-						value={state.headCount}
-						onChange={(_, headCount) => dispatch({ type: 'setHeadCount', headCount })}
-						aria-labelledby="headCount-slider"
-						valueLabelDisplay="auto"
-						step={1}
-						min={1}
-						max={process.env.MAX_POOL_SIZE || 10}
-						valueLabelDisplay="on"
-					/>
-				</Grid>
-				<Grid item xs={12} sm={4} lg={2}>
-					<OutlinedInput
-						fullWidth
-						value={state.headCount}
-						margin="none"
-						onChange={({ target: { value: headCount } }) =>
-							dispatch({ type: 'setHeadCount', headCount })
-						}
-						// onBlur={handleBlur}
-						inputProps={{
-							step: 1,
-							min: 1,
-							max: process.env.MAX_POOL_SIZE || 10,
-							type: 'number',
-							'aria-labelledby': 'headCount-slider',
-							style: { textAlign: 'center' },
-						}}
-					/>
-				</Grid>
+				<FeastDate
+					{...{
+						selectedDate: state.date,
+						setSelectedDate: (date: Date) => dispatch({ type: 'setDate', date }),
+					}}
+				/>
+				<Timing
+					{...{
+						selectedDate: state.fromTime,
+						setSelectedDate: (date: Date) => dispatch({ type: 'setFromTime', date }),
+						label: 'From',
+					}}
+				/>
+				<Timing
+					{...{
+						selectedDate: state.toTime,
+						setSelectedDate: (date: Date) => dispatch({ type: 'setToTime', date }),
+						label: 'To',
+					}}
+				/>
+				<HeadCountLabel />
+				<HeadCount
+					{...{
+						value: state.headCount,
+						sliderOnChange: (_, headCount) =>
+							dispatch({ type: 'setHeadCount', headCount }),
+						numberOnChange: ({ target: { value: headCount } }) =>
+							dispatch({ type: 'setHeadCount', headCount }),
+					}}
+				/>
 				<Grid item xs={12} sm={8} md={6}>
 					<Button
 						{...{
