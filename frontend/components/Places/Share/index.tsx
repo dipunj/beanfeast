@@ -7,10 +7,12 @@ import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import ShareIcon from '@material-ui/icons/Share';
 import { Notification } from '../../util';
 import useStyles from './styles';
+import useMediaQuery from '@material-ui/core/useMediaQuery';
+import { Grid } from '@material-ui/core';
 
 const sharePoolDetails = ({ poolId }) => {
 	// return <Input value={`share url is: ${poolId}`} disabled fullWidth />
-
+	const isMobile = useMediaQuery('(max-width:500px)');
 	const [notif, setNotif] = useState({ show: false, message: '', type: '' });
 	const shareUrl = `${process.env.APP_URL}/pool/join/${poolId}`;
 	const urlRef = useRef(null);
@@ -46,7 +48,74 @@ const sharePoolDetails = ({ poolId }) => {
 		// });
 		// requires HTTPS
 	};
-
+	if (isMobile) {
+		return (
+			<Grid container>
+				<Grid item xs={12}>
+					<Paper variant="outlined" className={classes.mobileRoot}>
+						<InputBase
+							disabled
+							className={classes.input}
+							value={shareUrl}
+							inputProps={{ style: { textAlign: 'center' } }}
+						/>
+					</Paper>
+				</Grid>
+				<Grid item xs={12}>
+					<Paper variant="outlined" className={classes.mobileExtra}>
+						<Grid container justify="space-between">
+							<Grid container xs={5} justify="center">
+								<IconButton
+									onClick={copyToClipboard}
+									color="default"
+									className={classes.iconButton}
+									aria-label="directions"
+								>
+									<FileCopyOutlinedIcon />
+								</IconButton>
+							</Grid>
+							<Grid container xs={2} justify="center" alignItems="center">
+								<Divider className={classes.divider} orientation="vertical" />
+							</Grid>
+							<Grid container xs={5} justify="center">
+								<IconButton
+									onClick={share}
+									color="primary"
+									className={classes.iconButton}
+									aria-label="share"
+								>
+									<ShareIcon />
+								</IconButton>
+							</Grid>
+						</Grid>
+					</Paper>
+					<Notification
+						{...{
+							isOpen: notif.show,
+							handleClose,
+							message: notif.message,
+							type: notif.type,
+							hideAfter: 3000,
+							showDismiss: false,
+							position: { vertical: 'bottom', horizontal: 'center' },
+							slideDirection: 'up',
+						}}
+					/>
+					<input
+						style={{
+							opacity: 0,
+							pointerEvents: 'none',
+							position: 'absolute',
+							left: '-1000px',
+							top: '-1000px',
+						}}
+						ref={urlRef}
+						value={shareUrl}
+					/>
+				</Grid>
+			</Grid>
+		);
+	}
 	return (
 		<Paper variant="outlined" className={classes.root}>
 			<IconButton

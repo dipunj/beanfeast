@@ -1,9 +1,10 @@
 import ShareJoinUrl from './Share';
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { request } from '../util';
 import getBrowserFingerprint from '../../utils/fingerprint';
 import ShowPoolStats from './PoolStats';
 import { Divider } from '@material-ui/core';
+
 const initialState = {
 	loading: true,
 	sessionData: {},
@@ -11,7 +12,7 @@ const initialState = {
 	placeData: {},
 };
 
-const reducer = (state, action) => {
+const reducer = (state, action: any) => {
 	switch (action.type) {
 		case 'update':
 			return {
@@ -27,6 +28,8 @@ const reducer = (state, action) => {
 
 const resultPage = ({ poolId }) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
+	const [edit, setEdit] = useState(false);
+
 	const fetchData = async () => {
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
@@ -46,17 +49,22 @@ const resultPage = ({ poolId }) => {
 		fetchData();
 	}, []);
 
+	useEffect(() => {
+		fetchData();
+	}, [edit]);
+
 	if (state.loading === true) {
 		return <p>Loading...</p>;
 	} else {
-		const { poolData, sessionData } = state;
+		const {
+			poolData: { _id, maxPoolSize, currPoolSize },
+		} = state;
 		return (
 			<>
-				{poolData.maxPoolSize !== poolData.currPoolSize && (
-					<ShareJoinUrl poolId={poolData._id} />
-				)}
+				{maxPoolSize !== currPoolSize && <ShareJoinUrl poolId={_id} />}
 				<Divider variant="middle" orientation="horizontal" />
-				<ShowPoolStats {...{ poolData }} />
+				<ShowPoolStats {...{ parentState: state, edit, setEdit }} />
+				{!edit && maxPoolSize === currPoolSize && <p>show results here</p>}
 			</>
 		);
 	}
