@@ -3,9 +3,14 @@ import useStyles from './styles';
 import { Grid, Button } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
+import FeastDate from '../../Pool/new/FeastDate';
+import mergeDateTime from '../../../utils/mergeDateTime';
+import { request } from '../../util';
 
 const reducer = (state: any, action: any) => {
 	switch (action.type) {
+		case 'date':
+			return { ...state, date: action.date };
 		case 'fromTime':
 			return { ...state, fromTime: action.fromTime };
 		case 'toTime':
@@ -19,13 +24,21 @@ const reducer = (state: any, action: any) => {
 
 const PoolStats = ({ parentState, edit, setEdit }) => {
 	const {
-		poolData: { createdBy, fromTime, toTime, maxPoolSize, currPoolSize },
+		poolData: {
+			createdBy,
+			fromTime: origFromTime,
+			toTime: origToTime,
+			maxPoolSize,
+			currPoolSize,
+			_id,
+		},
 		sessionData: { uniqueIdentifier },
 	} = parentState;
 
 	const [state, dispatch] = useReducer(reducer, {
-		fromTime: new Date(fromTime),
-		toTime: new Date(toTime),
+		date: new Date(origFromTime),
+		fromTime: new Date(origFromTime),
+		toTime: new Date(origToTime),
 		maxPoolSize,
 	});
 
@@ -37,24 +50,36 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 	};
 
 	const updatePool = async () => {
-		// make post call here
+		const { date, fromTime: from, toTime: to, maxPoolSize } = state;
+		const { fromTime, toTime } = mergeDateTime(date, from, to);
+		const updateParams = {
+			fromTime,
+			toTime,
+			maxPoolSize,
+			uniqueIdentifier,
+		};
+		console.log(updateParams);
+		const data = await request.post(`http://localhost:4000/pool/update/${_id}`, {
+			...updateParams,
+		});
+		console.log(data);
+		setEdit(false);
 	};
 
 	const handleUpdateCall = () => {
 		setLoading(true);
 		updatePool();
 		setLoading(false);
-		setEdit(false);
 	};
 
 	if (edit) {
 		return (
 			<Grid container>
 				<Grid item xs={12}>
-					<EditPopulation {...{ state, dispatch, edit, setEdit }} />
+					<EditPopulation {...{ state, dispatch }} />
 				</Grid>
 				<Grid item xs={12}>
-					<EditTiming {...{ state, dispatch, edit, setEdit }} />
+					<EditTiming {...{ state, dispatch }} />
 				</Grid>
 				{createdBy === uniqueIdentifier && (
 					<Grid item xs={12} container justify="center" alignItems="center">
@@ -77,7 +102,7 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 					<ViewPopulation {...{ currPoolSize, maxPoolSize }} />
 				</Grid>
 				<Grid item xs={12}>
-					<ViewTiming {...{ fromTime, toTime }} />
+					<ViewTiming {...{ fromTime: origFromTime, toTime: origToTime }} />
 				</Grid>
 				{createdBy === uniqueIdentifier && (
 					<Grid item xs={12} container justify="center" alignItems="center">
