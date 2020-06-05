@@ -5,7 +5,7 @@ const useStyles = makeStyles({
 		flexDirection: 'column',
 		justifyContent: 'space-evenly',
 		alignItems: 'center',
-		padding: '0px 25vw',
+		padding: '0px 20vw',
 	},
 });
 
