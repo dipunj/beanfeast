@@ -9,7 +9,7 @@ import {
 } from '@material-ui/core';
 import useTwinLayoutStyles from './styles';
 
-const TwinLayout = ({ header, left, divider, right }) => {
+const TwinLayout = ({ header, left, divider, right, style }) => {
 	const isMobile = useMediaQuery('(max-width:500px)');
 	const styles = useTwinLayoutStyles();
 
@@ -58,8 +58,9 @@ const TwinLayout = ({ header, left, divider, right }) => {
 			{right.key && !right.keyBefore && <InputLabel shrink>{right.key}</InputLabel>}
 		</Grid>
 	);
+
 	return (
-		<Paper>
+		<Paper className={styles.paperRoot} {...{ style }}>
 			<Grid container direction="column" alignItems="stretch" className={styles.root}>
 				{header && (
 					<Grid item xs={12} className={styles.header}>
