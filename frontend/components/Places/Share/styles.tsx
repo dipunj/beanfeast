@@ -7,6 +7,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			display: 'flex',
 			alignItems: 'center',
 			width: '100%',
+			marginBottom: '30px',
+		},
+		mobileContainerRoot: {
+			marginBottom: '30px',
 		},
 		mobileRoot: {
 			padding: '2px 4px',

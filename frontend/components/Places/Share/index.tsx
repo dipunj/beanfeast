@@ -50,7 +50,7 @@ const sharePoolDetails = ({ poolId }) => {
 	};
 	if (isMobile) {
 		return (
-			<Grid container>
+			<Grid container className={classes.mobileContainerRoot}>
 				<Grid item xs={12}>
 					<Paper variant="outlined" className={classes.mobileRoot}>
 						<InputBase

@@ -3,7 +3,7 @@ import { useEffect, useReducer, useState } from 'react';
 import { request } from '../util';
 import getBrowserFingerprint from '../../utils/fingerprint';
 import ShowPoolStats from './PoolStats';
-import { Divider, Grid } from '@material-ui/core';
+import PlaceResults from './PlaceResults';
 
 const initialState = {
 	loading: true,
@@ -55,12 +55,13 @@ const resultPage = ({ poolId }) => {
 	} else {
 		const {
 			poolData: { _id, maxPoolSize, currPoolSize },
+			placeData,
 		} = state;
 		return (
 			<>
 				{maxPoolSize !== currPoolSize && <ShareJoinUrl poolId={_id} />}
 				<ShowPoolStats {...{ parentState: state, isUpdating, setIsUpdating }} />
-				{!isUpdating && maxPoolSize === currPoolSize && <p>show results here</p>}
+				{!isUpdating && maxPoolSize === currPoolSize && <PlaceResults {...{ placeData }} />}
 			</>
 		);
 	}
