@@ -1,10 +1,9 @@
 import { makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles({
-	container: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
+	squareButton: {
+		borderRadius: 0,
+		marginTop: 30,
 	},
 });
 

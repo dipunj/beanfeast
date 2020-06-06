@@ -1,13 +1,11 @@
 import { useEffect, useReducer } from 'react';
-import { Grid, Typography, Button, LinearProgress } from '@material-ui/core';
+import { Grid, Typography, Button, LinearProgress, Paper } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import useStyles from './styles';
-import { Notification, request } from '../../util';
+import { Notification, request, TimePicker, DatePicker } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import mergeDateTime from '../../../utils/mergeDateTime';
 import HeadCount, { HeadCountLabel } from './HeadCount';
-import FeastDate from './FeastDate';
-import Timing from './Timing';
 
 const initialState = {
 	date: new Date(),
@@ -15,6 +13,7 @@ const initialState = {
 	toTime: new Date(),
 	headCount: 4,
 	location: null,
+	apiUnderProgress: false,
 	loadingLocation: true,
 	permissionError: null,
 };
@@ -132,37 +131,48 @@ const createNewPool = () => {
 
 	return (
 		<>
-			<Grid container className={styles.container} spacing={4}>
-				<FeastDate
-					{...{
-						selectedDate: state.date,
-						setSelectedDate: (date: Date) => dispatch({ type: 'setDate', date }),
-					}}
-				/>
-				<Timing
-					{...{
-						selectedDate: state.fromTime,
-						setSelectedDate: (date: Date) => dispatch({ type: 'setFromTime', date }),
-						label: 'From',
-					}}
-				/>
-				<Timing
-					{...{
-						selectedDate: state.toTime,
-						setSelectedDate: (date: Date) => dispatch({ type: 'setToTime', date }),
-						label: 'To',
-					}}
-				/>
-				<HeadCountLabel />
-				<HeadCount
-					{...{
-						value: state.headCount,
-						sliderOnChange: (_: any, headCount: any) =>
-							dispatch({ type: 'setHeadCount', headCount }),
-						numberOnChange: ({ target: { value: headCount } }) =>
-							dispatch({ type: 'setHeadCount', headCount }),
-					}}
-				/>
+			<Grid container direction="row" justify="space-evenly" alignItems="stretch" spacing={4}>
+				<Grid item xs={12}>
+					<DatePicker
+						{...{
+							selectedDate: state.date,
+							setSelectedDate: (date: Date) => dispatch({ type: 'setDate', date }),
+							label: 'Date',
+							minDate: new Date(),
+						}}
+					/>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<TimePicker
+						{...{
+							selectedDate: state.fromTime,
+							setSelectedDate: (date: Date) =>
+								dispatch({ type: 'setFromTime', date }),
+							label: 'From',
+						}}
+					/>
+				</Grid>
+				<Grid item xs={12} sm={6}>
+					<TimePicker
+						{...{
+							selectedDate: state.toTime,
+							setSelectedDate: (date: Date) => dispatch({ type: 'setToTime', date }),
+							label: 'To',
+						}}
+					/>
+				</Grid>
+				<Grid item xs={12} container alignItems="center" spacing={4}>
+					<HeadCountLabel />
+					<HeadCount
+						{...{
+							value: state.headCount,
+							sliderOnChange: (_: any, headCount: any) =>
+								dispatch({ type: 'setHeadCount', headCount }),
+							numberOnChange: ({ target: { value: headCount } }) =>
+								dispatch({ type: 'setHeadCount', headCount }),
+						}}
+					/>
+				</Grid>
 				<Grid item xs={12} sm={8} md={6}>
 					<Button
 						{...{
@@ -173,6 +183,7 @@ const createNewPool = () => {
 							variant: 'contained',
 							onClick: handleSubmit,
 							disabled: state.location === null,
+							className: styles.squareButton,
 						}}
 						// style={{ color: 'white', background: theme.palette.warning.main }}
 					>
