@@ -21,7 +21,7 @@ const reducer = (dataState: any, action: any) => {
 	}
 };
 
-const PoolStats = ({ parentState, isUpdating, setIsUpdating }) => {
+const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMode }) => {
 	const isMobile = useMediaQuery('(max-width:600px)');
 	const {
 		poolData: {
@@ -35,7 +35,6 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating }) => {
 		sessionData: { uniqueIdentifier },
 	} = parentState;
 
-	const [editMode, setEditMode] = useState(false);
 	const [dataState, dispatch] = useReducer(reducer, {
 		date: new Date(origFromTime),
 		fromTime: new Date(origFromTime),

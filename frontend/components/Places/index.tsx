@@ -29,6 +29,7 @@ const reducer = (state, action: any) => {
 const resultPage = ({ poolId }) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const [isUpdating, setIsUpdating] = useState(false);
+	const [editMode, setEditMode] = useState(false);
 
 	const fetchData = async () => {
 		try {
@@ -60,8 +61,10 @@ const resultPage = ({ poolId }) => {
 		return (
 			<>
 				{maxPoolSize !== currPoolSize && <ShareJoinUrl poolId={_id} />}
-				<ShowPoolStats {...{ parentState: state, isUpdating, setIsUpdating }} />
-				{!isUpdating && maxPoolSize === currPoolSize && <PlaceResults {...{ placeData }} />}
+				<ShowPoolStats
+					{...{ parentState: state, isUpdating, setIsUpdating, editMode, setEditMode }}
+				/>
+				{!editMode && maxPoolSize === currPoolSize && <PlaceResults {...{ placeData }} />}
 			</>
 		);
 	}
