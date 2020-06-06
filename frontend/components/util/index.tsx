@@ -15,8 +15,18 @@ const defaultGetLayout = (page) => {
 	return (
 		<>
 			<Header />
-			<Grid container className={paddedContainer}>
-				{page}
+			<Grid container justify="center">
+				<Grid
+					item
+					xs={9}
+					sm={6}
+					container
+					direction="column"
+					alignItems="center"
+					className={paddedContainer}
+				>
+					{page}
+				</Grid>
 			</Grid>
 		</>
 	);
