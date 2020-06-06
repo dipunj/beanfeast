@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react';
 import useStyles from './styles';
-import { Grid, Button, LinearProgress } from '@material-ui/core';
+import { Grid, Button, LinearProgress, useMediaQuery } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
 import mergeDateTime from '../../../utils/mergeDateTime';
@@ -22,6 +22,7 @@ const reducer = (dataState: any, action: any) => {
 };
 
 const PoolStats = ({ parentState, isUpdating, setIsUpdating }) => {
+	const isMobile = useMediaQuery('(max-width:600px)');
 	const {
 		poolData: {
 			createdBy,
@@ -69,17 +70,16 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating }) => {
 
 	if (editMode) {
 		return (
-			<Grid container>
-				<Grid item xs={12}>
+			<Grid container direction="column" justify="space-between" alignItems="stretch">
+				<Grid item>
 					<EditPopulation {...{ state: dataState, dispatch }} />
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item>
 					<EditTiming {...{ state: dataState, dispatch }} />
 				</Grid>
 				{createdBy === uniqueIdentifier && (
 					<Grid
 						item
-						xs={12}
 						direction="row"
 						container
 						justify="space-evenly"
@@ -90,7 +90,7 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating }) => {
 							<Button
 								size="large"
 								variant="contained"
-								className={styles.updateRoot}
+								className={isMobile ? styles.updateRootMobile : styles.updateRoot}
 								onClick={handleUpdateCall}
 							>
 								Update
@@ -103,7 +103,7 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating }) => {
 							<Button
 								size="large"
 								variant="contained"
-								className={styles.cancelRoot}
+								className={isMobile ? styles.cancelRootMobile : styles.cancelRoot}
 								onClick={handleCancelUpdate}
 							>
 								Cancel
@@ -115,24 +115,29 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating }) => {
 		);
 	} else {
 		return (
-			<Grid container>
-				<Grid item xs={12}>
+			<Grid container direction="column" justify="space-between" alignItems="stretch">
+				<Grid item>
 					<ViewPopulation {...{ currPoolSize, maxPoolSize: origMaxPoolSize }} />
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item>
 					<ViewTiming {...{ fromTime: origFromTime, toTime: origToTime }} />
 				</Grid>
 				{createdBy === uniqueIdentifier && (
-					<Grid item xs={12} container justify="center" alignItems="center">
-						<Button
-							size="large"
-							color="primary"
-							variant="contained"
-							className={styles.modifyRoot}
-							onClick={handleModifyToggle}
-						>
-							Modify
-						</Button>
+					<Grid item container justify="center">
+						<Grid item xs={12} sm={8} md={6}>
+							<Button
+								{...{
+									size: 'large',
+									color: 'primary',
+									variant: 'contained',
+									className: styles.modifyRoot,
+									onClick: handleModifyToggle,
+									fullWidth: true,
+								}}
+							>
+								Modify
+							</Button>
+						</Grid>
 					</Grid>
 				)}
 			</Grid>

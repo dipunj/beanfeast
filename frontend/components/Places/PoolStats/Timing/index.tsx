@@ -1,7 +1,6 @@
 import TwinLayout from '../../../Layouts/TwinLayout';
-import { TimePicker } from '../../../util';
+import { TimePicker, DatePicker } from '../../../util';
 import SingleLayout from '../../../Layouts/SingleLayout';
-import FeastDate from '../../../Pool/new/FeastDate';
 
 const ViewTiming = ({ fromTime, toTime }) => {
 	const options = {
@@ -74,15 +73,17 @@ const EditTiming = ({ state, dispatch }) => {
 	};
 	return (
 		<>
-			<SingleLayout header="Date">
-				<FeastDate
+			<SingleLayout header="Date" style={{ marginBottom: '0px', borderRadius: '0px' }}>
+				<DatePicker
 					{...{
 						selectedDate: state.date,
 						setSelectedDate: (date: Date) => dispatch({ type: 'date', date }),
+						label: null,
+						minDate: new Date(),
 					}}
 				/>
 			</SingleLayout>
-			<TwinLayout {...props} />
+			<TwinLayout {...props} style={{ borderRadius: '0px' }} />
 		</>
 	);
 };
