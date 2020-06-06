@@ -1,9 +1,8 @@
-import { useContext, useEffect, useReducer } from 'react';
-import { OutlinedInput, Grid, Slider, Typography, Button, LinearProgress } from '@material-ui/core';
+import { useEffect, useReducer } from 'react';
+import { Grid, Typography, Button, LinearProgress } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import useStyles from './styles';
-import { SessionCtx } from '../../../components/Context';
-import { TimePicker, DatePicker, Notification, request } from '../../util';
+import { Notification, request } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import mergeDateTime from '../../../utils/mergeDateTime';
 import HeadCount, { HeadCountLabel } from './HeadCount';
@@ -32,6 +31,8 @@ const reducer = (state, action) => {
 			return { ...state, headCount: action.headCount };
 		case 'setLocation':
 			return { ...state, loadingLocation: false, location: { ...action.location } };
+		case 'setApiUnderProgress':
+			return { ...state, apiUnderProgress: action.apiUnderProgress };
 		case 'setPermissionError':
 			let title = '';
 			let message = '';
@@ -68,19 +69,17 @@ const reducer = (state, action) => {
 };
 
 const createNewPool = () => {
-	const { container } = useStyles();
+	const styles = useStyles();
 	const router = useRouter();
-	const { context, setContext } = useContext(SessionCtx);
 	const [state, dispatch] = useReducer(reducer, initialState);
 
-	const handleClose = (e, reason?) => {
-		if (reason === 'clickaway') {
-			return;
-		}
+	const handleClose = (e: any, reason?: string) => {
+		if (reason === 'clickaway') return;
 		dispatch({ type: 'setPermissionError' });
 	};
 
 	const handleSubmit = async () => {
+		dispatch({ type: 'setApiUnderProgress', apiUnderProgress: true });
 		// transform data
 		const { date, fromTime: from, toTime: to, headCount, location } = state;
 		const uniqueIdentifier = await getBrowserFingerprint();
@@ -88,7 +87,7 @@ const createNewPool = () => {
 		const params = {
 			fromTime,
 			toTime,
-			maxPeople: headCount,
+			maxPoolSize: headCount,
 			...location,
 			uniqueIdentifier,
 		};
@@ -101,6 +100,7 @@ const createNewPool = () => {
 			} = await request.post('http://localhost:4000/pool/new', {
 				...params,
 			});
+			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
 			if (status === 200) {
 				router.push(`/place/[poolId]`, `/place/${poolData._id}`);
 			}
@@ -132,7 +132,7 @@ const createNewPool = () => {
 
 	return (
 		<>
-			<Grid container className={container} spacing={4}>
+			<Grid container className={styles.container} spacing={4}>
 				<FeastDate
 					{...{
 						selectedDate: state.date,
@@ -157,7 +157,7 @@ const createNewPool = () => {
 				<HeadCount
 					{...{
 						value: state.headCount,
-						sliderOnChange: (_, headCount) =>
+						sliderOnChange: (_: any, headCount: any) =>
 							dispatch({ type: 'setHeadCount', headCount }),
 						numberOnChange: ({ target: { value: headCount } }) =>
 							dispatch({ type: 'setHeadCount', headCount }),
@@ -178,11 +178,11 @@ const createNewPool = () => {
 					>
 						Create Pool
 					</Button>
-					{state.loadingLocation && (
+					{(state.loadingLocation || state.apiUnderProgress) && (
 						<Grid item xs={12}>
 							<LinearProgress style={{ width: '100%' }} color="primary" />
 							<Typography color="secondary" align="center">
-								Acquiring GPS
+								{state.loadingLocation && 'Acquiring GPS'}
 							</Typography>
 						</Grid>
 					)}
