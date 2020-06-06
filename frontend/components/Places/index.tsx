@@ -28,7 +28,7 @@ const reducer = (state, action: any) => {
 
 const resultPage = ({ poolId }) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
-	const [edit, setEdit] = useState(false);
+	const [isUpdating, setIsUpdating] = useState(false);
 
 	const fetchData = async () => {
 		try {
@@ -45,13 +45,10 @@ const resultPage = ({ poolId }) => {
 		}
 	};
 
+	// will run on first render, and whenever isUpdating changes from true to false
 	useEffect(() => {
-		fetchData();
-	}, []);
-
-	useEffect(() => {
-		if (!edit) fetchData();
-	}, [edit]);
+		if (!isUpdating) fetchData();
+	}, [isUpdating]);
 
 	if (state.loading === true) {
 		return <p>Loading...</p>;
@@ -62,15 +59,8 @@ const resultPage = ({ poolId }) => {
 		return (
 			<>
 				{maxPoolSize !== currPoolSize && <ShareJoinUrl poolId={_id} />}
-				{/* <Grid container>
-					<Divider
-						variant="inset"
-						orientation="horizontal"
-						style={{ width: '100%', marginTop: '30px' }}
-					/>
-				</Grid> */}
-				<ShowPoolStats {...{ parentState: state, edit, setEdit }} />
-				{!edit && maxPoolSize === currPoolSize && <p>show results here</p>}
+				<ShowPoolStats {...{ parentState: state, isUpdating, setIsUpdating }} />
+				{!isUpdating && maxPoolSize === currPoolSize && <p>show results here</p>}
 			</>
 		);
 	}

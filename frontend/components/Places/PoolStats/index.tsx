@@ -6,22 +6,22 @@ import { EditTiming, ViewTiming } from './Timing';
 import mergeDateTime from '../../../utils/mergeDateTime';
 import { request } from '../../util';
 
-const reducer = (state: any, action: any) => {
+const reducer = (dataState: any, action: any) => {
 	switch (action.type) {
 		case 'date':
-			return { ...state, date: action.date };
+			return { ...dataState, date: action.date };
 		case 'fromTime':
-			return { ...state, fromTime: action.fromTime };
+			return { ...dataState, fromTime: action.fromTime };
 		case 'toTime':
-			return { ...state, toTime: action.toTime };
+			return { ...dataState, toTime: action.toTime };
 		case 'maxPoolSize':
-			return { ...state, maxPoolSize: action.maxPoolSize };
+			return { ...dataState, maxPoolSize: action.maxPoolSize };
 		default:
-			return state;
+			return dataState;
 	}
 };
 
-const PoolStats = ({ parentState, edit, setEdit }) => {
+const PoolStats = ({ parentState, isUpdating, setIsUpdating }) => {
 	const {
 		poolData: {
 			createdBy,
@@ -34,7 +34,8 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 		sessionData: { uniqueIdentifier },
 	} = parentState;
 
-	const [state, dispatch] = useReducer(reducer, {
+	const [editMode, setEditMode] = useState(false);
+	const [dataState, dispatch] = useReducer(reducer, {
 		date: new Date(origFromTime),
 		fromTime: new Date(origFromTime),
 		toTime: new Date(origToTime),
@@ -42,13 +43,13 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 	});
 
 	const styles = useStyles();
-	const [loading, setLoading] = useState(false);
 
-	const handleModifyToggle = () => setEdit(true);
+	const handleModifyToggle = () => setEditMode(true);
+	const handleCancelUpdate = () => setEditMode(false);
 
 	const handleUpdateCall = async () => {
-		setLoading(true);
-		const { date, fromTime: from, toTime: to, maxPoolSize } = state;
+		setIsUpdating(true);
+		const { date, fromTime: from, toTime: to, maxPoolSize } = dataState;
 		const { fromTime, toTime } = mergeDateTime(date, from, to);
 		const updateParams = {
 			fromTime,
@@ -56,32 +57,24 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 			maxPoolSize,
 			uniqueIdentifier,
 		};
-		// if (
-		// 	fromTime !== new Date(origFromTime) ||
-		// 	toTime !== new Date(origToTime) ||
-		// 	maxPoolSize !== origMaxPoolSize
-		// ) {
 		const data = await request.post(`http://localhost:4000/pool/update/${_id}`, {
 			...updateParams,
 		});
 		// }
 		// TODO: Ensure that call was succesful
 		// else show a toast/snackbar showing the error
-		setLoading(false);
-		setEdit(false);
+		setIsUpdating(false);
+		setEditMode(false);
 	};
 
-	const handleCancelUpdate = () => {
-		setEdit(false);
-	};
-	if (edit) {
+	if (editMode) {
 		return (
 			<Grid container>
 				<Grid item xs={12}>
-					<EditPopulation {...{ state, dispatch }} />
+					<EditPopulation {...{ state: dataState, dispatch }} />
 				</Grid>
 				<Grid item xs={12}>
-					<EditTiming {...{ state, dispatch }} />
+					<EditTiming {...{ state: dataState, dispatch }} />
 				</Grid>
 				{createdBy === uniqueIdentifier && (
 					<Grid
@@ -102,7 +95,7 @@ const PoolStats = ({ parentState, edit, setEdit }) => {
 							>
 								Update
 							</Button>
-							{loading && (
+							{isUpdating && (
 								<LinearProgress color="secondary" style={{ width: '100%' }} />
 							)}
 						</Grid>
