@@ -2,7 +2,7 @@ import { useState, useReducer, useEffect } from 'react';
 import { Grid, Button, LinearProgress, Typography } from '@material-ui/core';
 import Information from './Information';
 import useStyles from './styles';
-import { Notification, request } from '../../util';
+import { NotificationToast, Request } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import { useRouter } from 'next/router';
 
@@ -96,7 +96,7 @@ const joinPoolById = ({ poolId }) => {
 		const { location } = state;
 
 		try {
-			const data = await request.post(`http://localhost:4000/pool/join/${poolId}`, {
+			const data = await Request.post(`http://localhost:4000/pool/join/${poolId}`, {
 				uniqueIdentifier,
 				...location,
 			});
@@ -141,7 +141,7 @@ const joinPoolById = ({ poolId }) => {
 					</Grid>
 				</Grid>
 			</Grid>
-			<Notification
+			<NotificationToast
 				{...{
 					isOpen: state.permissionError !== null,
 					handleClose,
@@ -150,7 +150,7 @@ const joinPoolById = ({ poolId }) => {
 					type: 'error',
 				}}
 			/>
-			<Notification
+			<NotificationToast
 				{...{
 					isOpen: apiError !== null,
 					handleClose: handleAPIErrorClose,

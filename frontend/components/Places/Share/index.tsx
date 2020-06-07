@@ -5,7 +5,7 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import ShareIcon from '@material-ui/icons/Share';
-import { Notification } from '../../util';
+import { NotificationToast } from '../../util';
 import useStyles from './styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Grid } from '@material-ui/core';
@@ -89,7 +89,7 @@ const sharePoolDetails = ({ poolId }) => {
 							</Grid>
 						</Grid>
 					</Paper>
-					<Notification
+					<NotificationToast
 						{...{
 							isOpen: notif.show,
 							handleClose,
@@ -142,7 +142,7 @@ const sharePoolDetails = ({ poolId }) => {
 			>
 				<ShareIcon />
 			</IconButton>
-			<Notification
+			<NotificationToast
 				{...{
 					isOpen: notif.show,
 					handleClose,

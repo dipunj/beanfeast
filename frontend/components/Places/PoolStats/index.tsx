@@ -4,7 +4,7 @@ import { Grid, Button, LinearProgress, useMediaQuery } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
 import mergeDateTime from '../../../utils/mergeDateTime';
-import { request } from '../../util';
+import { Request } from '../../util';
 
 const reducer = (dataState: any, action: any) => {
 	switch (action.type) {
@@ -57,7 +57,7 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 			maxPoolSize,
 			uniqueIdentifier,
 		};
-		const data = await request.post(`http://localhost:4000/pool/update/${_id}`, {
+		const data = await Request.post(`http://localhost:4000/pool/update/${_id}`, {
 			...updateParams,
 		});
 		// }

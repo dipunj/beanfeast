@@ -1,6 +1,6 @@
 import ShareJoinUrl from './Share';
 import { useEffect, useReducer, useState } from 'react';
-import { request } from '../util';
+import { Request } from '../util';
 import getBrowserFingerprint from '../../utils/fingerprint';
 import ShowPoolStats from './PoolStats';
 import PlaceResults from './PlaceResults';
@@ -34,7 +34,7 @@ const resultPage = ({ poolId }) => {
 	const fetchData = async () => {
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
-			const { data } = await request.get(`http://localhost:4000/pool/show`, {
+			const { data } = await Request.get(`http://localhost:4000/pool/show`, {
 				params: {
 					poolId,
 					uniqueIdentifier,

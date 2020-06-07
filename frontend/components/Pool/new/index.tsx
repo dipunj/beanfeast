@@ -2,7 +2,7 @@ import { useEffect, useReducer } from 'react';
 import { Grid, Typography, Button, LinearProgress, Paper } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import useStyles from './styles';
-import { Notification, request, TimePicker, DatePicker } from '../../util';
+import { NotificationToast, Request, TimePicker, DatePicker } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import mergeDateTime from '../../../utils/mergeDateTime';
 import HeadCount, { HeadCountLabel } from './HeadCount';
@@ -96,7 +96,7 @@ const createNewPool = () => {
 				data: {
 					data: { sessionData, poolData },
 				},
-			} = await request.post('http://localhost:4000/pool/new', {
+			} = await Request.post('http://localhost:4000/pool/new', {
 				...params,
 			});
 			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
@@ -199,7 +199,7 @@ const createNewPool = () => {
 					)}
 				</Grid>
 			</Grid>
-			<Notification
+			<NotificationToast
 				{...{
 					isOpen: state.permissionError !== null,
 					handleClose,
