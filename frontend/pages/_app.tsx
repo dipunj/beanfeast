@@ -1,16 +1,14 @@
-import React from 'react';
+import { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Head from 'next/head';
-import { ThemeProvider } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import theme from '../theme';
-import { defaultGetLayout } from '../components/util';
+import defaultGetLayout from '../components/Layouts/NextLayout';
+import Providers from './Providers';
 import SessionCtxProvider from '../components/Context';
 
 export default function MyApp(props) {
 	const { Component, pageProps } = props;
-
-	React.useEffect(() => {
+	useEffect(() => {
 		// Remove the server-side injected CSS.
 		const jssStyles = document.querySelector('#jss-server-side');
 		if (jssStyles) {
@@ -22,7 +20,7 @@ export default function MyApp(props) {
 	const getLayout = Component.getLayout || ((page) => defaultGetLayout(page));
 
 	return (
-		<React.Fragment>
+		<>
 			<Head>
 				<title>{process.env.PROJECT_TITLE || 'Beanfeast'}</title>
 				<meta
@@ -36,13 +34,13 @@ export default function MyApp(props) {
 				/>
 			</Head>
 			<SessionCtxProvider>
-				<ThemeProvider theme={theme}>
+				<Providers>
 					{/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
 					<CssBaseline />
 					{getLayout(<Component {...pageProps} />)}
-				</ThemeProvider>
+				</Providers>
 			</SessionCtxProvider>
-		</React.Fragment>
+		</>
 	);
 }
 

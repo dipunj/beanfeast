@@ -1,19 +1,30 @@
 import { createMuiTheme } from '@material-ui/core/styles';
-import createPalette from '@material-ui/core/styles/createPalette';
+import { useMemo } from 'react';
 
-const BeanfeastTheme = createMuiTheme({
-	palette: createPalette({
-		primary: {
-			main: '#1B98E0',
-		},
-		secondary: {
-			main: '#575860',
-		},
-		warning: {
-			main: '#D72638',
-		},
-		// light: '#000000',
-	}),
-});
-
-export default BeanfeastTheme;
+const useTheme = ({ darkMode }) => {
+	const theme = useMemo(
+		() =>
+			createMuiTheme({
+				palette: {
+					primary: {
+						light: '#1B98E0',
+						main: '#1B98E0',
+						dark: '#DDDDDD',
+					},
+					secondary: {
+						light: '#1B98E0',
+						main: '#575860',
+						dark: '#DDDDDD',
+					},
+					type: darkMode ? 'dark' : 'light',
+					// warning: {
+					// 	main: '#D72638',
+					// },
+					// light: '#000000',
+				},
+			}),
+		[darkMode]
+	);
+	return theme;
+};
+export default useTheme;
