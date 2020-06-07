@@ -3,12 +3,12 @@ var PoolService = require('./pool.service.js');
 var { GoogleStates, AppStates } = require('../constants/states');
 
 const _getPlaces = async (params, { queryString, searchRadius }, ...rest) => {
-	const { pool } = params;
+	const { poolData } = params;
 	try {
 		const params = {
 			key: process.env.GOOGLE_API_KEY,
 			keyword: queryString || process.env.defaultQueryString || 'cafe',
-			location: `${pool.centroidLatitude},${pool.centroidLongitude}`,
+			location: `${poolData.centroidLatitude},${poolData.centroidLongitude}`,
 			radius: Math.max(searchRadius, process.env.defaultSearchRadius) || 200,
 		};
 		const places = await axios.get(
@@ -39,33 +39,39 @@ const getStatusAndUpdate = async (
 	};
 
 	try {
-		const pool = await PoolService.updatePool(updateParams);
-		if (pool.currPoolSize === pool.maxPoolSize) {
-			const places = await _getPlaces({ pool }, searchParams);
+		const { poolData, sessionData } = await PoolService.updatePool(updateParams);
+		if (poolData.currPoolSize === poolData.maxPoolSize) {
+			const places = await _getPlaces({ poolData }, searchParams);
 
 			if (places.status === GoogleStates.OVER_QUERY_LIMIT) {
 				return {
 					status: GoogleStates.OVER_QUERY_LIMIT,
 					message:
-						'Google says that we have exhausted our daily free limit for Maps API. This is sometimes a error on their end. Please try again, if it persists, then we have certainly exahausted our free limit',
+						'Google says that we have exhausted our daily free limit for Maps API. This is sometimes a error on their end. Please try again. If this message persists, then we have certainly exahausted our free limit',
 				};
 			} else if (places.status !== GoogleStates.OK) {
 				return {
 					status: places.status,
 					message: places.error_message,
-					pool,
+					poolData,
+					sessionData,
+					searchParams,
 				};
 			}
 
 			return {
 				status: AppStates.GROUP_COMPLETE,
 				places,
-				pool,
+				poolData,
+				sessionData,
+				searchParams,
 			};
-		} else if (pool.currPoolSize < pool.maxPoolSize) {
+		} else if (poolData.currPoolSize < poolData.maxPoolSize) {
 			return {
 				status: AppStates.GROUP_INCOMPLETE,
-				pool,
+				poolData,
+				sessionData,
+				searchParams,
 			};
 		}
 	} catch (e) {

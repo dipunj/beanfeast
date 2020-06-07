@@ -1,6 +1,7 @@
 var PoolService = require('../services/pool.service');
 var SessionService = require('../services/session.service');
 var handleError = require('../util/error.util');
+var handleSuccess = require('../util/success.util');
 
 const createPool = async (req, res, next) => {
 	const {
@@ -19,16 +20,17 @@ const createPool = async (req, res, next) => {
 			maxPoolSize: parseInt(maxPoolSize),
 			uniqueIdentifier,
 		});
-		const { newSession, updatedPool } = await SessionService.createNew({
+		const { newSession: sessionData, updatedPool: poolData } = await SessionService.createNew({
 			pool: newPool,
 			latitude: parseFloat(latitude),
 			longitude: parseFloat(longitude),
 			uniqueIdentifier,
 		});
-		return res.status(200).json({
-			data: { sessionData: newSession, poolData: updatedPool },
-			message: 'Pool created succesfully',
-		});
+		return handleSuccess(
+			res,
+			{ sessionData, poolData },
+			{ message: 'Pool created succesfully' }
+		);
 	} catch (e) {
 		return handleError(res, e);
 	}
@@ -41,14 +43,14 @@ const updatePool = async (req, res, next) => {
 		if (!poolId) {
 			throw new Error('Incomplete joining URL');
 		}
-		const newPool = await PoolService.updatePool({
+		const { poolData, sessionData } = await PoolService.updatePool({
 			poolId,
 			fromTime,
 			toTime,
 			maxPoolSize: parseInt(maxPoolSize),
 			uniqueIdentifier,
 		});
-		return res.status(200).json({ data: newPool, message: 'Pool updated succesfully' });
+		return handleSuccess(res, { poolData, sessionData });
 	} catch (e) {
 		return handleError(res, e);
 	}
@@ -65,17 +67,18 @@ const joinPool = async (req, res, next) => {
 		} else if (!poolId) {
 			throw new Error('Incomplete joining URL');
 		}
-		const { newSession, updatedPool } = await SessionService.addToPool({
+		const { newSession: sessionData, updatedPool: poolData } = await SessionService.addToPool({
 			poolId,
 			uniqueIdentifier,
 			latitude,
 			longitude,
 		});
-		return res.status(200).json({
-			sessionData: newSession,
-			poolData: updatedPool,
-			message: `Joined the Pool ${poolId} succesfully`,
-		});
+
+		return handleSuccess(
+			res,
+			{ sessionData, poolData },
+			{ message: `Joined the Pool ${poolId} succesfully` }
+		);
 	} catch (e) {
 		return handleError(res, e);
 	}
@@ -94,10 +97,7 @@ const showPool = async (req, res, next) => {
 			poolId,
 			uniqueIdentifier,
 		});
-		return res.status(200).json({
-			sessionData,
-			poolData,
-		});
+		return handleSuccess(res, { sessionData, poolData });
 	} catch (e) {
 		return handleError(res, e);
 	}

@@ -76,15 +76,13 @@ const createNewPool = async ({ fromTime, toTime, maxPoolSize, uniqueIdentifier }
  *
  * @param {*} { poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier }
  * @param {*} rest
- * @returns updated pool object
+ * @returns updated pool object and the session which initiated the update request
  */
 const updatePool = async ({ poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier }, ...rest) => {
 	try {
 		var pool = await Pool.findOne({ _id: poolId });
-		var sessions = (await Session.find({ poolId }, 'uniqueIdentifier -_id')).map(
-			({ uniqueIdentifier }) => uniqueIdentifier
-		);
-		if (sessions.includes(uniqueIdentifier)) {
+		var session = await Session.findOne({ poolId, uniqueIdentifier });
+		if (session) {
 			if (maxPoolSize) {
 				if (!pool) {
 					throw new Error("The pool doesn't exist");
@@ -126,7 +124,10 @@ const updatePool = async ({ poolId, fromTime, toTime, maxPoolSize, uniqueIdentif
 
 			await pool.save();
 
-			return pool;
+			return {
+				poolData: pool,
+				sessionData: session,
+			};
 		} else {
 			throw new Error('Access Unauthorised to this pool');
 		}

@@ -1,12 +1,22 @@
 module.exports =
 	process.env.NODE_ENV === 'production'
-		? (res, error) =>
+		? (res, error, customeTitle = '') =>
 				res.status(400).json({
-					status: 400,
-					message: error.message,
+					meta: {
+						success: false,
+						response: {
+							title: customeTitle || error.title,
+							message: error.message,
+						},
+					},
 				})
-		: (res, error) =>
+		: (res, error, customeTitle) =>
 				res.status(400).json({
-					status: 400,
-					message: error.stack.split('\n'),
+					meta: {
+						success: false,
+						response: {
+							title: customeTitle || error.title,
+							message: error.stack.split('\n'),
+						},
+					},
 				});
