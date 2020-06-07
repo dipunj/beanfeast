@@ -25,8 +25,6 @@ const useStyles = makeStyles((theme: Theme) =>
 			},
 		},
 		updateRoot: {
-			backgroundColor: '#080708',
-			color: 'white',
 			borderRadius: '0px',
 			marginBottom: '0px',
 			width: '100%',
@@ -44,8 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
 			},
 		},
 		updateRootMobile: {
-			backgroundColor: '#080708',
-			color: 'white',
 			borderRadius: '10px 10px 0px 0px',
 			marginBottom: '0px',
 			width: '100%',

@@ -85,11 +85,13 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 						alignItems="center"
 						style={{ padding: '30px 10px' }}
 					>
-						<Grid item xs={12} md={4} container justify="center">
+						<Grid item xs={12} sm={6} md={4} container justify="center">
 							<Button
+								disableRipple
 								size="large"
 								variant="contained"
-								className={isMobile ? styles.updateRootMobile : styles.updateRoot}
+								color="primary"
+								className={isMobile ? styles.updateRootMobile : styles.modifyRoot}
 								onClick={handleUpdateCall}
 							>
 								Update
@@ -98,8 +100,9 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 								<LinearProgress color="secondary" style={{ width: '100%' }} />
 							)}
 						</Grid>
-						<Grid item xs={12} md={4} container justify="center">
+						<Grid item xs={12} sm={6} md={4} container justify="center">
 							<Button
+								disableRipple
 								size="large"
 								variant="contained"
 								className={isMobile ? styles.cancelRootMobile : styles.cancelRoot}
@@ -122,8 +125,16 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 					<ViewTiming {...{ fromTime: origFromTime, toTime: origToTime }} />
 				</Grid>
 				{createdBy === uniqueIdentifier && (
-					<Grid item container justify="center">
-						<Grid item xs={12} sm={8} md={6}>
+					// <Grid item container justify="center">
+					<Grid
+						item
+						direction="row"
+						container
+						justify="space-evenly"
+						alignItems="center"
+						style={{ padding: '30px 10px' }}
+					>
+						<Grid item xs={12} md={4} container justify="center">
 							<Button
 								{...{
 									size: 'large',
