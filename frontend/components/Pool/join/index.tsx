@@ -5,12 +5,13 @@ import useStyles from './styles';
 import { NotificationToast, Request } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import { useRouter } from 'next/router';
+import { handleNotification } from '../../util/NotificationToast';
 
 const initialState = {
 	location: null,
 	loadingLocation: true,
 	apiUnderProgress: false,
-	permissionError: null,
+	browserError: null,
 };
 
 const reducer = (state, action) => {
@@ -19,7 +20,7 @@ const reducer = (state, action) => {
 			return { ...state, loadingLocation: false, location: { ...action.location } };
 		case 'setApiUnderProgress':
 			return { ...state, apiUnderProgress: action.apiUnderProgress };
-		case 'setPermissionError':
+		case 'setBrowserError':
 			let title = '';
 			let message = '';
 			if (action.hasOwnProperty('error')) {
@@ -43,11 +44,11 @@ const reducer = (state, action) => {
 				}
 				return {
 					...state,
-					permissionError: { title, message },
+					browserError: { title, message },
 					loadingLocation: false,
 				};
 			} else {
-				return { ...state, permissionError: null, loadingLocation: false };
+				return { ...state, browserError: null, loadingLocation: false };
 			}
 		default:
 			throw new Error('Unexpected action');
@@ -57,16 +58,12 @@ const reducer = (state, action) => {
 const joinPoolById = ({ poolId }) => {
 	const styles = useStyles();
 	const [state, dispatch] = useReducer(reducer, initialState);
-	const [apiError, setApiError] = useState(null);
+	const [notification, setNotification] = useState(null);
 	const router = useRouter();
 
 	const handleClose = (e: any, reason?: string) => {
 		if (reason === 'clickaway') return;
-		dispatch({ type: 'setPermissionError' });
-	};
-	const handleAPIErrorClose = (e: any, reason?: string) => {
-		if (reason === 'clickaway') return;
-		setApiError(null);
+		dispatch({ type: 'setBrowserError' });
 	};
 
 	useEffect(() => {
@@ -80,7 +77,7 @@ const joinPoolById = ({ poolId }) => {
 							longitude: longitude.toFixed(7),
 						},
 					}),
-				(error) => dispatch({ type: 'setPermissionError', error }),
+				(error) => dispatch({ type: 'setBrowserError', error }),
 				{
 					maximumAge: 120000,
 					timeout: 5000,
@@ -96,16 +93,19 @@ const joinPoolById = ({ poolId }) => {
 		const { location } = state;
 
 		try {
-			const data = await Request.post(`http://localhost:4000/pool/join/${poolId}`, {
+			const {
+				status,
+				data: { meta, data },
+			} = await Request.post(`http://localhost:4000/pool/join/${poolId}`, {
 				uniqueIdentifier,
 				...location,
 			});
+			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
+			router.push(`/place/[poolId]`, `/place/${poolId}`);
 		} catch (error) {
-			setApiError({ message: error.response.data.message });
+			handleNotification(setNotification, error);
+			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
 		}
-
-		dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
-		router.push(`/place/[poolId]`, `/place/${poolId}`);
 	};
 
 	return (
@@ -141,22 +141,26 @@ const joinPoolById = ({ poolId }) => {
 					</Grid>
 				</Grid>
 			</Grid>
+
+			{/* specific for client side error */}
 			<NotificationToast
 				{...{
-					isOpen: state.permissionError !== null,
+					isOpen: state.browserError !== null,
 					handleClose,
-					title: state.permissionError?.title,
-					message: state.permissionError?.message,
+					title: state.browserError?.title,
+					message: state.browserError?.message,
 					type: 'error',
 				}}
 			/>
+
+			{/* specifically for server side errors */}
 			<NotificationToast
 				{...{
-					isOpen: apiError !== null,
-					handleClose: handleAPIErrorClose,
-					title: null,
-					message: apiError?.message,
-					type: 'error',
+					isOpen: notification !== null,
+					title: notification?.title,
+					message: notification?.message,
+					type: notification?.type,
+					setNotification,
 				}}
 			/>
 		</>

@@ -1,4 +1,4 @@
-import { useEffect, useReducer } from 'react';
+import { useEffect, useReducer, useState } from 'react';
 import { Grid, Typography, Button, LinearProgress, Paper } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import useStyles from './styles';
@@ -6,6 +6,7 @@ import { NotificationToast, Request, TimePicker, DatePicker } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import mergeDateTime from '../../../utils/mergeDateTime';
 import HeadCount, { HeadCountLabel } from './HeadCount';
+import { handleNotification } from '../../util/NotificationToast';
 
 const initialState = {
 	date: new Date(),
@@ -71,6 +72,7 @@ const createNewPool = () => {
 	const styles = useStyles();
 	const router = useRouter();
 	const [state, dispatch] = useReducer(reducer, initialState);
+	const [notification, setNotification] = useState(null);
 
 	const handleClose = (e: any, reason?: string) => {
 		if (reason === 'clickaway') return;
@@ -94,6 +96,7 @@ const createNewPool = () => {
 			const {
 				status,
 				data: {
+					meta,
 					data: { sessionData, poolData },
 				},
 			} = await Request.post('http://localhost:4000/pool/new', {
@@ -104,7 +107,7 @@ const createNewPool = () => {
 				router.push(`/place/[poolId]`, `/place/${poolData._id}`);
 			}
 		} catch (error) {
-			console.error(error);
+			handleNotification(setNotification, error);
 		}
 	};
 

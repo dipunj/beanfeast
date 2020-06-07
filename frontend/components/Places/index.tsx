@@ -1,9 +1,10 @@
 import ShareJoinUrl from './Share';
 import { useEffect, useReducer, useState } from 'react';
-import { Request } from '../util';
+import { Request, NotificationToast } from '../util';
 import getBrowserFingerprint from '../../utils/fingerprint';
 import ShowPoolStats from './PoolStats';
 import PlaceResults from './PlaceResults';
+import { handleNotification } from '../util/NotificationToast';
 
 const initialState = {
 	loading: true,
@@ -30,19 +31,23 @@ const resultPage = ({ poolId }) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [editMode, setEditMode] = useState(false);
+	const [notification, setNotification] = useState(null);
 
 	const fetchData = async () => {
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
-			const { data } = await Request.get(`http://localhost:4000/pool/show`, {
+			const {
+				status,
+				data: { meta, data },
+			} = await Request.get(`http://localhost:4000/pool/show`, {
 				params: {
 					poolId,
 					uniqueIdentifier,
 				},
 			});
 			dispatch({ type: 'update', data });
-		} catch (e) {
-			console.log(e);
+		} catch (error) {
+			handleNotification(setNotification, error);
 		}
 	};
 
@@ -65,6 +70,15 @@ const resultPage = ({ poolId }) => {
 					{...{ parentState: state, isUpdating, setIsUpdating, editMode, setEditMode }}
 				/>
 				{!editMode && maxPoolSize === currPoolSize && <PlaceResults {...{ placeData }} />}
+				<NotificationToast
+					{...{
+						isOpen: notification !== null,
+						title: notification?.title,
+						message: notification?.message,
+						type: notification?.type,
+						setNotification,
+					}}
+				/>
 			</>
 		);
 	}
