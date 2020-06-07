@@ -3,6 +3,7 @@ import { Alert, AlertTitle } from '@material-ui/lab';
 
 const Notification = ({
 	handleClose,
+	setNotification,
 	title,
 	message,
 	type,
@@ -15,6 +16,11 @@ const Notification = ({
 	},
 	slideDirection = 'down',
 }) => {
+	if (!handleClose)
+		handleClose = (e: any, reason?: string) => {
+			if (reason === 'clickaway') return;
+			setNotification(null);
+		};
 	return (
 		<Snackbar
 			color="error"
@@ -43,4 +49,16 @@ const Notification = ({
 	);
 };
 
+const handleNotification = (setNotification, error) => {
+	const { mustShow, type, title, message } = error.response.data.meta;
+	if (mustShow) {
+		setNotification({
+			title,
+			message,
+			type,
+		});
+	}
+};
+
 export default Notification;
+export { handleNotification };
