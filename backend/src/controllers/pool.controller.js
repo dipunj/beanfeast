@@ -67,7 +67,7 @@ const joinPool = async (req, res, next) => {
 		} else if (!poolId) {
 			throw new Error('Incomplete joining URL');
 		}
-		const { newSession: sessionData, updatedPool: poolData } = await SessionService.addToPool({
+		const { sessionData, poolData, message } = await SessionService.addToPool({
 			poolId,
 			uniqueIdentifier,
 			latitude,
@@ -77,7 +77,7 @@ const joinPool = async (req, res, next) => {
 		return handleSuccess(
 			res,
 			{ sessionData, poolData },
-			{ message: `Joined the Pool ${poolId} succesfully` }
+			{ message: message || `Joined the Pool ${poolId} succesfully` }
 		);
 	} catch (e) {
 		return handleError(res, e);

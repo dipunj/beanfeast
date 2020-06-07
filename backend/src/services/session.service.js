@@ -52,8 +52,13 @@ const addToPool = async (params, ...rest) => {
 			throw new Error('Invalid Joining URL');
 		}
 		const anySession = await Session.find({ uniqueIdentifier });
-		if (anySession && anySession.filter((sesh) => sesh.poolId == pool._id).length > 0) {
-			throw new Error('You are already in this pool!');
+		if (anySession) {
+			const existingSession = anySession.filter((sesh) => sesh.poolId == pool._id)[0];
+			return {
+				poolData: pool,
+				sessionData: existingSession,
+				message: 'You are already in the pool',
+			};
 		}
 		const newSession = await createNew({
 			pool,
@@ -61,7 +66,7 @@ const addToPool = async (params, ...rest) => {
 			longitude,
 			uniqueIdentifier,
 		});
-		return newSession;
+		return { poolData: pool, sessionData: newSession };
 	} catch (e) {
 		throw e;
 	}
