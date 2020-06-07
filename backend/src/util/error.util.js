@@ -5,6 +5,7 @@ module.exports =
 					meta: {
 						success: false,
 						response: {
+							mustShow: true,
 							title: customeTitle || error.title,
 							message: error.message,
 						},
@@ -15,6 +16,7 @@ module.exports =
 					meta: {
 						success: false,
 						response: {
+							mustShow: true,
 							title: customeTitle || error.title,
 							message: error.stack.split('\n'),
 						},

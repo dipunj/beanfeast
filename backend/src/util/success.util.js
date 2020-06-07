@@ -3,9 +3,9 @@ module.exports = (res, data, { mustShow = false, title = 'Success', message } = 
 		message = 'Request completed succesfully';
 	}
 
-	return res.status(400).json({
+	return res.status(200).json({
 		meta: {
-			success: false,
+			success: true,
 			response: {
 				mustShow,
 				title,
