@@ -7,15 +7,20 @@ const _getPlaces = async (params, { queryString, searchRadius }, ...rest) => {
 	try {
 		const params = {
 			key: process.env.GOOGLE_API_KEY,
-			keyword: queryString || process.env.defaultQueryString || 'cafe',
+			keyword: queryString,
 			location: `${poolData.centroidLatitude},${poolData.centroidLongitude}`,
 			radius: Math.max(searchRadius, process.env.defaultSearchRadius) || 200,
 		};
+
 		const places = await axios.get(
-			'https://maps.googleapis.com/maps/api/place/nearbysearch/json',
+			`https://maps.googleapis.com/maps/api/place/nearbysearch/json`,
 			{ crossDomain: true, params }
 		);
-		return places.data;
+		return {
+			places: places.data,
+			apiQueryString: params.keyword,
+			apiRadius: params.radius,
+		};
 	} catch (e) {
 		throw e;
 	}
@@ -35,7 +40,10 @@ const showResults = async ({ poolId, uniqueIdentifier, queryString, searchRadius
 	try {
 		const { poolData, sessionData } = await PoolService._verifyMember(membershipParams);
 		if (poolData.currPoolSize === poolData.maxPoolSize) {
-			const places = await _getPlaces({ poolData }, searchParams);
+			const { places, apiQueryString, apiRadius } = await _getPlaces(
+				{ poolData },
+				searchParams
+			);
 
 			if (places.status === GoogleStates.OVER_QUERY_LIMIT) {
 				return {
@@ -49,7 +57,8 @@ const showResults = async ({ poolId, uniqueIdentifier, queryString, searchRadius
 					message: places.error_message,
 					poolData,
 					sessionData,
-					searchParams,
+					apiQueryString,
+					apiRadius,
 				};
 			}
 
@@ -58,14 +67,16 @@ const showResults = async ({ poolId, uniqueIdentifier, queryString, searchRadius
 				places,
 				poolData,
 				sessionData,
-				searchParams,
+				apiQueryString,
+				apiRadius,
 			};
 		} else if (poolData.currPoolSize < poolData.maxPoolSize) {
 			return {
 				status: AppStates.GROUP_INCOMPLETE,
 				poolData,
 				sessionData,
-				searchParams,
+				apiQueryString,
+				apiRadius,
 			};
 		}
 	} catch (e) {

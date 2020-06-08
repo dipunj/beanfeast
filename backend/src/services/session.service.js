@@ -48,26 +48,26 @@ const addToPool = async (params, ...rest) => {
 	const { poolId, uniqueIdentifier, latitude, longitude } = params;
 	try {
 		const anySession = await Session.findOne({ poolId, uniqueIdentifier });
-		const poolData = await PoolService._findPool({ poolId });
+		const pool = await PoolService._findPool({ poolId });
 
 		if (anySession) {
 			return {
-				poolData,
+				pool,
 				sessionData: anySession,
 				message: 'You are already in the pool',
 			};
 		}
-		if (!poolData) {
+		if (!pool) {
 			throw new Error('Invalid Joining URL');
 		}
 
-		const newSession = await createNew({
-			pool: poolData,
+		const { newSession: sessionData, updatedPool: poolData } = await createNew({
+			pool,
 			latitude,
 			longitude,
 			uniqueIdentifier,
 		});
-		return { poolData, sessionData: newSession };
+		return { poolData, sessionDatas };
 	} catch (e) {
 		throw e;
 	}

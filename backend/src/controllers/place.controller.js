@@ -9,8 +9,8 @@ const showResults = async (req, res, next) => {
 	const params = {
 		poolId,
 		uniqueIdentifier,
-		queryString,
-		searchRadius,
+		queryString: queryString || process.env.defaultQueryString || 'cafe',
+		searchRadius: searchRadius || 1000,
 	};
 
 	try {
