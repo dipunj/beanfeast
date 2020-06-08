@@ -59,7 +59,7 @@ POST: '/pool/create/new';
  * 		uniqueIdentifier
  * }
  */
-GET: '/pool/read/:poolId';
+GET: '/pool/status/:poolId';
 
 // UPDATE POOL
 // only the creator of the pool can update the pool
