@@ -7,14 +7,14 @@ const useTheme = ({ darkMode }) => {
 			createMuiTheme({
 				palette: {
 					primary: {
-						light: '#1B98E0',
+						// light: '#1B98E0',
 						main: '#1B98E0',
-						dark: '#DDDDDD',
+						// dark: '#DDDDDD',
 					},
 					secondary: {
-						light: '#1B98E0',
+						// light: '#1B98E0',
 						main: '#575860',
-						dark: '#DDDDDD',
+						// dark: '#DDDDDD',
 					},
 					type: darkMode ? 'dark' : 'light',
 					// warning: {

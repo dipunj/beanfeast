@@ -16,6 +16,7 @@
 		"@material-ui/icons": "^4.9.1",
 		"@material-ui/lab": "^4.0.0-alpha.54",
 		"@material-ui/pickers": "^3.2.10",
+		"@react-google-maps/api": "^2.0.0-alpha",
 		"axios": "^0.19.2",
 		"date-fns": "^2.14.0",
 		"fingerprintjs2": "^2.1.0",
@@ -30,6 +31,7 @@
 		"@types/react": "16.8.23",
 		"@types/react-dom": "16.8.4",
 		"@types/styled-components": "5.0.1",
+		"@welldone-software/why-did-you-render": "^4.2.5",
 		"babel-plugin-styled-components": "^1.10.0",
 		"prettier": "^2.0.5",
 		"typescript": "3.5.2"

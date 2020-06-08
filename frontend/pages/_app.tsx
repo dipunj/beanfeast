@@ -5,6 +5,14 @@ import CssBaseline from '@material-ui/core/CssBaseline';
 import defaultGetLayout from '../components/Layouts/NextLayout';
 import Providers from './Providers';
 import SessionCtxProvider from '../components/Context';
+import whyDidYouRender from '@welldone-software/why-did-you-render';
+import React from 'react';
+
+if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
+	whyDidYouRender(React, {
+		trackAllPureComponents: true,
+	});
+}
 
 export default function MyApp(props) {
 	const { Component, pageProps } = props;
@@ -22,7 +30,7 @@ export default function MyApp(props) {
 	return (
 		<>
 			<Head>
-				<title>{process.env.PROJECT_TITLE || 'Beanfeast'}</title>
+				<title>{process.env.NEXT_PUBLIC_PROJECT_TITLE || 'Beanfeast'}</title>
 				<meta
 					name="viewport"
 					content="minimum-scale=1, initial-scale=1, width=device-width"
