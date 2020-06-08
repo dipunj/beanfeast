@@ -6,7 +6,7 @@ const Container = styled.div`
 	justify-content: flex-start;
 	align-items: stretch;
 	width: 100vw;
-	height: 100vh;
+	height: 80vh;
 `;
 
 const Header = styled.div`

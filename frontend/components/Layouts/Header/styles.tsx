@@ -6,7 +6,6 @@ const useStyles = makeStyles({
 		justifyContent: 'center',
 		alignItems: 'center',
 		height: '20vh',
-		position: 'sticky',
 		top: '0px',
 		left: '0px',
 		zIndex: 5,
