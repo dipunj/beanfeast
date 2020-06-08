@@ -101,7 +101,7 @@ const joinPoolById = ({ poolId }) => {
 				...location,
 			});
 			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
-			router.push(`/place/[poolId]`, `/place/${poolId}`);
+			router.push(`/pool/status/[poolId]`, `/pool/status/${poolId}`);
 		} catch (error) {
 			handleNotification(setNotification, error);
 			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });

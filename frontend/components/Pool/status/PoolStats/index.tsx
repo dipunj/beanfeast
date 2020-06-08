@@ -3,9 +3,9 @@ import useStyles from './styles';
 import { Grid, Button, LinearProgress, useMediaQuery } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
-import mergeDateTime from '../../../utils/mergeDateTime';
-import { Request, NotificationToast } from '../../util';
-import { handleNotification } from '../../util/NotificationToast';
+import mergeDateTime from '../../../../utils/mergeDateTime';
+import { Request, NotificationToast } from '../../../util';
+import { handleNotification } from '../../../util/NotificationToast';
 
 const reducer = (dataState: any, action: any) => {
 	switch (action.type) {

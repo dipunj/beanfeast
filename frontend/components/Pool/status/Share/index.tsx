@@ -5,14 +5,12 @@ import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import ShareIcon from '@material-ui/icons/Share';
-import { NotificationToast } from '../../util';
+import { NotificationToast } from '../../../util';
 import useStyles from './styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Grid } from '@material-ui/core';
 
 const sharePoolDetails = ({ poolId }) => {
-	// return <Input value={`share url is: ${poolId}`} disabled fullWidth />
-	console.log(process.env);
 	const isMobile = useMediaQuery('(max-width:500px)');
 	const [notif, setNotif] = useState({ show: false, message: '', type: '' });
 	const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/pool/join/${poolId}`;

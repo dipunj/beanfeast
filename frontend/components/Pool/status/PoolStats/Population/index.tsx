@@ -1,6 +1,6 @@
-import TwinLayout from '../../../Layouts/TwinLayout';
-import HeadCount from '../../../Pool/new/HeadCount';
-import SingleLayout from '../../../Layouts/SingleLayout';
+import TwinLayout from '../../../../Layouts/TwinLayout';
+import HeadCount from '../../../new/HeadCount';
+import SingleLayout from '../../../../Layouts/SingleLayout';
 import { Grid } from '@material-ui/core';
 
 const ViewPopulation = ({ currPoolSize, maxPoolSize }) => {

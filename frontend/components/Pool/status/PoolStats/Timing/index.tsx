@@ -1,6 +1,6 @@
-import TwinLayout from '../../../Layouts/TwinLayout';
-import { TimePicker, DatePicker } from '../../../util';
-import SingleLayout from '../../../Layouts/SingleLayout';
+import TwinLayout from '../../../../Layouts/TwinLayout';
+import { TimePicker, DatePicker } from '../../../../util';
+import SingleLayout from '../../../../Layouts/SingleLayout';
 
 const ViewTiming = ({ fromTime, toTime }) => {
 	const options = {

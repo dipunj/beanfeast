@@ -99,13 +99,11 @@ const createNewPool = () => {
 					meta,
 					data: { sessionData, poolData },
 				},
-			} = await Request.post('/pool/new', {
+			} = await Request.post('/pool/create/new', {
 				...params,
 			});
 			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
-			if (status === 200) {
-				router.push(`/place/[poolId]`, `/place/${poolData._id}`);
-			}
+			router.push(`/pool/status/[poolId]`, `/pool/status/${poolData._id}`);
 		} catch (error) {
 			handleNotification(setNotification, error);
 		}
