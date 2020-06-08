@@ -96,7 +96,7 @@ const joinPoolById = ({ poolId }) => {
 			const {
 				status,
 				data: { meta, data },
-			} = await Request.post(`http://localhost:4000/pool/join/${poolId}`, {
+			} = await Request.post(`/pool/join/${poolId}`, {
 				uniqueIdentifier,
 				...location,
 			});

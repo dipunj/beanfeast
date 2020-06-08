@@ -99,7 +99,7 @@ const createNewPool = () => {
 					meta,
 					data: { sessionData, poolData },
 				},
-			} = await Request.post('http://localhost:4000/pool/new', {
+			} = await Request.post('/pool/new', {
 				...params,
 			});
 			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });

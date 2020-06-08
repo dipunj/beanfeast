@@ -13,9 +13,10 @@ const Information = () => {
 				</Grid>
 				<Grid item xs={12}>
 					<Typography color="textSecondary" variant="body2">
-						When you click JOIN POOL, {process.env.PROJECT_TITLE || 'Beanfeast'} would
-						ask for location access. Your location is stored on our servers, but without
-						your identity attached to it. This is why there is no login/signup system.
+						When you click JOIN POOL,{' '}
+						{process.env.NEXT_PUBLIC_PROJECT_TITLE || 'Beanfeast'} would ask for
+						location access. Your location is stored on our servers, but without your
+						identity attached to it. This is why there is no login/signup system.
 					</Typography>
 				</Grid>
 				<Grid item xs={12}>
