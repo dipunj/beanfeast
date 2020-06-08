@@ -2,16 +2,12 @@ var PlaceService = require('../services/place.service');
 var handleError = require('../util/error.util');
 var handleSuccess = require('../util/success.util');
 
-const showStatus = async (req, res, next) => {
-	const { uniqueIdentifier, fromTime, toTime, maxPeople, queryString, searchRadius } = req.query;
-
+const showResults = async (req, res, next) => {
+	const { uniqueIdentifier, queryString, searchRadius } = req.query;
 	const { poolId } = req.params;
 
 	const params = {
 		poolId,
-		fromTime,
-		toTime,
-		maxPoolSize: parseInt(maxPeople),
 		uniqueIdentifier,
 		queryString,
 		searchRadius,
@@ -21,7 +17,7 @@ const showStatus = async (req, res, next) => {
 		if (!poolId) throw new Error('Invalid pool');
 		if (!uniqueIdentifier) throw new Error('Empty uniqueIdentifier');
 
-		const result = await PlaceService.getStatusAndUpdate(params);
+		const result = await PlaceService.showResults(params);
 		return handleSuccess(res, result);
 	} catch (e) {
 		return handleError(res, e);
@@ -29,7 +25,7 @@ const showStatus = async (req, res, next) => {
 };
 
 const PlaceController = {
-	showStatus,
+	showResults,
 };
 
 module.exports = PlaceController;

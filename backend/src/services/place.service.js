@@ -21,15 +21,9 @@ const _getPlaces = async (params, { queryString, searchRadius }, ...rest) => {
 	}
 };
 
-const getStatusAndUpdate = async (
-	{ poolId, fromTime, toTime, maxPoolSize, uniqueIdentifier, queryString, searchRadius },
-	...rest
-) => {
-	const updateParams = {
+const showResults = async ({ poolId, uniqueIdentifier, queryString, searchRadius }, ...rest) => {
+	const membershipParams = {
 		poolId,
-		fromTime,
-		toTime,
-		maxPoolSize,
 		uniqueIdentifier,
 	};
 
@@ -39,7 +33,7 @@ const getStatusAndUpdate = async (
 	};
 
 	try {
-		const { poolData, sessionData } = await PoolService.updatePool(updateParams);
+		const { poolData, sessionData } = await PoolService._verifyMember(membershipParams);
 		if (poolData.currPoolSize === poolData.maxPoolSize) {
 			const places = await _getPlaces({ poolData }, searchParams);
 
@@ -80,7 +74,7 @@ const getStatusAndUpdate = async (
 };
 
 const PlaceService = {
-	getStatusAndUpdate,
+	showResults,
 };
 
 module.exports = PlaceService;

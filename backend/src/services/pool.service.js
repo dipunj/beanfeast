@@ -17,6 +17,20 @@ const _findPool = async ({ poolId }, ...rest) => {
 	}
 };
 
+const _verifyMember = async ({ poolId, uniqueIdentifier }, ...rest) => {
+	try {
+		const sessionData = await Session.findOne({ poolId, uniqueIdentifier });
+		if (!sessionData) {
+			throw new Error('Unauthorised');
+		} else {
+			const poolData = await _findPool({ poolId });
+			return { poolData, sessionData };
+		}
+	} catch (e) {
+		throw e;
+	}
+};
+
 /**
  * updates the centroid for a pool with poolObj
  *
@@ -58,8 +72,8 @@ const _updateCentroid_InPlace = async ({ poolObj }) => {
 const createNewPool = async ({ fromTime, toTime, maxPoolSize, uniqueIdentifier }, ...rest) => {
 	try {
 		const newPool = Pool({
-			fromTime,
-			toTime,
+			fromTime: fromTime || Date.now(),
+			toTime: fromTime || Date.now(),
 			maxPoolSize,
 			createdBy: uniqueIdentifier,
 		});
@@ -192,6 +206,7 @@ const PoolService = {
 	updatePool,
 	incrementPoolSize,
 	_findPool,
+	_verifyMember,
 	showPool,
 };
 

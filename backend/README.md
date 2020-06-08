@@ -1,6 +1,6 @@
 # beanfeast
 
-Standard success response:
+## Standard success response:
 
 ```js
 status: 200
@@ -19,7 +19,7 @@ status: 200
 }
 ```
 
-Standard error message:
+## Standard error message:
 
 ```js
 status: 400
@@ -33,4 +33,68 @@ status: 400
 		}
 	}
 }
+```
+
+## API Doc
+
+```js
+// CREATE NEW POOL
+/**
+ * req.body = {
+ * 		maxPoolSize
+ * 		fromTime
+ * 		toTime
+ * 		uniqueIdentifier
+ * 		latitude
+ * 		longitude
+ * }
+ *
+ */
+POST: '/pool/create/new';
+
+// READ the pool's stats (number of people, max capacity, timing)
+/**
+ * req.params = { poolId }
+ * req.body = {
+ * 		uniqueIdentifier
+ * }
+ */
+GET: '/pool/read/:poolId';
+
+// UPDATE POOL
+// only the creator of the pool can update the pool
+/**
+ * req.params = { poolId }
+ * req.body = {
+ * 		maxPoolSize
+ * 		fromTime
+ * 		toTime
+ * 		uniqueIdentifier
+ * }
+ */
+POST: '/pool/update/:poolId';
+
+// CREATES the user/poster to pool, if there is space
+/**
+ * req.params = { poolId }
+ * req.body = {
+ * 		uniqueIdentifier,
+ * 		latitude,
+ * 		longitude
+ * }
+ */
+POST: '/pool/join/:poolId';
+
+// READ: Generates results for the pool.
+// Pool must be full to compute result
+/**
+ * req.params = { poolId }
+ *
+ * req.body = {
+ * 		uniqueIdentifier,
+ * 		queryString,
+ * 		searchRadius
+ * }
+ */
+GET: '/place/results/:poolId';
 ```

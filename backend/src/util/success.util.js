@@ -7,6 +7,7 @@ module.exports = (res, data, { mustShow = false, title = 'Success', message } = 
 		meta: {
 			success: true,
 			response: {
+				type: 'success',
 				mustShow,
 				title,
 				message,

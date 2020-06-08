@@ -5,8 +5,8 @@ var handleSuccess = require('../util/success.util');
 
 const createPool = async (req, res, next) => {
 	const {
-		fromTime = Date.now(),
-		toTime = Date.now(),
+		fromTime,
+		toTime,
 		maxPoolSize = Infinity,
 		latitude,
 		longitude,
@@ -85,7 +85,8 @@ const joinPool = async (req, res, next) => {
 };
 
 const showPool = async (req, res, next) => {
-	const { uniqueIdentifier, poolId } = req.query;
+	const { uniqueIdentifier } = req.query;
+	const { poolId } = req.params;
 
 	try {
 		if (!uniqueIdentifier) {
