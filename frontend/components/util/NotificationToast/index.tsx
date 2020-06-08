@@ -50,7 +50,7 @@ const Notification = ({
 };
 
 const handleNotification = (setNotification, error) => {
-	const { mustShow, type, title, message } = error.response.data.meta;
+	const { mustShow, type, title, message } = error.response.data.meta.response;
 	if (mustShow) {
 		setNotification({
 			title,

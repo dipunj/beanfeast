@@ -1,7 +1,7 @@
 import { Typography } from '@material-ui/core';
 import useStyles from './styles';
 
-const Branding = ({ name = process.env.PROJECT_TITLE || 'Beanfeast' }) => {
+const Branding = ({ name = process.env.NEXT_PUBLIC_PROJECT_TITLE || 'Beanfeast' }) => {
 	const { branding } = useStyles();
 	return (
 		<>
