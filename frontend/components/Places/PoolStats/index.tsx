@@ -4,7 +4,7 @@ import { Grid, Button, LinearProgress, useMediaQuery } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
 import mergeDateTime from '../../../utils/mergeDateTime';
-import { Request } from '../../util';
+import { Request, NotificationToast } from '../../util';
 import { handleNotification } from '../../util/NotificationToast';
 
 const reducer = (dataState: any, action: any) => {
@@ -63,10 +63,11 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 			const {
 				status,
 				data: { meta, data },
-			} = await Request.post(`http://localhost:4000/pool/update/${_id}`, {
+			} = await Request.post(`/pool/update/${_id}`, {
 				...updateParams,
 			});
 		} catch (error) {
+			console.log(error.response.data);
 			handleNotification(setNotification, error);
 		}
 		// else show a toast/snackbar showing the error
@@ -96,6 +97,7 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 							<Grid item xs={12} sm={6} md={4} container justify="center">
 								<Button
 									disableRipple
+									disableTouchRipple
 									size="large"
 									variant="contained"
 									color="primary"
@@ -113,6 +115,7 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 							<Grid item xs={12} sm={6} md={4} container justify="center">
 								<Button
 									disableRipple
+									disableTouchRipple
 									size="large"
 									variant="contained"
 									className={
@@ -129,10 +132,10 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 				<NotificationToast
 					{...{
 						isOpen: notification !== null,
-						handleClose: handleAPIErrorClose,
 						title: notification?.title,
 						message: notification?.message,
 						type: notification?.type,
+						setNotification,
 					}}
 				/>
 			</>
@@ -177,10 +180,10 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 				<NotificationToast
 					{...{
 						isOpen: notification !== null,
-						handleClose: handleAPIErrorClose,
 						title: notification?.title,
 						message: notification?.message,
 						type: notification?.type,
+						setNotification,
 					}}
 				/>
 			</>

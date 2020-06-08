@@ -5,6 +5,7 @@ import getBrowserFingerprint from '../../utils/fingerprint';
 import ShowPoolStats from './PoolStats';
 import PlaceResults from './PlaceResults';
 import { handleNotification } from '../util/NotificationToast';
+import { Button } from '@material-ui/core';
 
 const initialState = {
 	loading: true,
@@ -18,6 +19,7 @@ const reducer = (state, action: any) => {
 		case 'update':
 			return {
 				loading: false,
+				success: action.meta.success,
 				sessionData: action.data.sessionData,
 				poolData: action.data.poolData,
 				placeData: action.data.placeData,
@@ -32,22 +34,25 @@ const resultPage = ({ poolId }) => {
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [editMode, setEditMode] = useState(false);
 	const [notification, setNotification] = useState(null);
+	const [showDrawer, setShowDrawer] = useState(true);
 
 	const fetchData = async () => {
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
+
 			const {
-				status,
 				data: { meta, data },
-			} = await Request.get(`http://localhost:4000/pool/show`, {
+			} = await Request.get(`/pool/show`, {
 				params: {
 					poolId,
 					uniqueIdentifier,
 				},
 			});
-			dispatch({ type: 'update', data });
+			dispatch({ type: 'update', data, meta });
 		} catch (error) {
+			const { meta } = error.response.data;
 			handleNotification(setNotification, error);
+			dispatch({ type: 'update', data: {}, meta });
 		}
 	};
 
@@ -59,6 +64,24 @@ const resultPage = ({ poolId }) => {
 	if (state.loading === true) {
 		return <p>Loading...</p>;
 	} else {
+		const { success } = state;
+		if (!success) {
+			return (
+				<>
+					<p>Create a new pool</p>
+					<NotificationToast
+						{...{
+							isOpen: notification !== null,
+							title: notification?.title,
+							message: notification?.message,
+							type: notification?.type,
+							setNotification,
+						}}
+					/>
+				</>
+			);
+		}
+
 		const {
 			poolData: { _id, maxPoolSize, currPoolSize },
 			placeData,
@@ -69,7 +92,7 @@ const resultPage = ({ poolId }) => {
 				<ShowPoolStats
 					{...{ parentState: state, isUpdating, setIsUpdating, editMode, setEditMode }}
 				/>
-				{!editMode && maxPoolSize === currPoolSize && <PlaceResults {...{ placeData }} />}
+				{!editMode && maxPoolSize === currPoolSize && <Button>View Results</Button>}
 				<NotificationToast
 					{...{
 						isOpen: notification !== null,

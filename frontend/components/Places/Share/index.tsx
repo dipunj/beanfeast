@@ -12,9 +12,10 @@ import { Grid } from '@material-ui/core';
 
 const sharePoolDetails = ({ poolId }) => {
 	// return <Input value={`share url is: ${poolId}`} disabled fullWidth />
+	console.log(process.env);
 	const isMobile = useMediaQuery('(max-width:500px)');
 	const [notif, setNotif] = useState({ show: false, message: '', type: '' });
-	const shareUrl = `${process.env.APP_URL}/pool/join/${poolId}`;
+	const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/pool/join/${poolId}`;
 	const urlRef = useRef(null);
 	const classes = useStyles();
 
