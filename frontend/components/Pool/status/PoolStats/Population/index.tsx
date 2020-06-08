@@ -10,14 +10,14 @@ const ViewPopulation = ({ currPoolSize, maxPoolSize }) => {
 			key: currPoolSize === 1 ? '(Joined - Only You)' : '(Joined)',
 			value: currPoolSize,
 			variant: 'h4',
-			color: 'secondary',
+			color: 'textSecondary',
 			gridProps: { justify: 'center' },
 			keyBefore: false,
 		},
 		divider: {
 			value: '/',
 			variant: 'h4',
-			color: 'secondary',
+			color: 'textSecondary',
 			keyBefore: false,
 		},
 		right: {

@@ -41,7 +41,7 @@ const HeadCountSlider = ({ value, onChange }) => {
 
 const HeadCountLabel = () => (
 	<Grid item xs={12}>
-		<Typography id="headCount-slider" color="secondary">
+		<Typography id="headCount-slider" color="textSecondary">
 			Head Count? (including you)
 		</Typography>
 	</Grid>

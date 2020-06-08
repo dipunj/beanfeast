@@ -19,6 +19,9 @@ const useTwinLayoutStyles = makeStyles((theme: Theme) =>
 			margin: '30px 0px',
 			width: '100%',
 		},
+		linearProgress: {
+			borderRadius: '0px 0px 4px 4px',
+		},
 	})
 );
 

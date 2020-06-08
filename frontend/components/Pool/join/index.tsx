@@ -133,7 +133,7 @@ const joinPoolById = ({ poolId }) => {
 						{(state.loadingLocation || state.apiUnderProgress) && (
 							<Grid item xs={12}>
 								<LinearProgress style={{ width: '100%' }} color="primary" />
-								<Typography color="secondary" align="center">
+								<Typography color="textSecondary" align="center">
 									{state.loadingLocation && 'Acquiring GPS'}
 								</Typography>
 							</Grid>

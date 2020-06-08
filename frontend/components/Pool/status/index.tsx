@@ -5,6 +5,7 @@ import getBrowserFingerprint from '../../../utils/fingerprint';
 import ShowPoolStats from './PoolStats';
 import { handleNotification } from '../../util/NotificationToast';
 import { Button } from '@material-ui/core';
+import { useRouter } from 'next/router';
 
 const initialState = {
 	loading: true,
@@ -29,10 +30,15 @@ const reducer = (state, action: any) => {
 };
 
 const statusPage = ({ poolId }) => {
+	const router = useRouter();
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [editMode, setEditMode] = useState(false);
 	const [notification, setNotification] = useState(null);
+
+	const routeToResultsPage = () => {
+		router.push('/place/results/[poolId]', `/place/results/${poolId}`);
+	};
 
 	const fetchData = async () => {
 		try {
@@ -88,7 +94,9 @@ const statusPage = ({ poolId }) => {
 				<ShowPoolStats
 					{...{ parentState: state, isUpdating, setIsUpdating, editMode, setEditMode }}
 				/>
-				{!editMode && maxPoolSize === currPoolSize && <Button>View Results</Button>}
+				{!editMode && maxPoolSize === currPoolSize && (
+					<Button onClick={routeToResultsPage}>View Results</Button>
+				)}
 				<NotificationToast
 					{...{
 						isOpen: notification !== null,

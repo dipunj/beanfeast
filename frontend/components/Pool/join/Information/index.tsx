@@ -7,7 +7,7 @@ const Information = () => {
 		<Paper className={styles.paperRoot}>
 			<Grid container spacing={4}>
 				<Grid item xs={12}>
-					<Typography variant="h6" color="secondary">
+					<Typography variant="h6" color="textSecondary">
 						Before you proceed
 					</Typography>
 				</Grid>
@@ -26,7 +26,7 @@ const Information = () => {
 						map back to you.
 					</Typography>
 				</Grid>
-				<Typography variant="caption" color="primary">
+				<Typography variant="caption" color="textPrimary">
 					**Please ensure that you use the same browser to access beanfeast for a
 					particular pool
 				</Typography>

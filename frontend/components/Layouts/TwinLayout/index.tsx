@@ -83,6 +83,7 @@ const TwinLayout = ({ header, left, divider, right, style }) => {
 			{numberValues && (
 				<Grid item xs={12}>
 					<LinearProgress
+						className={styles.linearProgress}
 						variant="determinate"
 						value={(left.value * 100) / right.value}
 					/>

@@ -15,8 +15,7 @@ const center = { lat: -43.653225, lng: -79.383186 };
 
 const PlaceResults = ({ poolId }) => {
 	const [loading, setLoading] = useState(true);
-	const [browserFP, setBrowserFP] = useState(null);
-	const [notification, setNotification] = useState(null);
+	// const [notification, setNotification] = useState(null);
 	const [data, setData] = useState({ poolData: {}, sessionData: {}, placesData: {} });
 
 	const { isLoaded, loadError } = useLoadScript({
@@ -26,21 +25,24 @@ const PlaceResults = ({ poolId }) => {
 
 	const fetchData = async () => {
 		const uniqueIdentifier = await getBrowserFingerprint();
-
 		try {
 			const {
 				data: { meta, data },
-			} = await Request.post(`/place/status/${poolId}`, {
-				uniqueIdentifier,
+			} = await Request.get(`/place/results/${poolId}`, {
+				params: {
+					uniqueIdentifier,
+				},
 			});
 			setData(data);
+			setLoading(false);
 		} catch (error) {
-			handleNotification(setNotification, error);
+			console.error(error);
+			// handleNotification(setNotification, error);
 		}
 	};
 
 	useEffect(() => {
-		fetchData(setData, setNotification);
+		fetchData();
 	}, []);
 
 	const redirectToModifyPage = () => {};
