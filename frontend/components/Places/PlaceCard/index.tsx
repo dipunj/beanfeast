@@ -18,7 +18,6 @@ import { Chip, Paper, Container, emphasize } from '@material-ui/core';
 const chipColors = ['default', 'primary', 'secondary'];
 
 const PlacesCard = ({ id, name, phone, tags, rating, address, position: { lat, lon } }) => {
-	console.log(rating);
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
 

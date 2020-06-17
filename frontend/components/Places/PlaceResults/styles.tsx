@@ -25,11 +25,16 @@ const Content = styled.div`
 
 const MapContainer = styled.div`
 	width: 75%;
+	height: 100%;
+	& .leaflet-container {
+		height: 100%;
+	}
 `;
 
 const DetailsContainer = styled.div`
-	min-width: 25%;
-	background: black;
+	overflow-y: auto;
+	height: 80vh;
+	width: 25%;
 `;
 
 export { Container, Header, Content, MapContainer, DetailsContainer };

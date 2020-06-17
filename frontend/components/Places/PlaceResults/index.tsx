@@ -1,13 +1,22 @@
 import { useState, useEffect } from 'react';
+import dynamic from 'next/dynamic';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import Request from '../../util/Request';
 import PlacesCard from '../PlaceCard';
+import { Header, Container, Content, MapContainer, DetailsContainer } from './styles';
+
+// leaflet doesn't support ssr
+const MapView = dynamic(import('../PlaceMaps'), {
+	ssr: false,
+	loading: () => <div style={{ textAlign: 'center', paddingTop: 20 }}>Chargement…</div>,
+});
 
 const PlaceResults = ({ poolId }) => {
 	const [data, setData] = useState(null);
 	const fetchData = async () => {
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
+			console.log(uniqueIdentifier);
 			const {
 				data: { meta, data },
 			} = await Request.get(`/place/results/${poolId}`, {
@@ -50,8 +59,27 @@ const PlaceResults = ({ poolId }) => {
 				/>
 			);
 		});
-
-		return <>{cards}</>;
+		return (
+			<Container>
+				<Header>Hello</Header>
+				<Content>
+					<MapContainer className="leaflet-container">
+						<MapView
+							center={[
+								data.poolData.centroidLatitude.$numberDecimal,
+								data.poolData.centroidLongitude.$numberDecimal,
+							]}
+							searchRadius={data.apiRadius}
+							peerPositions={data.poolMembersLocation}
+							resultPositions={data?.placesData?.results?.map(
+								({ position: { lat, lon } }) => [lat, lon]
+							)}
+						/>
+					</MapContainer>
+					<DetailsContainer>{cards}</DetailsContainer>
+				</Content>
+			</Container>
+		);
 	}
 };
 
