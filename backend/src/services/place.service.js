@@ -9,14 +9,14 @@ const _getPlaces = async (params, { queryString, searchRadius }, ...rest) => {
 			key: process.env.GOOGLE_API_KEY,
 			keyword: queryString,
 			location: `${poolData.centroidLatitude},${poolData.centroidLongitude}`,
-			radius: Math.max(searchRadius, process.env.defaultSearchRadius) || 200,
+			radius: Math.max(searchRadius, process.env.defaultSearchRadius) || 2000,
 		};
 
 		const tomTomparams = {
 			key: process.env.TOMTOM_API_KEY,
 			lat: parseFloat(poolData.centroidLatitude),
 			lon: parseFloat(poolData.centroidLongitude),
-			radius: Math.max(searchRadius, process.env.defaultSearchRadius) || 200,
+			radius: Math.max(searchRadius, process.env.defaultSearchRadius) || 2000,
 			idxSet: 'POI',
 			categorySet: '9376',
 		};
@@ -55,7 +55,9 @@ const showResults = async ({ poolId, uniqueIdentifier, queryString, searchRadius
 	};
 
 	try {
-		const { poolData, sessionData } = await PoolService._verifyMember(membershipParams);
+		const { poolData, sessionData, poolMembersLocation } = await PoolService._verifyMember(
+			membershipParams
+		);
 		if (poolData.currPoolSize === poolData.maxPoolSize) {
 			const { places, apiQueryString, apiRadius } = await _getPlaces(
 				{ poolData },
@@ -65,6 +67,7 @@ const showResults = async ({ poolId, uniqueIdentifier, queryString, searchRadius
 			return {
 				poolData,
 				sessionData,
+				poolMembersLocation,
 				placesData: places,
 				apiQueryString,
 				apiRadius,

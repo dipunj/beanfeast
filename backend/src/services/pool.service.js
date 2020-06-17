@@ -19,12 +19,17 @@ const _findPool = async ({ poolId }, ...rest) => {
 
 const _verifyMember = async ({ poolId, uniqueIdentifier }, ...rest) => {
 	try {
-		const sessionData = await Session.findOne({ poolId, uniqueIdentifier });
+		const sessionData = await Session.findOne({ poolId });
 		if (!sessionData) {
 			throw new Error('Unauthorised');
 		} else {
 			const poolData = await _findPool({ poolId });
-			return { poolData, sessionData };
+			const allMembers = await Session.find({ poolId });
+			const poolMembersLocation = allMembers.map(({ latitude, longitude }) => [
+				parseFloat(latitude),
+				parseFloat(longitude),
+			]);
+			return { poolData, sessionData, poolMembersLocation };
 		}
 	} catch (e) {
 		throw e;
