@@ -29,7 +29,7 @@ const MapContainer = styled.div`
 
 const DetailsContainer = styled.div`
 	min-width: 25%;
-	background: peachpuff;
+	background: black;
 `;
 
 export { Container, Header, Content, MapContainer, DetailsContainer };
