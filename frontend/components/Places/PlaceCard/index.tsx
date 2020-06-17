@@ -17,7 +17,7 @@ import { Chip, Paper, Container, emphasize } from '@material-ui/core';
 
 const chipColors = ['default', 'primary', 'secondary'];
 
-const PlacesCard = ({ name, phone, tags, rating, address, position: { lat, lon } }) => {
+const PlacesCard = ({ id, name, phone, tags, rating, address, position: { lat, lon } }) => {
 	console.log(rating);
 	const classes = useStyles();
 	const [expanded, setExpanded] = React.useState(false);
@@ -30,19 +30,23 @@ const PlacesCard = ({ name, phone, tags, rating, address, position: { lat, lon }
 	};
 
 	return (
-		<Card className={classes.root}>
-			<CardHeader title={name} />
+		<Card className={classes.root} id={id}>
+			<CardHeader
+				title={name}
+				action={
+					<CardActions disableSpacing>
+						<IconButton aria-label="share" onClick={handleOpen}>
+							<DirectionsIcon />
+						</IconButton>
+					</CardActions>
+				}
+				// subheader={<Typography>{phone || <i>Phone not listed</i>}</Typography>}
+			/>
 			<CardContent>
-				<Typography variant="subtitle2">{phone || <i>Phone not listed</i>}</Typography>
-				<Typography variant="caption" align="right" component="div">
+				<Typography variant="caption" component="div">
 					TomTom Rating
 				</Typography>
-				<Typography
-					variant="body2"
-					color="textSecondary"
-					align="right"
-					className={classes.rating}
-				>
+				<Typography variant="body2" color="textSecondary" className={classes.rating}>
 					<Rating aria-label="rating" name="rating" value={rating} readOnly />
 				</Typography>
 				<Typography variant="body2" color="textSecondary" component="p">
@@ -54,12 +58,6 @@ const PlacesCard = ({ name, phone, tags, rating, address, position: { lat, lon }
 					))}
 				</Paper>
 			</CardContent>
-
-			<CardActions disableSpacing>
-				<IconButton aria-label="share" onClick={handleOpen}>
-					<DirectionsIcon />
-				</IconButton>
-			</CardActions>
 		</Card>
 	);
 };

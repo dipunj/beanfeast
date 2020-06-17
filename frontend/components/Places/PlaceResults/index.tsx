@@ -31,6 +31,7 @@ const PlaceResults = ({ poolId }) => {
 	} else {
 		const cards = data.placesData.results.map((itm) => {
 			const {
+				id,
 				poi: { name, phone, categories },
 				score,
 				address: { freeformAddress: address },
@@ -39,6 +40,7 @@ const PlaceResults = ({ poolId }) => {
 			return (
 				<PlacesCard
 					{...{
+						id,
 						name,
 						rating: ((5 * parseFloat(score)) / 100).toFixed(2).toString(),
 						address,
