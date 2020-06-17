@@ -67,7 +67,7 @@ const addToPool = async (params, ...rest) => {
 			longitude,
 			uniqueIdentifier,
 		});
-		return { poolData, sessionDatas };
+		return { poolData, sessionData };
 	} catch (e) {
 		throw e;
 	}
