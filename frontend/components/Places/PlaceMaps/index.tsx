@@ -18,12 +18,12 @@ const MapView = ({ center, searchRadius, peerPositions, resultPositions, handleF
 			<Circle center={center} color="red" radius={searchRadius} />
 			<Polygon color="lime" positions={peerPositions} />
 			{resultPositions.map(({ id, pos, title, details }) => (
-				<Marker position={pos} onClick={() => handleFocus(id)}>
+				<Marker key={id} position={pos} onClick={() => handleFocus(id)}>
 					<ToolTip {...{ title, details }} />
 				</Marker>
 			))}
 			{peerPositions.map((pos) => (
-				<CircleMarker center={pos} color="black" radius={5}>
+				<CircleMarker key={pos} center={pos} color="black" radius={5}>
 					<Popup>{JSON.stringify(pos)}</Popup>
 				</CircleMarker>
 			))}

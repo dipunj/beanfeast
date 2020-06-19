@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -17,7 +17,7 @@ import { Chip, Paper, Container, emphasize } from '@material-ui/core';
 
 const chipColors = ['default', 'primary', 'secondary'];
 
-const PlacesCard = ({ id, name, phone, tags, rating, address, position: { lat, lon } }) => {
+const PlacesCard = ({ id, refptr, name, phone, tags, rating, address, position: { lat, lon } }) => {
 	const classes = useStyles();
 
 	const handleOpen = () => {
@@ -28,35 +28,37 @@ const PlacesCard = ({ id, name, phone, tags, rating, address, position: { lat, l
 	};
 
 	return (
-		<Card className={classes.root} id={id}>
-			<CardHeader
-				title={name}
-				action={
-					<CardActions disableSpacing>
-						<IconButton aria-label="directions" onClick={handleOpen}>
-							<DirectionsIcon />
-						</IconButton>
-					</CardActions>
-				}
-				// subheader={<Typography>{phone || <i>Phone not listed</i>}</Typography>}
-			/>
-			<CardContent>
-				<Typography variant="caption" component="div">
-					TomTom Rating
-				</Typography>
-				<Typography variant="body2" color="textSecondary" className={classes.rating}>
-					<Rating aria-label="rating" name="rating" value={rating} readOnly />
-				</Typography>
-				<Typography variant="body2" color="textSecondary" component="p">
-					{address}
-				</Typography>
-				<Paper className={classes.ratingPaper} elevation={0}>
-					{tags?.map((tg, idx) => (
-						<Chip label={tg} color={chipColors[idx % 3]} />
-					))}
-				</Paper>
-			</CardContent>
-		</Card>
+		<div ref={refptr} key={id}>
+			<Card className={classes.root}>
+				<CardHeader
+					title={name}
+					action={
+						<CardActions disableSpacing>
+							<IconButton aria-label="directions" onClick={handleOpen}>
+								<DirectionsIcon />
+							</IconButton>
+						</CardActions>
+					}
+					// subheader={<Typography>{phone || <i>Phone not listed</i>}</Typography>}
+				/>
+				<CardContent>
+					<Typography variant="caption" component="div">
+						TomTom Rating
+					</Typography>
+					<Typography variant="body2" color="textSecondary" className={classes.rating}>
+						<Rating aria-label="rating" name="rating" value={rating} readOnly />
+					</Typography>
+					<Typography variant="body2" color="textSecondary" component="p">
+						{address}
+					</Typography>
+					<Paper className={classes.ratingPaper} elevation={0}>
+						{tags?.map((tg, idx) => (
+							<Chip key={idx} label={tg} color={chipColors[idx % 3]} />
+						))}
+					</Paper>
+				</CardContent>
+			</Card>
+		</div>
 	);
 };
 
