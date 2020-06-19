@@ -4,6 +4,7 @@ import getBrowserFingerprint from '../../../utils/fingerprint';
 import Request from '../../util/Request';
 import PlacesCard from '../PlaceCard';
 import { Header, Container, Content, MapContainer, DetailsContainer } from './styles';
+import sortHullOrder from '../../../utils/hull';
 
 // leaflet doesn't support ssr
 const MapView = dynamic(import('../PlaceMaps'), {
@@ -70,7 +71,7 @@ const PlaceResults = ({ poolId }) => {
 								data.poolData.centroidLongitude.$numberDecimal,
 							]}
 							searchRadius={data.apiRadius}
-							peerPositions={data.poolMembersLocation}
+							peerPositions={sortHullOrder(data.poolMembersLocation)}
 							resultPositions={data?.placesData?.results?.map(
 								({ position: { lat, lon } }) => [lat, lon]
 							)}

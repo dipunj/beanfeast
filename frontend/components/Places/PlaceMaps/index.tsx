@@ -13,7 +13,9 @@ const MapView = ({ center, searchRadius, peerPositions, resultPositions }) => {
 				<Marker position={pos} />
 			))}
 			{peerPositions.map((pos) => (
-				<CircleMarker center={pos} color="black" radius={5} />
+				<CircleMarker center={pos} color="black" radius={5}>
+					<Popup>{JSON.stringify(pos)}</Popup>
+				</CircleMarker>
 			))}
 		</Map>
 	);

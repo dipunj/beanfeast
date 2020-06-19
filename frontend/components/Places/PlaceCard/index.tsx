@@ -19,7 +19,6 @@ const chipColors = ['default', 'primary', 'secondary'];
 
 const PlacesCard = ({ id, name, phone, tags, rating, address, position: { lat, lon } }) => {
 	const classes = useStyles();
-	const [expanded, setExpanded] = React.useState(false);
 
 	const handleOpen = () => {
 		// window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`);
@@ -34,7 +33,7 @@ const PlacesCard = ({ id, name, phone, tags, rating, address, position: { lat, l
 				title={name}
 				action={
 					<CardActions disableSpacing>
-						<IconButton aria-label="share" onClick={handleOpen}>
+						<IconButton aria-label="directions" onClick={handleOpen}>
 							<DirectionsIcon />
 						</IconButton>
 					</CardActions>
