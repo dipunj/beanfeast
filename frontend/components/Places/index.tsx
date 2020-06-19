@@ -13,6 +13,7 @@ const MapView = dynamic(import('./PlaceMaps'), {
 });
 
 const CardsAndMap = ({ data }) => {
+	const [selected, setSelected] = useState('');
 	const refList = data.placesData.results.reduce((acc, { id }) => {
 		acc[id] = createRef();
 		return acc;
@@ -21,8 +22,9 @@ const CardsAndMap = ({ data }) => {
 	const handleFocus = (id) => {
 		refList[id].current.scrollIntoView({
 			behavior: 'smooth',
-			block: 'start',
+			block: 'center',
 		});
+		setSelected(id);
 	};
 
 	const cards = data.placesData.results.map(
@@ -38,6 +40,7 @@ const CardsAndMap = ({ data }) => {
 				{...{
 					refptr: refList[id],
 					name,
+					isFocused: selected === id,
 					rating: ((5 * parseFloat(score)) / 100).toFixed(2).toString(),
 					address,
 					position,

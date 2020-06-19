@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext } from 'react';
 import clsx from 'clsx';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -14,10 +14,24 @@ import DirectionsIcon from '@material-ui/icons/Directions';
 import useStyles from './styles';
 import { Rating } from '@material-ui/lab';
 import { Chip, Paper, Container, emphasize } from '@material-ui/core';
+import { SessionCtx } from '../../Context';
 
 const chipColors = ['default', 'primary', 'secondary'];
 
-const PlacesCard = ({ id, refptr, name, phone, tags, rating, address, position: { lat, lon } }) => {
+const PlacesCard = ({
+	id,
+	refptr,
+	name,
+	phone,
+	tags,
+	rating,
+	address,
+	position: { lat, lon },
+	isFocused,
+}) => {
+	const {
+		ctx: { darkMode },
+	} = useContext(SessionCtx);
 	const classes = useStyles();
 
 	const handleOpen = () => {
@@ -29,7 +43,17 @@ const PlacesCard = ({ id, refptr, name, phone, tags, rating, address, position: 
 
 	return (
 		<div ref={refptr} key={id}>
-			<Card className={classes.root}>
+			<Card
+				className={
+					isFocused
+						? darkMode
+							? classes.focusedDarkRoot
+							: classes.focusedRoot
+						: classes.root
+				}
+				elevation={isFocused ? 4 : 0}
+				variant={isFocused ? 'elevation' : 'outlined'}
+			>
 				<CardHeader
 					title={name}
 					action={
