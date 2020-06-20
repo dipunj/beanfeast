@@ -5,11 +5,8 @@ import CardHeader from '@material-ui/core/CardHeader';
 // import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import CardActions from '@material-ui/core/CardActions';
-import Collapse from '@material-ui/core/Collapse';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
 import DirectionsIcon from '@material-ui/icons/Directions';
 import useStyles from './styles';
 import { Rating } from '@material-ui/lab';
@@ -18,6 +15,25 @@ import { SessionCtx } from '../../Context';
 
 const chipColors = ['default', 'primary', 'secondary'];
 
+interface propsType {
+	id: string;
+	refptr: any;
+	name: string;
+	phone: string;
+	isFocused: boolean;
+	rating: string;
+	fullAddress: string;
+	shortAddress: string;
+	api: {
+		name: string;
+	};
+	position: {
+		lat: number;
+		lon: number;
+	};
+	tags: string[];
+}
+
 const PlacesCard = ({
 	id,
 	refptr,
@@ -25,10 +41,11 @@ const PlacesCard = ({
 	phone,
 	tags,
 	rating,
-	address,
+	fullAddress,
+	api,
 	position: { lat, lon },
 	isFocused,
-}) => {
+}: propsType) => {
 	const {
 		ctx: { darkMode },
 	} = useContext(SessionCtx);
@@ -37,7 +54,7 @@ const PlacesCard = ({
 	const handleOpen = () => {
 		// window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`);
 		window.open(
-			`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&travelmode=driving`
+			`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&travelmode=driving&layer=traffic`
 		);
 	};
 
@@ -67,13 +84,13 @@ const PlacesCard = ({
 				/>
 				<CardContent>
 					<Typography variant="caption" component="div">
-						TomTom Rating
+						{api.name} Rating
 					</Typography>
 					<Typography variant="body2" color="textSecondary" className={classes.rating}>
 						<Rating aria-label="rating" name="rating" value={rating} readOnly />
 					</Typography>
 					<Typography variant="body2" color="textSecondary" component="p">
-						{address}
+						{fullAddress}
 					</Typography>
 					<Paper className={classes.ratingPaper} elevation={0}>
 						{tags?.map((tg, idx) => (
