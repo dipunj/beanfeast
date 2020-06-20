@@ -1,6 +1,6 @@
 import { useState, createRef } from 'react';
 import dynamic from 'next/dynamic';
-import { Container, Header, Content, MapContainer, DetailsContainer } from './styles';
+import { MapContainer, DetailsContainer } from './styles';
 import PlacesCard from '../PlaceCard';
 import sortHullOrder from '../../../utils/hull';
 
@@ -62,6 +62,7 @@ interface resultResponse {
 
 const CardsAndMap = ({ data }: { data: resultResponse }) => {
 	const [selected, setSelected] = useState('');
+
 	const refList: any = data.placesData.reduce((acc, { id }) => {
 		acc[id] = createRef();
 		return acc;
@@ -95,7 +96,7 @@ const CardsAndMap = ({ data }: { data: resultResponse }) => {
 		)
 	);
 
-	const resultPositions = data?.placesData?.map(
+	const resultPositions = data.placesData.map(
 		({ id, position: { lat, lon }, name: title, shortAddress }) => ({
 			id,
 			pos: [lat, lon],
@@ -110,29 +111,24 @@ const CardsAndMap = ({ data }: { data: resultResponse }) => {
 		data.poolData.centroidLongitude.$numberDecimal,
 	];
 
-	console.log('center', center);
-
 	const peerPositions = sortHullOrder(data.poolMembersLocation);
 	const searchRadius = data.api.radius;
 
 	return (
-		<Container>
-			<Header></Header>
-			<Content>
-				<MapContainer className="leaflet-container">
-					<MapView
-						{...{
-							center,
-							searchRadius,
-							peerPositions,
-							resultPositions,
-							handleFocus,
-						}}
-					/>
-				</MapContainer>
-				<DetailsContainer>{cards}</DetailsContainer>
-			</Content>
-		</Container>
+		<>
+			<MapContainer className="leaflet-container">
+				<MapView
+					{...{
+						center,
+						searchRadius,
+						peerPositions,
+						resultPositions,
+						handleFocus,
+					}}
+				/>
+			</MapContainer>
+			<DetailsContainer>{cards}</DetailsContainer>
+		</>
 	);
 };
 

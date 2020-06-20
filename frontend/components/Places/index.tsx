@@ -2,10 +2,13 @@ import { useState, useEffect } from 'react';
 import getBrowserFingerprint from '../../utils/fingerprint';
 import Request from '../util/Request';
 import CardsAndMap from './CardsAndMap';
+import Controls from './Controls';
+import { Header, Container, Content } from './styles';
 
 const PlaceResults = ({ poolId }) => {
 	const [data, setData] = useState(null);
-	const fetchData = async () => {
+
+	const fetchData = async (query, radius) => {
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
 			const {
@@ -13,6 +16,8 @@ const PlaceResults = ({ poolId }) => {
 			} = await Request.get(`/place/results/${poolId}`, {
 				params: {
 					uniqueIdentifier,
+					queryString: query,
+					searchRadius: radius,
 				},
 			});
 			setData(data);
@@ -27,7 +32,17 @@ const PlaceResults = ({ poolId }) => {
 	}, []);
 
 	if (!data) return <div>loading...</div>;
-	else return <CardsAndMap {...{ data }} />;
+	else
+		return (
+			<Container>
+				<Header>
+					<Controls {...{ data, reRequest: fetchData }} />
+				</Header>
+				<Content>
+					<CardsAndMap {...{ data }} />
+				</Content>
+			</Container>
+		);
 };
 
 export default PlaceResults;

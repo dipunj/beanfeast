@@ -9,8 +9,9 @@ const ToolTip = ({ title, details }) => (
 );
 
 const MapView = ({ center, searchRadius, peerPositions, resultPositions, handleFocus }) => {
+	console.log(searchRadius);
 	return (
-		<Map center={center} zoom={17}>
+		<Map id="map-id" center={center} zoom={17}>
 			<TileLayer
 				// attribution='&amp;copy <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
 				url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -18,12 +19,12 @@ const MapView = ({ center, searchRadius, peerPositions, resultPositions, handleF
 			<Circle center={center} color="red" radius={searchRadius} />
 			<Polygon color="lime" positions={peerPositions} />
 			{resultPositions.map(({ id, pos, title, details }) => (
-				<Marker key={id} position={pos} onClick={() => handleFocus(id)}>
+				<Marker id={id} key={id} position={pos} onClick={() => handleFocus(id)}>
 					<ToolTip {...{ title, details }} />
 				</Marker>
 			))}
 			{peerPositions.map((pos) => (
-				<CircleMarker key={pos} center={pos} color="black" radius={5}>
+				<CircleMarker id={pos} key={pos} center={pos} color="black" radius={5}>
 					<Popup>{JSON.stringify(pos)}</Popup>
 				</CircleMarker>
 			))}
