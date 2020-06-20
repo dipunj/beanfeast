@@ -1,42 +1,75 @@
 var axios = require('axios');
 var PoolService = require('./pool.service.js');
-var { GoogleStates, AppStates } = require('../constants/states');
+// var { GoogleStates, AppStates } = require('../constants/states.constants');
+var API = require('../constants/apis.constants');
+var preprocess = require('../util/preprocess.util');
+
+const _apiSelector = () => {
+	return API.TOM_TOM;
+};
+
+const _generateAPIParams = (apiName, { queryString, centroid: { lat, lon }, radius }) => {
+	switch (apiName) {
+		case API.TOM_TOM.apiName:
+			return {
+				targetUrl: `${API.TOM_TOM.apiUrl}/${queryString}.json`,
+				apiParams: {
+					key: process.env.TOMTOM_API_KEY,
+					lat: parseFloat(lat),
+					lon: parseFloat(lon),
+					radius: Math.max(radius, process.env.defaultSearchRadius) || 2000,
+					idxSet: 'POI',
+					minFuzzyLevel: 1,
+					maxFuzzyLevel: 4,
+					limit: 100,
+				},
+			};
+
+		case API.GOOGLE.apiName:
+			// Google sucks here, GCP just won't accept the same indian debit card which AWS accepted without question
+			// hence not using Google maps api, instead using tomtom api which sucks, but good enough for demonstration purposes very competetive results
+			return {
+				targetUrl: API.GOOGLE.apiUrl,
+				apiParams: {
+					key: process.env.GOOGLE_API_KEY,
+					keyword: queryString,
+					location: `${lat},${lon}`,
+					radius: Math.max(radius, process.env.defaultSearchRadius) || 2000,
+				},
+			};
+		default:
+			throw new Error('Invalid API selected');
+	}
+};
 
 const _getPlaces = async (params, { queryString, searchRadius }, ...rest) => {
 	const { poolData } = params;
+
+	const { apiName, apiMaxRating } = _apiSelector();
+
+	const { apiParams, targetUrl } = _generateAPIParams(apiName, {
+		queryString,
+		centroid: {
+			lat: poolData.centroidLatitude,
+			lon: poolData.centroidLongitude,
+		},
+		radius: searchRadius,
+	});
+
 	try {
-		const params = {
-			key: process.env.GOOGLE_API_KEY,
-			keyword: queryString,
-			location: `${poolData.centroidLatitude},${poolData.centroidLongitude}`,
-			radius: Math.max(searchRadius, process.env.defaultSearchRadius) || 2000,
-		};
-
-		const tomTomparams = {
-			key: process.env.TOMTOM_API_KEY,
-			lat: parseFloat(poolData.centroidLatitude),
-			lon: parseFloat(poolData.centroidLongitude),
-			radius: Math.max(searchRadius, process.env.defaultSearchRadius) || 2000,
-			idxSet: 'POI',
-			categorySet: '9376',
-		};
-
-		const places = await axios.get('https://api.tomtom.com/search/2/nearbySearch/.json', {
+		const places = await axios.get(targetUrl, {
 			crossDomain: true,
-			params: tomTomparams,
+			params: apiParams,
 		});
 
-		// Google you just suck here, GCP just won't accept the same debit card which AWS accepted without question
-		// hence not using Google maps api, instead using tomtom api offers very competetive results
-		// const places = await axios.get(
-		// 	`https://maps.googleapis.com/maps/api/place/nearbysearch/json`,
-		// 	{ crossDomain: true, params }
-		// );
-
 		return {
-			places: places.data,
-			apiQueryString: params.keyword,
-			apiRadius: params.radius,
+			places: preprocess(places.data, apiName),
+			api: {
+				name: apiName,
+				radius: searchRadius,
+				queryString,
+				maxRating: apiMaxRating,
+			},
 		};
 	} catch (e) {
 		throw e;
@@ -59,18 +92,14 @@ const showResults = async ({ poolId, uniqueIdentifier, queryString, searchRadius
 			membershipParams
 		);
 		if (poolData.currPoolSize === poolData.maxPoolSize) {
-			const { places, apiQueryString, apiRadius } = await _getPlaces(
-				{ poolData },
-				searchParams
-			);
+			const { places, api } = await _getPlaces({ poolData }, searchParams);
 
 			return {
 				poolData,
 				sessionData,
 				poolMembersLocation,
+				api,
 				placesData: places,
-				apiQueryString,
-				apiRadius,
 			};
 
 			// 	if (places.status === GoogleStates.OVER_QUERY_LIMIT) {
