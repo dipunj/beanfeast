@@ -1,5 +1,4 @@
 import { Map, TileLayer, Marker, Popup, Circle, Polygon, CircleMarker } from 'react-leaflet';
-import { Typography } from '@material-ui/core';
 
 const MapView = ({ center, searchRadius, peerPositions, resultPositions, handleFocus }) => {
 	return (
@@ -10,9 +9,9 @@ const MapView = ({ center, searchRadius, peerPositions, resultPositions, handleF
 			/>
 			<Circle center={center} color="red" radius={searchRadius} />
 			<Polygon color="lime" positions={peerPositions} />
-			{resultPositions.map(({ id, pos, tooltipComponent, popUpProps }) => (
+			{resultPositions.map(({ id, pos, toolTipComponent }) => (
 				<Marker id={id} key={id} position={pos} onClick={() => handleFocus(id)}>
-					<Popup {...popUpProps}>{tooltipComponent}</Popup>
+					<Popup>{toolTipComponent}</Popup>
 				</Marker>
 			))}
 			{peerPositions.map((pos) => (

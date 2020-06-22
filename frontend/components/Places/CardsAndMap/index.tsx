@@ -67,7 +67,21 @@ const MobileVersion = ({ center, peerPositions, searchRadius, data }: { data: re
 		({ id, position: { lat, lon }, name: title, shortAddress }) => ({
 			id,
 			pos: [lat, lon],
-			toolTipComponent: <ToolTip {...{ title, details: shortAddress }} />,
+			toolTipComponent: (
+				<ToolTip
+					{...{
+						title,
+						details: shortAddress,
+						showIcon: true,
+						handleOpen: () => {
+							// window.open(`https://www.google.com/maps/search/?api=1&query=${lat},${lon}`);
+							window.open(
+								`https://www.google.com/maps/dir/?api=1&destination=${lat},${lon}&travelmode=driving&layer=traffic`
+							);
+						},
+					}}
+				/>
+			),
 		})
 	);
 
