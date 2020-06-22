@@ -60,7 +60,40 @@ interface resultResponse {
 	}[];
 }
 
-const CardsAndMap = ({ isMobile, data }: { data: resultResponse; isMobile: boolean }) => {
+const MobileVersion = ({ center, peerPositions, searchRadius, data }: { data: resultResponse }) => {
+	const handleFocus = () => {};
+	const resultPositions = data.placesData.map(
+		({ id, position: { lat, lon }, name: title, shortAddress }) => ({
+			id,
+			pos: [lat, lon],
+			title,
+			details: shortAddress,
+		})
+	);
+
+	return (
+		<MapContainer isMobile className="leaflet-container">
+			<MapView
+				{...{
+					center,
+					searchRadius,
+					peerPositions,
+					resultPositions,
+					handleFocus,
+				}}
+			/>
+		</MapContainer>
+	);
+};
+
+const DesktopVersion = ({
+	center,
+	peerPositions,
+	searchRadius,
+	data,
+}: {
+	data: resultResponse;
+}) => {
 	const [selected, setSelected] = useState('');
 
 	const refList: any = data.placesData.reduce((acc, { id }) => {
@@ -106,17 +139,9 @@ const CardsAndMap = ({ isMobile, data }: { data: resultResponse; isMobile: boole
 		})
 	);
 
-	const center = [
-		data.poolData.centroidLatitude.$numberDecimal,
-		data.poolData.centroidLongitude.$numberDecimal,
-	];
-
-	const peerPositions = sortHullOrder(data.poolMembersLocation);
-	const searchRadius = data.api.radius;
-
 	return (
 		<>
-			<MapContainer isMobile={isMobile} className="leaflet-container">
+			<MapContainer className="leaflet-container">
 				<MapView
 					{...{
 						center,
@@ -127,8 +152,36 @@ const CardsAndMap = ({ isMobile, data }: { data: resultResponse; isMobile: boole
 					}}
 				/>
 			</MapContainer>
-			{!isMobile && <DetailsContainer>{cards}</DetailsContainer>}
+			<DetailsContainer>{cards}</DetailsContainer>
 		</>
+	);
+};
+
+const CardsAndMap = ({ isMobile, data }: { isMobile: boolean; data: resultResponse }) => {
+	const dataProps = {
+		center: [
+			data.poolData.centroidLatitude.$numberDecimal,
+			data.poolData.centroidLongitude.$numberDecimal,
+		],
+
+		peerPositions: sortHullOrder(data.poolMembersLocation),
+		searchRadius: data.api.radius,
+	};
+
+	return isMobile ? (
+		<MobileVersion
+			{...{
+				data,
+				...dataProps,
+			}}
+		/>
+	) : (
+		<DesktopVersion
+			{...{
+				data,
+				...dataProps,
+			}}
+		/>
 	);
 };
 
