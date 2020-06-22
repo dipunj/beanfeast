@@ -13,7 +13,7 @@ const Header = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
-	flex-grow: 1;
+	/* flex-grow: 1; */
 `;
 
 const Content = styled.div`

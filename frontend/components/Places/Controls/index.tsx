@@ -63,7 +63,7 @@ const Controls = ({ isMobile, data, reRequest }: { isMobile: boolean; reRequest:
 						justify="center"
 						item
 						xs={12}
-						md={3}
+						md={2}
 						className={classes.textFieldContainer}
 					>
 						<Button
@@ -71,7 +71,7 @@ const Controls = ({ isMobile, data, reRequest }: { isMobile: boolean; reRequest:
 							color="primary"
 							disabled={loading}
 							onClick={handleSubmit}
-							fullWidth={isMobile}
+							fullWidth
 						>
 							Submit
 							{loading && (

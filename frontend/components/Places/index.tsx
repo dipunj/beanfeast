@@ -38,12 +38,12 @@ const PlaceResults = ({ poolId }) => {
 	else
 		return (
 			<Container>
+				<Content>
+					<CardsAndMap {...{ isMobile, data }} />
+				</Content>
 				<Header>
 					<Controls {...{ isMobile, data, reRequest: fetchData }} />
 				</Header>
-				<Content>
-					<CardsAndMap {...{ data }} />
-				</Content>
 			</Container>
 		);
 };

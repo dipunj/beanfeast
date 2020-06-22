@@ -9,7 +9,6 @@ const ToolTip = ({ title, details }) => (
 );
 
 const MapView = ({ center, searchRadius, peerPositions, resultPositions, handleFocus }) => {
-	console.log(searchRadius);
 	return (
 		<Map id="map-id" center={center} zoom={17}>
 			<TileLayer
