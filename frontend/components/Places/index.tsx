@@ -4,8 +4,11 @@ import Request from '../util/Request';
 import CardsAndMap from './CardsAndMap';
 import Controls from './Controls';
 import { Header, Container, Content } from './styles';
+import defaultGetLayout from '../Layouts/NextLayout';
+import { useMediaQuery } from '@material-ui/core';
 
 const PlaceResults = ({ poolId }) => {
+	const isMobile = useMediaQuery('(max-width:500px)');
 	const [data, setData] = useState(null);
 
 	const fetchData = async (query, radius) => {
@@ -36,7 +39,7 @@ const PlaceResults = ({ poolId }) => {
 		return (
 			<Container>
 				<Header>
-					<Controls {...{ data, reRequest: fetchData }} />
+					<Controls {...{ isMobile, data, reRequest: fetchData }} />
 				</Header>
 				<Content>
 					<CardsAndMap {...{ data }} />
@@ -44,5 +47,7 @@ const PlaceResults = ({ poolId }) => {
 			</Container>
 		);
 };
+
+PlaceResults.getLayout = (page) => defaultGetLayout(page, { height: '15vh' });
 
 export default PlaceResults;

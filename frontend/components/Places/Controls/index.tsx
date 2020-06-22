@@ -28,7 +28,7 @@ const Controls = ({ isMobile, data, reRequest }: { isMobile: boolean; reRequest:
 
 	return (
 		<AppBar position="static" color="default">
-			<Toolbar>
+			<Toolbar className={classes.toolbar}>
 				<Grid container alignItems="center" direction="row">
 					<Grid
 						container

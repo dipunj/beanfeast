@@ -35,11 +35,15 @@ export default function MyApp(props) {
 					name="viewport"
 					content="minimum-scale=1, initial-scale=1, width=device-width"
 				/>
+
+				{/* font style for beanfeast logo */}
 				<link
 					href="https://fonts.googleapis.com/css2?family=Condiment&display=swap"
 					rel="stylesheet"
 					key="google-font-condiment"
 				/>
+
+				{/* leaflet css */}
 				<link
 					rel="stylesheet"
 					href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
@@ -54,6 +58,8 @@ export default function MyApp(props) {
 					{getLayout(<Component {...pageProps} />)}
 				</Providers>
 			</SessionCtxProvider>
+
+			{/* leaflet javascript */}
 			<script
 				src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
 				integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="

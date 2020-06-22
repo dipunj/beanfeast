@@ -10,7 +10,10 @@ const useStyles = makeStyles((theme: Theme) =>
 			marginLeft: -12,
 		},
 		textFieldContainer: {
-			padding: '20px 1px',
+			padding: '10px 1px',
+		},
+		toolbar: {
+			height: '100%',
 		},
 	})
 );
