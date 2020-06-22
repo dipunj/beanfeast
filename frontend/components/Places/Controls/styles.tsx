@@ -9,6 +9,9 @@ const useStyles = makeStyles((theme: Theme) =>
 			left: '50%',
 			marginLeft: -12,
 		},
+		textFieldContainer: {
+			padding: '20px 1px',
+		},
 	})
 );
 
