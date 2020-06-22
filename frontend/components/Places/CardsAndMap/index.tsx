@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic';
 import { MapContainer, DetailsContainer } from './styles';
 import PlacesCard from '../PlaceCard';
 import sortHullOrder from '../../../utils/hull';
+import ToolTip from '../ToolTip';
 
 // leaflet doesn't support ssr
 const MapView = dynamic(import('../PlaceMaps'), {
@@ -66,8 +67,7 @@ const MobileVersion = ({ center, peerPositions, searchRadius, data }: { data: re
 		({ id, position: { lat, lon }, name: title, shortAddress }) => ({
 			id,
 			pos: [lat, lon],
-			title,
-			details: shortAddress,
+			toolTipComponent: <ToolTip {...{ title, details: shortAddress }} />,
 		})
 	);
 
@@ -133,9 +133,7 @@ const DesktopVersion = ({
 		({ id, position: { lat, lon }, name: title, shortAddress }) => ({
 			id,
 			pos: [lat, lon],
-			title,
-			details: shortAddress,
-			ref: refList[id],
+			toolTipComponent: <ToolTip {...{ title, details: shortAddress }} />,
 		})
 	);
 
