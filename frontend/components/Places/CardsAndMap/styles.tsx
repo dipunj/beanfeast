@@ -1,8 +1,7 @@
 import styled from 'styled-components';
 
 const MapContainer = styled.div`
-	width: ${(props) => (props.isMobile ? '80%' : '100%')};
-	/* width: 80%; */
+	width: ${({ isMobile }) => (isMobile ? '100%' : '80%')};
 	& .leaflet-container {
 		height: 100%;
 	}

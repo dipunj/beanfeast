@@ -116,7 +116,7 @@ const CardsAndMap = ({ isMobile, data }: { data: resultResponse; isMobile: boole
 
 	return (
 		<>
-			<MapContainer isMobile className="leaflet-container">
+			<MapContainer isMobile={isMobile} className="leaflet-container">
 				<MapView
 					{...{
 						center,
