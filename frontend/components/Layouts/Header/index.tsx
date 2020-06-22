@@ -3,8 +3,8 @@ import Branding from './Branding';
 import useStyles from './styles';
 import ToggleDarkMode from './ToggleDarkMode';
 
-const Header = () => {
-	const { container } = useStyles();
+const Header = (styleProps) => {
+	const { container } = useStyles({ ...styleProps });
 	return (
 		<Grid container className={container} alignItems="center" justify="center">
 			<Grid item>

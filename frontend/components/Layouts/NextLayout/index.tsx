@@ -3,11 +3,11 @@ import { Grid } from '@material-ui/core';
 import useStyles from './styles';
 
 // used by _app.tsx
-const defaultGetLayout = (page) => {
+const defaultGetLayout = (page, styleProps) => {
 	const { paddedContainer } = useStyles();
 	return (
 		<>
-			<Header />
+			<Header {...styleProps} />
 			<Grid container justify="center">
 				<Grid
 					item
