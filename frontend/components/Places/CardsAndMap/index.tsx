@@ -60,7 +60,7 @@ interface resultResponse {
 	}[];
 }
 
-const CardsAndMap = ({ data }: { data: resultResponse }) => {
+const CardsAndMap = ({ isMobile, data }: { data: resultResponse; isMobile: boolean }) => {
 	const [selected, setSelected] = useState('');
 
 	const refList: any = data.placesData.reduce((acc, { id }) => {
@@ -116,7 +116,7 @@ const CardsAndMap = ({ data }: { data: resultResponse }) => {
 
 	return (
 		<>
-			<MapContainer className="leaflet-container">
+			<MapContainer isMobile className="leaflet-container">
 				<MapView
 					{...{
 						center,
@@ -127,7 +127,7 @@ const CardsAndMap = ({ data }: { data: resultResponse }) => {
 					}}
 				/>
 			</MapContainer>
-			<DetailsContainer>{cards}</DetailsContainer>
+			{!isMobile && <DetailsContainer>{cards}</DetailsContainer>}
 		</>
 	);
 };
