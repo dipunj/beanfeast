@@ -9,7 +9,7 @@ const showResults = async (req, res, next) => {
 	const params = {
 		poolId,
 		uniqueIdentifier,
-		queryString: queryString || process.env.defaultQueryString || 'nightlife',
+		queryString: queryString || process.env.defaultQueryString || 'cafe',
 		searchRadius: searchRadius || 2000,
 	};
 

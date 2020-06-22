@@ -67,7 +67,7 @@ const _getPlaces = async (params, { queryString, searchRadius }, ...rest) => {
 			api: {
 				name: apiName,
 				radius: searchRadius,
-				queryString,
+				query: queryString,
 				maxRating: apiMaxRating,
 			},
 		};
