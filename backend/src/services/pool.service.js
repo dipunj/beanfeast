@@ -19,7 +19,7 @@ const _findPool = async ({ poolId }, ...rest) => {
 
 const _verifyMember = async ({ poolId, uniqueIdentifier }, ...rest) => {
 	try {
-		const sessionData = await Session.findOne({ poolId });
+		const sessionData = await Session.findOne({ poolId, uniqueIdentifier });
 		if (!sessionData) {
 			throw new Error('Unauthorised');
 		} else {
@@ -195,6 +195,7 @@ const showPool = async (params, ...rest) => {
 			throw new Error('Invalid Joining URL');
 		}
 		const anySession = await Session.find({ uniqueIdentifier, poolId });
+		console.log(anySession);
 		if (anySession.length > 0) {
 			const thisSession = anySession.filter((sesh) => sesh.poolId == pool._id)[0];
 			return { sessionData: thisSession, poolData: pool };
