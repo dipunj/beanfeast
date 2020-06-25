@@ -3,7 +3,7 @@ import getBrowserFingerprint from '../../utils/fingerprint';
 import Request from '../util/Request';
 import CardsAndMap from './CardsAndMap';
 import Controls from './Controls';
-import { Header, Container, Content } from './styles';
+import { Footer, Container, Content } from './styles';
 import defaultGetLayout from '../Layouts/NextLayout';
 import { useMediaQuery } from '@material-ui/core';
 import Loader from '../Loader';
@@ -42,9 +42,9 @@ const PlaceResults = ({ poolId }) => {
 				<Content>
 					<CardsAndMap {...{ isMobile, data }} />
 				</Content>
-				<Header>
+				<Footer>
 					<Controls {...{ isMobile, data, reRequest: fetchData }} />
-				</Header>
+				</Footer>
 			</Container>
 		);
 };

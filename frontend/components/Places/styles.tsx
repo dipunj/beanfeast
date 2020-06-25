@@ -9,7 +9,7 @@ const Container = styled.div`
 	height: 85vh;
 `;
 
-const Header = styled.div`
+const Footer = styled.div`
 	display: flex;
 	flex-direction: row;
 	justify-content: center;
@@ -24,4 +24,4 @@ const Content = styled.div`
 	align-items: stretch;
 `;
 
-export { Container, Header, Content };
+export { Container, Footer, Content };
