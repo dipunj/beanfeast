@@ -38,6 +38,6 @@
 		"@welldone-software/why-did-you-render": "^4.2.5",
 		"babel-plugin-styled-components": "^1.10.0",
 		"prettier": "^2.0.5",
-		"typescript": "3.7.x"
+		"typescript": "3.8.x"
 	}
 }

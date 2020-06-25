@@ -1,7 +1,7 @@
 import { ThemeProvider } from '@material-ui/core';
 import { useContext } from 'react';
-import { SessionCtx } from '../components/Context';
-import useTheme from '../theme';
+import { SessionCtx } from '../Context';
+import useTheme from '../../theme';
 
 const Providers = ({ children }) => {
 	const {

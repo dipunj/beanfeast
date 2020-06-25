@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import Head from 'next/head';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import defaultGetLayout from '../components/Layouts/NextLayout';
-import Providers from './Providers';
 import SessionCtxProvider from '../components/Context';
 import whyDidYouRender from '@welldone-software/why-did-you-render';
 import React from 'react';
+import Providers from '../components/Providers';
 
 if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
 	whyDidYouRender(React, {
