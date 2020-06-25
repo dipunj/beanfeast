@@ -5,9 +5,10 @@
 	"repository": "https://github.com/dipunj/beanfeast.git",
 	"author": "Dipunj Gupta <dipunj.mnnit@gmail.com>",
 	"license": "MIT",
-	"main": "index.js",
+	"main": "./src/bin/www",
 	"scripts": {
-		"dev": "nodemon ./src/bin/www"
+		"dev": "nodemon ./src/bin/www",
+		"prod": "node ./src/bin/www"
 	},
 	"dependencies": {
 		"axios": "^0.19.2",

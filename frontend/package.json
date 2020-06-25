@@ -18,6 +18,7 @@
 		"@material-ui/pickers": "^3.2.10",
 		"axios": "^0.19.2",
 		"date-fns": "^2.14.0",
+		"dotenv": "^8.2.0",
 		"fingerprintjs2": "^2.1.0",
 		"leaflet": "^1.6.0",
 		"next": "latest",
@@ -28,6 +29,7 @@
 		"styled-components": "^5.0.0"
 	},
 	"devDependencies": {
+		"@babel/plugin-proposal-optional-chaining": "^7.10.3",
 		"@types/node": "12.0.12",
 		"@types/react": "16.8.23",
 		"@types/react-dom": "16.8.4",
@@ -36,6 +38,6 @@
 		"@welldone-software/why-did-you-render": "^4.2.5",
 		"babel-plugin-styled-components": "^1.10.0",
 		"prettier": "^2.0.5",
-		"typescript": "3.5.2"
+		"typescript": "3.7.x"
 	}
 }
