@@ -14,16 +14,17 @@ const Information = () => {
 				<Grid item xs={12}>
 					<Typography color="textSecondary" variant="body2">
 						When you click JOIN POOL,{' '}
-						{process.env.NEXT_PUBLIC_PROJECT_TITLE || 'Beanfeast'} would ask for
-						location access. Your location is stored on our servers, but without your
-						identity attached to it. This is why there is no login/signup system.
+						{process.env.NEXT_PUBLIC_PROJECT_TITLE || 'Beanfeast'} your location would
+						be sent to our servers, anonymously. This is why there is no login/signup
+						system.
 					</Typography>
 				</Grid>
 				<Grid item xs={12}>
 					<Typography color="textSecondary" variant="body2">
-						We instead rely on your browser details like version, screen resolution,
-						user-agent and other configuration to generate a unique hash, which helps us
-						map back to you.
+						We instead rely on your browser details like browser version, screen
+						resolution, user-agent and other configuration to generate a unique
+						hash(browser fingerprint), which helps identify you for this short online
+						get together.
 					</Typography>
 				</Grid>
 				<Typography variant="caption" color="textPrimary">
