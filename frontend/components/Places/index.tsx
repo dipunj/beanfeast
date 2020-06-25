@@ -6,6 +6,7 @@ import Controls from './Controls';
 import { Header, Container, Content } from './styles';
 import defaultGetLayout from '../Layouts/NextLayout';
 import { useMediaQuery } from '@material-ui/core';
+import Loader from '../Loader';
 
 const PlaceResults = ({ poolId }) => {
 	const isMobile = useMediaQuery('(max-width:500px)');
@@ -34,7 +35,7 @@ const PlaceResults = ({ poolId }) => {
 		fetchData();
 	}, []);
 
-	if (!data) return <div>loading...</div>;
+	if (!data) return <Loader />;
 	else
 		return (
 			<Container>

@@ -6,6 +6,7 @@ import ShowPoolStats from './PoolStats';
 import { handleNotification } from '../../util/NotificationToast';
 import { Button } from '@material-ui/core';
 import { useRouter } from 'next/router';
+import Loader from '../../Loader';
 
 const initialState = {
 	loading: true,
@@ -65,7 +66,7 @@ const statusPage = ({ poolId }) => {
 	}, [isUpdating]);
 
 	if (state.loading === true) {
-		return <p>Loading...</p>;
+		return <Loader />;
 	} else {
 		const { success } = state;
 		if (!success) {
