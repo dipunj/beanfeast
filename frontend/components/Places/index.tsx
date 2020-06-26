@@ -7,12 +7,15 @@ import { Footer, Container, Content } from './styles';
 import defaultGetLayout from '../Layouts/NextLayout';
 import { useMediaQuery } from '@material-ui/core';
 import Loader from '../Loader';
+import Toast from '../util/Toast';
 
 const PlaceResults = ({ poolId }) => {
 	const isMobile = useMediaQuery('(max-width:500px)');
+	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState(null);
 
 	const fetchData = async (query, radius) => {
+		setLoading(true);
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
 			const {
@@ -25,8 +28,10 @@ const PlaceResults = ({ poolId }) => {
 				},
 			});
 			setData(data);
+			setLoading(false);
 		} catch (error) {
-			console.log(error);
+			Toast({ error });
+			setLoading(false);
 			// handleNotification(setNotification, error);
 		}
 	};
@@ -35,7 +40,8 @@ const PlaceResults = ({ poolId }) => {
 		fetchData();
 	}, []);
 
-	if (!data) return <Loader />;
+	if (loading) return <Loader />;
+	else if (!loading && !data) return <div>show link to create new pool</div>;
 	else
 		return (
 			<Container>
