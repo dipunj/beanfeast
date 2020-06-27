@@ -1,11 +1,10 @@
-import { useReducer, useState } from 'react';
+import { useReducer } from 'react';
 import useStyles from './styles';
 import { Grid, Button, LinearProgress, useMediaQuery } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
 import mergeDateTime from '../../../../utils/mergeDateTime';
-import { Request, NotificationToast } from '../../../util';
-import { handleNotification } from '../../../util/NotificationToast';
+import { Request, Toast } from '../../../util';
 
 const reducer = (dataState: any, action: any) => {
 	switch (action.type) {
@@ -23,7 +22,6 @@ const reducer = (dataState: any, action: any) => {
 };
 
 const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMode }) => {
-	const [notification, setNotification] = useState(null);
 	const isMobile = useMediaQuery('(max-width:600px)');
 	const {
 		poolData: {
@@ -67,8 +65,7 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 				...updateParams,
 			});
 		} catch (error) {
-			console.log(error.response.data);
-			handleNotification(setNotification, error);
+			Toast({ error });
 		}
 		// else show a toast/snackbar showing the error
 		setIsUpdating(false);
@@ -129,15 +126,6 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 						</Grid>
 					)}
 				</Grid>
-				<NotificationToast
-					{...{
-						isOpen: notification !== null,
-						title: notification?.title,
-						message: notification?.message,
-						type: notification?.type,
-						setNotification,
-					}}
-				/>
 			</>
 		);
 	} else {
@@ -177,15 +165,6 @@ const PoolStats = ({ parentState, isUpdating, setIsUpdating, editMode, setEditMo
 						</Grid>
 					)}
 				</Grid>
-				<NotificationToast
-					{...{
-						isOpen: notification !== null,
-						title: notification?.title,
-						message: notification?.message,
-						type: notification?.type,
-						setNotification,
-					}}
-				/>
 			</>
 		);
 	}

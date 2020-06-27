@@ -1,6 +1,6 @@
 import DatePicker from './DatePicker';
 import TimePicker from './TimePicker';
-import NotificationToast from './NotificationToast';
+import Toast from './Toast';
 import Request from './Request';
 
-export { DatePicker, TimePicker, NotificationToast, Request };
+export { DatePicker, TimePicker, Toast, Request };

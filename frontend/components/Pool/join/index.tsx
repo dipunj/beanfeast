@@ -2,10 +2,9 @@ import { useState, useReducer, useEffect } from 'react';
 import { Grid, Button, LinearProgress, Typography } from '@material-ui/core';
 import Information from './Information';
 import useStyles from './styles';
-import { NotificationToast, Request } from '../../util';
+import { Request, Toast } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import { useRouter } from 'next/router';
-import Toast from '../../util/Toast';
 
 const initialState = {
 	location: null,

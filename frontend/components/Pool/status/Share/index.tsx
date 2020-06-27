@@ -1,39 +1,26 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import Paper from '@material-ui/core/Paper';
 import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import FileCopyOutlinedIcon from '@material-ui/icons/FileCopyOutlined';
 import ShareIcon from '@material-ui/icons/Share';
-import { NotificationToast } from '../../../util';
 import useStyles from './styles';
 import useMediaQuery from '@material-ui/core/useMediaQuery';
 import { Grid } from '@material-ui/core';
+import { Toast } from '../../../util';
 
 const sharePoolDetails = ({ poolId }) => {
 	const isMobile = useMediaQuery('(max-width:500px)');
-	const [notif, setNotif] = useState({ show: false, message: '', type: '' });
 	const shareUrl = `${process.env.NEXT_PUBLIC_APP_URL}/pool/join/${poolId}`;
 	const urlRef = useRef(null);
 	const classes = useStyles();
-
-	const handleClose = (e, reason?) => {
-		if (reason === 'clickaway') {
-			return;
-		}
-		setNotif({
-			show: false,
-			message: '',
-			type: '',
-		});
-	};
 
 	const copyToClipboard = () => {
 		urlRef.current.select();
 		document.execCommand('copy');
 
-		setNotif({
-			show: true,
+		Toast({
 			message: 'copied',
 			type: 'success',
 		});
@@ -88,18 +75,6 @@ const sharePoolDetails = ({ poolId }) => {
 							</Grid>
 						</Grid>
 					</Paper>
-					<NotificationToast
-						{...{
-							isOpen: notif.show,
-							handleClose,
-							message: notif.message,
-							type: notif.type,
-							hideAfter: 3000,
-							showDismiss: false,
-							position: { vertical: 'bottom', horizontal: 'center' },
-							slideDirection: 'up',
-						}}
-					/>
 					<input
 						style={{
 							opacity: 0,
@@ -141,18 +116,6 @@ const sharePoolDetails = ({ poolId }) => {
 			>
 				<ShareIcon />
 			</IconButton>
-			<NotificationToast
-				{...{
-					isOpen: notif.show,
-					handleClose,
-					message: notif.message,
-					type: notif.type,
-					hideAfter: 3000,
-					showDismiss: false,
-					position: { vertical: 'bottom', horizontal: 'center' },
-					slideDirection: 'up',
-				}}
-			/>
 			<input
 				style={{
 					opacity: 0,

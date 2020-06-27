@@ -1,9 +1,9 @@
 import ShareJoinUrl from './Share';
 import { useEffect, useReducer, useState } from 'react';
-import { Request, NotificationToast } from '../../util';
+import { Request } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import ShowPoolStats from './PoolStats';
-import { handleNotification } from '../../util/NotificationToast';
+import { Toast } from '../../util';
 import { Button } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import Loader from '../../Loader';
@@ -35,7 +35,6 @@ const statusPage = ({ poolId }) => {
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const [isUpdating, setIsUpdating] = useState(false);
 	const [editMode, setEditMode] = useState(false);
-	const [notification, setNotification] = useState(null);
 
 	const routeToResultsPage = () => {
 		router.push('/place/results/[poolId]', `/place/results/${poolId}`);
@@ -55,7 +54,7 @@ const statusPage = ({ poolId }) => {
 			dispatch({ type: 'update', data, meta });
 		} catch (error) {
 			const { meta } = error.response.data;
-			handleNotification(setNotification, error);
+			Toast({ error });
 			dispatch({ type: 'update', data: {}, meta });
 		}
 	};
@@ -73,15 +72,6 @@ const statusPage = ({ poolId }) => {
 			return (
 				<>
 					<p>Create a new pool</p>
-					<NotificationToast
-						{...{
-							isOpen: notification !== null,
-							title: notification?.title,
-							message: notification?.message,
-							type: notification?.type,
-							setNotification,
-						}}
-					/>
 				</>
 			);
 		}
@@ -98,15 +88,6 @@ const statusPage = ({ poolId }) => {
 				{!editMode && maxPoolSize === currPoolSize && (
 					<Button onClick={routeToResultsPage}>View Results</Button>
 				)}
-				<NotificationToast
-					{...{
-						isOpen: notification !== null,
-						title: notification?.title,
-						message: notification?.message,
-						type: notification?.type,
-						setNotification,
-					}}
-				/>
 			</>
 		);
 	}
