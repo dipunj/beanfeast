@@ -8,7 +8,10 @@
 	"scripts": {
 		"dev": "next",
 		"build": "next build",
-		"start": "next start"
+		"start": "next start",
+		"analyze": "cross-env ANALYZE=true next build",
+		"analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
+		"analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
 	},
 	"dependencies": {
 		"@date-io/date-fns": "1.x",
@@ -31,6 +34,7 @@
 	},
 	"devDependencies": {
 		"@babel/plugin-proposal-optional-chaining": "^7.10.3",
+		"@next/bundle-analyzer": "^9.4.4",
 		"@types/node": "12.0.12",
 		"@types/react": "16.8.23",
 		"@types/react-dom": "16.8.4",
@@ -38,6 +42,7 @@
 		"@types/styled-components": "5.0.1",
 		"@welldone-software/why-did-you-render": "^4.2.5",
 		"babel-plugin-styled-components": "^1.10.0",
+		"cross-env": "^7.0.2",
 		"prettier": "^2.0.5",
 		"typescript": "3.8.x"
 	}

@@ -3,6 +3,8 @@ var dotenv = require('dotenv');
 var path = require('path');
 const envConfig = dotenv.parse(fs.readFileSync(path.resolve(__dirname, '..', '.frontend.env')));
 
-module.exports = {
-	env: envConfig,
-};
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+	enabled: process.env.ANALYZE === 'true',
+});
+
+module.exports = withBundleAnalyzer({ env: envConfig });
