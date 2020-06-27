@@ -5,13 +5,12 @@ import useStyles from './styles';
 import { NotificationToast, Request } from '../../util';
 import getBrowserFingerprint from '../../../utils/fingerprint';
 import { useRouter } from 'next/router';
-import { handleNotification } from '../../util/NotificationToast';
+import Toast from '../../util/Toast';
 
 const initialState = {
 	location: null,
 	loadingLocation: true,
 	apiUnderProgress: false,
-	browserError: null,
 };
 
 const reducer = (state, action) => {
@@ -20,36 +19,40 @@ const reducer = (state, action) => {
 			return { ...state, loadingLocation: false, location: { ...action.location } };
 		case 'setApiUnderProgress':
 			return { ...state, apiUnderProgress: action.apiUnderProgress };
-		case 'setBrowserError':
-			let title = '';
-			let message = '';
+		case 'showBrowserError':
 			if (action.hasOwnProperty('error')) {
 				switch (action.error.code) {
 					case action.error.PERMISSION_DENIED:
-						title = 'Permission Error';
-						message = 'You denied the request for Geolocation, cannot proceed.';
+						Toast({
+							title: 'Permission Error',
+							message: 'You denied the request for Geolocation, cannot proceed.',
+							type: 'error',
+						});
 						break;
 					case action.error.POSITION_UNAVAILABLE:
-						title = 'Position Unavailable';
-						message = 'Location information is unavailable on this device';
+						Toast({
+							title: 'Position Unavailable',
+							message: 'Location information is unavailable on this device',
+							type: 'error',
+						});
 						break;
 					case action.error.TIMEOUT:
-						title = 'Timeout';
-						message = 'The request to get user location timed out.';
+						Toast({
+							title: 'Timeout',
+							message: 'The request to get user location timed out.',
+							type: 'error',
+						});
 						break;
 					default:
-						title = 'Unknown Error';
-						message = 'An unknown error occurred.';
+						Toast({
+							title: 'Unknown Error',
+							message: 'An unknown error occurred.',
+							type: 'error',
+						});
 						break;
 				}
-				return {
-					...state,
-					browserError: { title, message },
-					loadingLocation: false,
-				};
-			} else {
-				return { ...state, browserError: null, loadingLocation: false };
 			}
+			return { ...state, loadingLocation: false };
 		default:
 			throw new Error('Unexpected action');
 	}
@@ -58,13 +61,7 @@ const reducer = (state, action) => {
 const joinPoolById = ({ poolId }) => {
 	const styles = useStyles();
 	const [state, dispatch] = useReducer(reducer, initialState);
-	const [notification, setNotification] = useState(null);
 	const router = useRouter();
-
-	const handleClose = (e: any, reason?: string) => {
-		if (reason === 'clickaway') return;
-		dispatch({ type: 'setBrowserError' });
-	};
 
 	useEffect(() => {
 		if (navigator.geolocation) {
@@ -77,7 +74,7 @@ const joinPoolById = ({ poolId }) => {
 							longitude: longitude.toFixed(7),
 						},
 					}),
-				(error) => dispatch({ type: 'setBrowserError', error }),
+				(error) => dispatch({ type: 'showBrowserError', error }),
 				{
 					maximumAge: 120000,
 					timeout: 5000,
@@ -103,7 +100,7 @@ const joinPoolById = ({ poolId }) => {
 			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
 			router.push(`/pool/status/[poolId]`, `/pool/status/${poolId}`);
 		} catch (error) {
-			handleNotification(setNotification, error);
+			Toast({ error });
 			dispatch({ type: 'setApiUnderProgress', apiUnderProgress: false });
 		}
 	};
@@ -141,28 +138,6 @@ const joinPoolById = ({ poolId }) => {
 					</Grid>
 				</Grid>
 			</Grid>
-
-			{/* specific for client side error */}
-			<NotificationToast
-				{...{
-					isOpen: state.browserError !== null,
-					handleClose,
-					title: state.browserError?.title,
-					message: state.browserError?.message,
-					type: 'error',
-				}}
-			/>
-
-			{/* specifically for server side errors */}
-			<NotificationToast
-				{...{
-					isOpen: notification !== null,
-					title: notification?.title,
-					message: notification?.message,
-					type: notification?.type,
-					setNotification,
-				}}
-			/>
 		</>
 	);
 };
