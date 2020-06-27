@@ -7,7 +7,7 @@ import { Footer, Container, Content } from './styles';
 import defaultGetLayout from '../Layouts/NextLayout';
 import { useMediaQuery } from '@material-ui/core';
 import Loader from '../Loader';
-import Toast from '../util/Toast';
+import { Toast, RedirectButtons } from '../util';
 
 const PlaceResults = ({ poolId }) => {
 	const isMobile = useMediaQuery('(max-width:500px)');
@@ -41,7 +41,7 @@ const PlaceResults = ({ poolId }) => {
 	}, []);
 
 	if (loading) return <Loader />;
-	else if (!loading && !data) return <div>show link to create new pool</div>;
+	else if (!loading && !data) return <RedirectButtons />;
 	else
 		return (
 			<Container>

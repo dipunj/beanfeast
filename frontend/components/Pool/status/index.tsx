@@ -7,6 +7,7 @@ import { Toast } from '../../util';
 import { Button } from '@material-ui/core';
 import { useRouter } from 'next/router';
 import Loader from '../../Loader';
+import { RedirectButtons } from '../../util';
 
 const initialState = {
 	loading: true,
@@ -69,11 +70,7 @@ const statusPage = ({ poolId }) => {
 	} else {
 		const { success } = state;
 		if (!success) {
-			return (
-				<>
-					<p>Create a new pool</p>
-				</>
-			);
+			return <RedirectButtons />;
 		}
 
 		const {
