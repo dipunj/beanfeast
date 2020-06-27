@@ -13,11 +13,12 @@ const PlaceResults = ({ poolId }) => {
 	const isMobile = useMediaQuery('(max-width:500px)');
 	const [loading, setLoading] = useState(true);
 	const [data, setData] = useState(null);
+	const [uid, setUid] = useState(null);
 
 	const fetchData = async (query, radius) => {
-		setLoading(true);
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
+			setUid(uniqueIdentifier);
 			const {
 				data: { meta, data },
 			} = await Request.get(`/place/results/${poolId}`, {
@@ -32,7 +33,6 @@ const PlaceResults = ({ poolId }) => {
 		} catch (error) {
 			Toast({ error });
 			setLoading(false);
-			// handleNotification(setNotification, error);
 		}
 	};
 
@@ -42,17 +42,19 @@ const PlaceResults = ({ poolId }) => {
 
 	if (loading) return <Loader />;
 	else if (!loading && !data) return <RedirectButtons />;
-	else
+	else {
+		const isAdmin = data.poolData.createdBy === uid;
 		return (
 			<Container>
 				<Content>
 					<CardsAndMap {...{ isMobile, data }} />
 				</Content>
 				<Footer>
-					<Controls {...{ isMobile, data, reRequest: fetchData }} />
+					<Controls {...{ isAdmin, data, reRequest: fetchData }} />
 				</Footer>
 			</Container>
 		);
+	}
 };
 
 PlaceResults.getLayout = (page) => defaultGetLayout(page, { height: '15vh' });
