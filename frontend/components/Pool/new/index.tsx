@@ -27,7 +27,10 @@ const reducer = (state, action) => {
 		case 'setToTime':
 			return { ...state, toTime: action.date };
 		case 'setHeadCount':
-			return { ...state, headCount: action.headCount };
+			return {
+				...state,
+				headCount: Math.min(action.headCount, process.env.MAX_POOL_COUNT || 10),
+			};
 		case 'setLocation':
 			return { ...state, loadingLocation: false, location: { ...action.location } };
 		case 'setApiUnderProgress':
