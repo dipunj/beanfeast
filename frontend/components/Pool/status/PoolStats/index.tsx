@@ -15,7 +15,10 @@ const reducer = (dataState: any, action: any) => {
 		case 'toTime':
 			return { ...dataState, toTime: action.toTime };
 		case 'maxPoolSize':
-			return { ...dataState, maxPoolSize: action.maxPoolSize };
+			return {
+				...dataState,
+				maxPoolSize: Math.min(action.maxPoolSize, process.env.MAX_POOL_SIZE || 10),
+			};
 		default:
 			return dataState;
 	}
