@@ -11,7 +11,8 @@
 		"start": "next start",
 		"analyze": "cross-env ANALYZE=true next build",
 		"analyze:server": "cross-env BUNDLE_ANALYZE=server next build",
-		"analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build"
+		"analyze:browser": "cross-env BUNDLE_ANALYZE=browser next build",
+		"deploy": "yarn build && yarn start"
 	},
 	"dependencies": {
 		"@date-io/date-fns": "1.x",

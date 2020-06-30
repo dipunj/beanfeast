@@ -13,7 +13,7 @@ module.exports = {
 			name: 'frontend',
 			cwd: './frontend',
 			script: 'yarn',
-			args: 'start',
+			args: 'deploy',
 			env: {
 				NODE_ENV: 'production',
 			},
