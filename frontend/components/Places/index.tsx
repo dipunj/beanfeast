@@ -50,7 +50,7 @@ const PlaceResults = ({ poolId }) => {
 					<CardsAndMap {...{ isMobile, data }} />
 				</Content>
 				<Footer>
-					<Controls {...{ isAdmin, data, reRequest: fetchData }} />
+					<Controls {...{ isMobile, isAdmin, data, reRequest: fetchData }} />
 				</Footer>
 			</Container>
 		);

@@ -12,7 +12,15 @@ import { useRouter } from 'next/router';
 // if the controls are seperated into a seperate component (Controls), the react diffing algorithm would only find
 // that the node Controls in Virtual DOM has changed and would only rerender it and not its siblings like Map
 // This helped: https://stackoverflow.com/a/50820219/6922149
-const Controls = ({ isAdmin, data, reRequest }: { isAdmin: boolean; reRequest: Function }) => {
+const Controls = ({
+	isMobile,
+	isAdmin,
+	data,
+	reRequest,
+}: {
+	isAdmin: boolean;
+	reRequest: Function;
+}) => {
 	const router = useRouter();
 	const classes = useStyles();
 	const [loading, setLoading] = useState(false);
@@ -44,22 +52,24 @@ const Controls = ({ isAdmin, data, reRequest }: { isAdmin: boolean; reRequest: F
 						md
 						className={classes.textFieldContainer}
 					>
-						<Grid item>
+						<Grid item xs={5}>
 							<TextField
 								id="searchRadius"
 								label="Search Radius (m)"
 								variant="standard"
 								type="number"
+								fullWidth={isMobile}
 								value={radius}
 								onChange={handleRadiusChange}
 							/>
 						</Grid>
-						<Grid item>
+						<Grid item xs={5}>
 							<TextField
 								id="queryString"
 								label="Search For"
 								variant="standard"
 								value={query}
+								fullWidth={isMobile}
 								onChange={handleQueryChange}
 							/>
 						</Grid>
