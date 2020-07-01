@@ -8,7 +8,7 @@ Currently for demonstration purposes the app uses TomTom API for fetching the pl
 ## A few things about browser fingerprint
 
 -   The browser needs to be in the exact same configuration as it was while creating/joining a pool.
--   Even a change in window size, browser update, changing youur system's display resolution, switching from mobile data to wifi etc would alter the browser's fingerprint, rendering the app useless. These cases are very unlikely to occur during a single session for finding your partying spot, justifying the tradeoff for using browser fingerprint instead of a sign up process.
+-   Even a change in window size, browser update, changing your system's display resolution, switching from mobile data to wifi etc would alter the browser's fingerprint, rendering the app useless. These cases are very unlikely to occur during a single session for finding your partying spot, justifying the tradeoff for using browser fingerprint instead of a sign up process.
 
 ## How to deploy
 
