@@ -120,7 +120,7 @@ const About = () => {
 			</Grid>
 			<Grid item xs={12}>
 				<Typography>
-					Currenlty for demonstration purposes the app uses TomTom API for fetching the
+					Currently for demonstration purposes the app uses TomTom API for fetching the
 					places in proximity of centroid, because Google just declines Indian Debit
 					Cards, and hence I cannot use it. However, the app can be migrated to google
 					maps api, within a few minutes, since the data fetch api is modular and can
