@@ -1,7 +1,7 @@
 import ShareJoinUrl from './Share';
 import { useEffect, useReducer, useState } from 'react';
 import { Request } from '../../util';
-import getBrowserFingerprint from '../../../utils/fingerprint';
+import getBrowserFingerprint from '../../../common/utils/fingerprint';
 import ShowPoolStats from './PoolStats';
 import { Toast } from '../../util';
 import { Button } from '@material-ui/core';

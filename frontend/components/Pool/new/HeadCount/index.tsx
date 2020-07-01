@@ -29,10 +29,9 @@ const HeadCountSlider = ({ value, onChange }) => {
 				value={value}
 				onChange={onChange}
 				aria-labelledby="headCount-slider"
-				valueLabelDisplay="auto"
 				step={1}
 				min={1}
-				max={process.env.MAX_POOL_SIZE || 10}
+				max={parseInt(process.env.MAX_POOL_SIZE) || 10}
 				valueLabelDisplay="on"
 			/>
 		</Grid>

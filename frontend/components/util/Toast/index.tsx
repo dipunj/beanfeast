@@ -1,7 +1,18 @@
 import toast from 'cogo-toast';
 import { TitleDiv, MessageDiv, Container } from './styles';
+import { errored } from '../../../common/types';
 
-const Toast = ({ type = 'info', title, message, error = null }) =>
+const Toast = ({
+	type = 'info',
+	title,
+	message,
+	error,
+}: {
+	type?: string;
+	title?: string;
+	message?: string;
+	error?: errored;
+}) =>
 	error
 		? toast.error(
 				<Container>

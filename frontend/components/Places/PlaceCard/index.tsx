@@ -13,7 +13,7 @@ import { Rating } from '@material-ui/lab';
 import { Chip, Paper, Container, emphasize } from '@material-ui/core';
 import { SessionCtx } from '../../Context';
 
-const chipColors = ['default', 'primary', 'secondary'];
+const chipColors = ['default', 'primary', 'secondary'] as const;
 
 interface propsType {
 	id: string;
@@ -21,7 +21,7 @@ interface propsType {
 	name: string;
 	phone: string;
 	isFocused: boolean;
-	rating: string;
+	rating: number;
 	fullAddress: string;
 	shortAddress: string;
 	api: {

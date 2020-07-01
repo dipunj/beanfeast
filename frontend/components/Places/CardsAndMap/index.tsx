@@ -2,8 +2,9 @@ import { useState, createRef } from 'react';
 import dynamic from 'next/dynamic';
 import { MapContainer, DetailsContainer } from './styles';
 import PlacesCard from '../PlaceCard';
-import sortHullOrder from '../../../utils/hull';
+import sortHullOrder from '../../../common/utils/hull';
 import ToolTip from '../ToolTip';
+import { coordinate, resultResponse } from '../../../common/types';
 
 // leaflet doesn't support ssr
 const MapView = dynamic(import('../PlaceMaps'), {
@@ -11,57 +12,17 @@ const MapView = dynamic(import('../PlaceMaps'), {
 	loading: () => <div style={{ textAlign: 'center', paddingTop: 20 }}>Loading Map...</div>,
 });
 
-interface resultResponse {
-	poolData: {
-		fromTime: string;
-		toTime: string;
-		maxPoolSize: number;
-		currPoolSize: number;
-		_id: string;
-		createdBy: string;
-		centroidLatitude: {
-			$numberDecimal: string;
-		};
-		centroidLongitude: {
-			$numberDecimal: string;
-		};
-	};
-	sessionData: {
-		_id: string;
-		poolId: string;
-		uniqueIdentifier: string;
-		latitude: {
-			$numberDecimal: string;
-		};
-		longitude: {
-			$numberDecimal: string;
-		};
-		createdAt: string;
-		updatedAt: string;
-	};
-	poolMembersLocation: number[][];
-	api: {
-		name: string;
-		radius: number;
-		query: string;
-		maxRating: number;
-	};
-	placesData: {
-		id: string;
-		name: string;
-		phone?: string;
-		categories: string[];
-		fullAddress: string;
-		shortAddress: string;
-		rating: number;
-		position: {
-			lat: number;
-			lon: number;
-		};
-	}[];
-}
-
-const MobileVersion = ({ center, peerPositions, searchRadius, data }: { data: resultResponse }) => {
+const MobileVersion = ({
+	center,
+	peerPositions,
+	searchRadius,
+	data,
+}: {
+	center: coordinate;
+	peerPositions: coordinate[];
+	searchRadius: number;
+	data: resultResponse;
+}) => {
 	const handleFocus = () => {};
 	const resultPositions = data.placesData.map(
 		({ id, position: { lat, lon }, name: title, shortAddress }) => ({
@@ -106,6 +67,9 @@ const DesktopVersion = ({
 	searchRadius,
 	data,
 }: {
+	center: coordinate;
+	peerPositions: coordinate[];
+	searchRadius: number;
 	data: resultResponse;
 }) => {
 	const [selected, setSelected] = useState('');
@@ -133,7 +97,7 @@ const DesktopVersion = ({
 					name,
 					phone,
 					isFocused: selected === id,
-					rating: ((5 * rating) / data.api.maxRating).toFixed(2).toString(),
+					rating: parseFloat(((5 * rating) / data.api.maxRating).toFixed(2)),
 					fullAddress,
 					shortAddress,
 					position,

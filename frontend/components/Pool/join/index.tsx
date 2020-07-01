@@ -3,7 +3,7 @@ import { Grid, Button, LinearProgress, Typography } from '@material-ui/core';
 import Information from './Information';
 import useStyles from './styles';
 import { Request, Toast } from '../../util';
-import getBrowserFingerprint from '../../../utils/fingerprint';
+import getBrowserFingerprint from '../../../common/utils/fingerprint';
 import { useRouter } from 'next/router';
 
 const initialState = {
@@ -115,7 +115,6 @@ const joinPoolById = ({ poolId }) => {
 						<Button
 							{...{
 								color: 'primary',
-								variant: 'outlined',
 								fullWidth: true,
 								size: 'large',
 								variant: 'contained',

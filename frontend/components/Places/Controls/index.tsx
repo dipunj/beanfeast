@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AppBar, Toolbar, TextField, Button, Grid, CircularProgress } from '@material-ui/core';
 import { useStyles } from './styles';
 import { useRouter } from 'next/router';
+import { resultResponse } from '../../../common/types';
 
 // REACT LESSON: try putting the following component directly into the CardsAndMaps component
 // so query, radius would become states of CardsAndMaps
@@ -18,7 +19,9 @@ const Controls = ({
 	data,
 	reRequest,
 }: {
-	isAdmin: boolean;
+	isMobile?: boolean;
+	isAdmin?: boolean;
+	data: resultResponse;
 	reRequest: Function;
 }) => {
 	const router = useRouter();

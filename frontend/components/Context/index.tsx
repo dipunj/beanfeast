@@ -1,11 +1,11 @@
 import { createContext, useState, useEffect } from 'react';
-import { getFromLS, saveToLS } from '../../utils/localStorage';
+import { getFromLS, saveToLS } from '../../common/utils/localStorage';
 import { useMediaQuery } from '@material-ui/core';
 
 const SessionCtx = createContext({ ctx: { darkMode: false }, setCtx: (old) => {} });
 
 const SessionCtxProvider = ({ children }) => {
-	const [ctx, setCtx] = useState({});
+	const [ctx, setCtx] = useState({ darkMode: false });
 	const prefersDark = useMediaQuery('(prefers-color-scheme: dark)');
 
 	useEffect(() => {

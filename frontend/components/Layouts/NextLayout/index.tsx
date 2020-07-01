@@ -3,7 +3,7 @@ import { Grid } from '@material-ui/core';
 import useStyles from './styles';
 
 // used by _app.tsx
-const defaultGetLayout = (page, styleProps) => {
+const defaultGetLayout = (page, styleProps?: any) => {
 	const { paddedContainer } = useStyles();
 	return (
 		<>

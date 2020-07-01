@@ -1,7 +1,15 @@
 import useSingleLayoutStyles from './styles';
 import { Paper, Grid, InputLabel } from '@material-ui/core';
 
-const SingleLayout = ({ header, children, style }) => {
+const SingleLayout = ({
+	header,
+	children,
+	style,
+}: {
+	header: string;
+	children: React.ReactNode;
+	style?: any;
+}) => {
 	const styles = useSingleLayoutStyles();
 	return (
 		<Paper className={styles.paperRoot} {...{ style }}>

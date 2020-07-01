@@ -9,7 +9,100 @@ import {
 } from '@material-ui/core';
 import useTwinLayoutStyles from './styles';
 
-const TwinLayout = ({ header, left, divider, right, style }) => {
+interface propType {
+	header: string;
+	left: {
+		key: string;
+		value: any;
+		variant:
+			| 'button'
+			| 'caption'
+			| 'h1'
+			| 'h2'
+			| 'h3'
+			| 'h4'
+			| 'h5'
+			| 'h6'
+			| 'inherit'
+			| 'overline'
+			| 'subtitle1'
+			| 'subtitle2'
+			| 'body1'
+			| 'body2'
+			| 'srOnly';
+		color?:
+			| 'error'
+			| 'primary'
+			| 'secondary'
+			| 'inherit'
+			| 'initial'
+			| 'textPrimary'
+			| 'textSecondary';
+		gridProps: any;
+		keyBefore?: boolean;
+	};
+	divider?: {
+		value: any;
+		variant:
+			| 'button'
+			| 'caption'
+			| 'h1'
+			| 'h2'
+			| 'h3'
+			| 'h4'
+			| 'h5'
+			| 'h6'
+			| 'inherit'
+			| 'overline'
+			| 'subtitle1'
+			| 'subtitle2'
+			| 'body1'
+			| 'body2'
+			| 'srOnly';
+		color?:
+			| 'error'
+			| 'primary'
+			| 'secondary'
+			| 'inherit'
+			| 'initial'
+			| 'textPrimary'
+			| 'textSecondary';
+		keyBefore?: boolean;
+	};
+	right: {
+		key: string;
+		value: any;
+		variant:
+			| 'button'
+			| 'caption'
+			| 'h1'
+			| 'h2'
+			| 'h3'
+			| 'h4'
+			| 'h5'
+			| 'h6'
+			| 'inherit'
+			| 'overline'
+			| 'subtitle1'
+			| 'subtitle2'
+			| 'body1'
+			| 'body2'
+			| 'srOnly';
+		color?:
+			| 'error'
+			| 'primary'
+			| 'secondary'
+			| 'inherit'
+			| 'initial'
+			| 'textPrimary'
+			| 'textSecondary';
+		gridProps: any;
+		keyBefore?: boolean;
+	};
+	style?: any;
+}
+
+const TwinLayout = ({ header, left, divider, right, style }: propType) => {
 	const isMobile = useMediaQuery('(max-width:500px)');
 	const styles = useTwinLayoutStyles();
 
@@ -85,7 +178,7 @@ const TwinLayout = ({ header, left, divider, right, style }) => {
 					<LinearProgress
 						className={styles.linearProgress}
 						variant="determinate"
-						value={(left.value * 100) / right.value}
+						value={(parseFloat(left.value) * 100) / parseFloat(right.value)}
 					/>
 				</Grid>
 			)}

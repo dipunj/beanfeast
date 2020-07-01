@@ -18,14 +18,14 @@ const ViewTiming = ({ fromTime, toTime }) => {
 		left: {
 			key: 'From',
 			value: from,
-			variant: 'button',
+			variant: 'button' as const,
 			gridProps: { justify: 'flex-start', direction: 'column', alignItems: 'flex-start' },
 			keyBefore: true,
 		},
 		right: {
 			key: 'To',
 			value: to,
-			variant: 'button',
+			variant: 'button' as const,
 			gridProps: { justify: 'flex-start', direction: 'column', alignItems: 'flex-start' },
 			keyBefore: true,
 		},
@@ -61,13 +61,13 @@ const EditTiming = ({ state, dispatch }) => {
 		left: {
 			key: null,
 			value: from,
-			variant: 'button',
+			variant: 'button' as const,
 			gridProps: { justify: 'flex-start', direction: 'column', alignItems: 'stretch' },
 		},
 		right: {
 			key: null,
 			value: to,
-			variant: 'button',
+			variant: 'button' as const,
 			gridProps: { justify: 'flex-start', direction: 'column', alignItems: 'stretch' },
 		},
 	};

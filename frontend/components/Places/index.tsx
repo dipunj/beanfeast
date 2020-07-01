@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import getBrowserFingerprint from '../../utils/fingerprint';
+import getBrowserFingerprint from '../../common/utils/fingerprint';
 import Request from '../util/Request';
 import CardsAndMap from './CardsAndMap';
 import Controls from './Controls';
@@ -15,7 +15,7 @@ const PlaceResults = ({ poolId }) => {
 	const [data, setData] = useState(null);
 	const [uid, setUid] = useState(null);
 
-	const fetchData = async (query, radius) => {
+	const fetchData = async (query?: string, radius?: string) => {
 		try {
 			const uniqueIdentifier = await getBrowserFingerprint();
 			setUid(uniqueIdentifier);

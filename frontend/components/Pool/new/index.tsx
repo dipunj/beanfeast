@@ -3,8 +3,8 @@ import { Grid, Typography, Button, LinearProgress, Paper } from '@material-ui/co
 import { useRouter } from 'next/router';
 import useStyles from './styles';
 import { Request, TimePicker, DatePicker } from '../../util';
-import getBrowserFingerprint from '../../../utils/fingerprint';
-import mergeDateTime from '../../../utils/mergeDateTime';
+import getBrowserFingerprint from '../../../common/utils/fingerprint';
+import mergeDateTime from '../../../common/utils/mergeDateTime';
 import HeadCount, { HeadCountLabel } from './HeadCount';
 import Toast from '../../util/Toast';
 
@@ -29,7 +29,7 @@ const reducer = (state, action) => {
 		case 'setHeadCount':
 			return {
 				...state,
-				headCount: Math.min(action.headCount, process.env.MAX_POOL_COUNT || 10),
+				headCount: Math.min(action.headCount, parseInt(process.env.MAX_POOL_COUNT) || 10),
 			};
 		case 'setLocation':
 			return { ...state, loadingLocation: false, location: { ...action.location } };
@@ -177,7 +177,6 @@ const createNewPool = () => {
 				<Button
 					{...{
 						color: 'primary',
-						variant: 'outlined',
 						fullWidth: true,
 						size: 'large',
 						variant: 'contained',

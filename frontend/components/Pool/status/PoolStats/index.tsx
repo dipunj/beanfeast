@@ -3,7 +3,7 @@ import useStyles from './styles';
 import { Grid, Button, LinearProgress, useMediaQuery } from '@material-ui/core';
 import { EditPopulation, ViewPopulation } from './Population';
 import { EditTiming, ViewTiming } from './Timing';
-import mergeDateTime from '../../../../utils/mergeDateTime';
+import mergeDateTime from '../../../../common/utils/mergeDateTime';
 import { Request, Toast } from '../../../util';
 
 const reducer = (dataState: any, action: any) => {
@@ -17,7 +17,10 @@ const reducer = (dataState: any, action: any) => {
 		case 'maxPoolSize':
 			return {
 				...dataState,
-				maxPoolSize: Math.min(action.maxPoolSize, process.env.MAX_POOL_SIZE || 10),
+				maxPoolSize: Math.min(
+					action.maxPoolSize,
+					parseInt(process.env.MAX_POOL_SIZE) || 10
+				),
 			};
 		default:
 			return dataState;

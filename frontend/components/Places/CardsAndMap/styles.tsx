@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 
 const MapContainer = styled.div`
-	width: ${({ isMobile }) => (isMobile ? '100%' : '80%')};
+	width: ${({ isMobile }: { isMobile?: boolean }) => (isMobile ? '100%' : '80%')};
 	border-radius: 10px;
 	padding: 16px;
 	background: transparent;

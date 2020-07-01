@@ -1,9 +1,6 @@
-import { createMuiTheme } from '@material-ui/core/styles';
+import { createMuiTheme, ThemeOptions } from '@material-ui/core/styles';
 
-const darkTheme = {
-	typography: {
-		useNextVariants: true,
-	},
+const darkTheme: ThemeOptions = {
 	palette: {
 		primary: {
 			// light: '#1B98E0',
@@ -22,10 +19,7 @@ const darkTheme = {
 	},
 };
 
-const lightTheme = {
-	typography: {
-		useNextVariants: true,
-	},
+const lightTheme: ThemeOptions = {
 	palette: {
 		primary: {
 			// light: '#1B98E0',
@@ -42,7 +36,6 @@ const lightTheme = {
 			// contrastText: '#ffcc00',
 			// dark: '#ffcc00',
 		},
-		text: {},
 		type: 'light',
 		// warning: {
 		// 	main: '#D72638',

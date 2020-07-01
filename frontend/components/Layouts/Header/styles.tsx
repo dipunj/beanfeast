@@ -5,7 +5,7 @@ const useStyles = makeStyles({
 		flexDirection: 'row',
 		justifyContent: 'center',
 		alignItems: 'center',
-		height: ({ height }) => height || '20vh',
+		height: ({ height }: { height: string }) => height || '20vh',
 		top: '0px',
 		left: '0px',
 		zIndex: 5,
