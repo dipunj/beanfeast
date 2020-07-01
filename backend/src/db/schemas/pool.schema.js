@@ -35,6 +35,11 @@ const PoolSchema = new Schema(
 		centroidLongitude: {
 			type: Decimal128,
 		},
+		createdAt: {
+			type: Date,
+			expires: 86400,
+			default: Date.now,
+		},
 	},
 	{
 		timestamps: true,

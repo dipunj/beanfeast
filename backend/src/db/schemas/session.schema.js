@@ -22,6 +22,11 @@ const SessionSchema = new Schema(
 			type: Decimal128,
 			required: true,
 		},
+		createdAt: {
+			type: Date,
+			expires: 86400,
+			default: Date.now,
+		},
 	},
 	{
 		timestamps: true,
