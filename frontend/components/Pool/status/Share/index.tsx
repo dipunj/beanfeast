@@ -26,12 +26,18 @@ const sharePoolDetails = ({ poolId }) => {
 		});
 	};
 
-	const share = async () => {
-		// await navigator.share({
-		// 	url: shareUrl,
-		// 	text: '',
-		// 	title: '',
-		// });
+	const share = () => {
+		let nav: any = window.navigator;
+
+		if (nav && nav.share) {
+			nav.share({
+				title: 'Beanfeast',
+				text: 'Click the url to join my pool.',
+				url: shareUrl,
+			})
+				.then(() => console.log('Successful share'))
+				.catch((error) => console.log('Error sharing', error));
+		}
 		// requires HTTPS
 	};
 	if (isMobile) {
