@@ -20,7 +20,7 @@
 		"@material-ui/icons": "^4.9.1",
 		"@material-ui/lab": "^4.0.0-alpha.54",
 		"@material-ui/pickers": "^3.2.10",
-		"axios": "^0.19.2",
+		"axios": "^0.21.1",
 		"cogo-toast": "^4.2.3",
 		"date-fns": "^2.14.0",
 		"dotenv": "^8.2.0",
